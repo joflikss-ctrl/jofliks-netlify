@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — JoFliks Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .breadcrumb { display:flex; align-items:center; gap:0.5rem; padding:1rem 2.5rem; border-bottom:1px solid #e8e7e2; background:#fdfcfa; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:#a8a8a4; }
+    .breadcrumb span { cursor:pointer; transition:color 0.2s; }
+    .breadcrumb span:hover { color:#1c1c1b; }
+    .breadcrumb .bc-sep { cursor:default; }
+    .breadcrumb .bc-current { color:#1c1c1b; cursor:default; }
+    .category-select { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; padding:3px; }
+    .cat-card { position:relative; aspect-ratio:3/2; overflow:hidden; cursor:pointer; }
+    .cat-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.45s ease; }
+    .cat-card:hover img { transform:scale(1.05); }
+    .cat-card-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(17,17,16,0.85) 0%,rgba(0,0,0,0.15) 100%); display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:1.5rem; transition:background 0.3s; }
+    .cat-card:hover .cat-card-overlay { background:linear-gradient(to top,rgba(17,17,16,0.92) 0%,rgba(0,0,0,0.3) 100%); }
+    .cat-card-name { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:400; color:white; margin-bottom:0.3rem; }
+    .cat-card-count { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:0.8rem; }
+    .cat-card-btn { font-size:0.65rem; letter-spacing:0.14em; text-transform:uppercase; color:white; border:1px solid rgba(255,255,255,0.5); padding:0.35rem 1rem; opacity:0; transform:translateY(6px); transition:all 0.25s; }
+    .cat-card:hover .cat-card-btn { opacity:1; transform:translateY(0); }
+    .album-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; padding:3px; }
+    .album-card { position:relative; aspect-ratio:4/3; overflow:hidden; cursor:pointer; }
+    .album-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.45s ease; }
+    .album-card:hover img { transform:scale(1.05); }
+    .album-card-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(17,17,16,0.88) 0%,transparent 55%); display:flex; flex-direction:column; justify-content:flex-end; padding:1.2rem 1.4rem; }
+    .album-card-title { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:400; color:white; line-height:1.2; margin-bottom:0.2rem; }
+    .album-card-date { font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:0.5rem; }
+    .album-card-arrow { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6); opacity:0; transform:translateX(-4px); transition:all 0.25s; }
+    .album-card:hover .album-card-arrow { opacity:1; transform:translateX(0); }
+    .pc-buy-hint { font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-top:0.3rem; opacity:0; transition:opacity 0.25s; }
+    .photo-card:hover .pc-buy-hint { opacity:1; }
+    #view-sports { display:block; }
+    #view-albums { display:none; }
+    #view-photos { display:none; }
+
+    /* PHOTO MODAL */
+    .photo-modal-backdrop {
+      position:fixed; inset:0; background:rgba(0,0,0,0.85);
+      z-index:1000; display:flex; align-items:center; justify-content:center;
+      padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.3s;
+    }
+    .photo-modal-backdrop.open { opacity:1; pointer-events:all; }
+    .photo-modal {
+      background:#fdfcfa; max-width:700px; width:100%;
+      display:grid; grid-template-columns:1fr 1fr;
+      max-height:90vh; overflow:hidden;
+    }
+    .photo-modal-img {
+      position:relative; overflow:hidden; min-height:300px;
+    }
+    .photo-modal-img img {
+      width:100%; height:100%; object-fit:cover;
+    }
+    .photo-modal-img::after {
+      content:'';
+      position:absolute; inset:0;
+      background-image:url('https://res.cloudinary.com/dxthbasef/image/upload/v1774125404/Watermark_mz83dh.png');
+      background-size:55%; background-position:center; background-repeat:no-repeat;
+      opacity:0.35; pointer-events:none;
+    }
+    .photo-modal-info {
+      padding:2rem; display:flex; flex-direction:column; justify-content:space-between; overflow-y:auto;
+    }
+    .photo-modal-close {
+      position:absolute; top:1rem; right:1rem; background:rgba(0,0,0,0.5);
+      color:white; border:none; width:32px; height:32px; border-radius:50%;
+      font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      z-index:10;
+    }
+    .modal-photo-name { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:400; margin-bottom:0.3rem; }
+    .modal-photo-meta { font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:#737370; margin-bottom:1.5rem; }
+    .modal-price { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:400; margin-bottom:0.5rem; }
+    .modal-price-note { font-size:0.75rem; color:#737370; line-height:1.7; margin-bottom:1.5rem; }
+    .modal-buy-btn {
+      display:block; width:100%; padding:0.85rem; text-align:center;
+      background:#1c1c1b; color:white; border:none; cursor:pointer;
+      font-family:inherit; font-size:0.75rem; font-weight:500;
+      letter-spacing:0.14em; text-transform:uppercase; transition:background 0.2s;
+    }
+    .modal-buy-btn:hover { background:#2e2e2c; }
+    .modal-buy-btn:disabled { background:#a8a8a4; cursor:not-allowed; }
+    .modal-cancel { display:block; text-align:center; margin-top:0.8rem; font-size:0.72rem; color:#a8a8a4; cursor:pointer; }
+    .modal-cancel:hover { color:#1c1c1b; }
+    @media (max-width:600px) {
+      .photo-modal { grid-template-columns:1fr; max-height:95vh; }
+      .photo-modal-img { min-height:200px; max-height:250px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">JoFliks<span>Photography</span></a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="gallery.html" class="active">Gallery</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="index.html">Home</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </header>
+
+  <!-- PHOTO PURCHASE MODAL -->
+  <div class="photo-modal-backdrop" id="photoModal">
+    <div class="photo-modal" style="position:relative;">
+      <button class="photo-modal-close" onclick="closePhotoModal()">✕</button>
+      <div class="photo-modal-img">
+        <img id="modalImg" src="" alt="Photo" />
+      </div>
+      <div class="photo-modal-info">
+        <div>
+          <p class="modal-photo-name" id="modalName"></p>
+          <p class="modal-photo-meta" id="modalMeta"></p>
+          <div class="modal-price">$15</div>
+          <p class="modal-price-note">High-resolution JPEG delivered instantly to your email after payment. Personal &amp; social media use included.</p>
+        </div>
+        <div>
+          <button class="modal-buy-btn" id="modalBuyBtn" onclick="handleBuyPhoto()">
+            Buy This Photo — $15
+          </button>
+          <span class="modal-cancel" onclick="closePhotoModal()">Cancel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-eyebrow">Browse &amp; Purchase</p>
+      <h1>Gallery</h1>
+      <p class="page-sub" style="font-size:1rem;font-weight:500;color:#1c1c1b;">Click any photo to purchase it for $15. High-resolution file delivered to your email instantly.</p>
+    </div>
+  </section>
+
+  <div class="breadcrumb" id="breadcrumb">
+    <span class="bc-current">Gallery</span>
+  </div>
+
+  <!-- VIEW 1 — SPORTS -->
+  <div id="view-sports">
+    <div class="category-select">
+      <div class="cat-card" onclick="openSport('basketball','Basketball')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_0372_k8yi3s.jpg" alt="Basketball" />
+        <div class="cat-card-overlay">
+          <div class="cat-card-name">Basketball</div>
+          <div class="cat-card-count">Browse albums</div>
+          <div class="cat-card-btn">View Albums &rarr;</div>
+        </div>
+      </div>
+      <div class="cat-card" onclick="openSport('soccer','Soccer')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6195-Enhanced-NR_yngxvr.jpg" alt="Soccer" />
+        <div class="cat-card-overlay">
+          <div class="cat-card-name">Soccer</div>
+          <div class="cat-card-count">Browse albums</div>
+          <div class="cat-card-btn">View Albums &rarr;</div>
+        </div>
+      </div>
+      <div class="cat-card" onclick="openSport('football','Football')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_5656_ma6teq.jpg" alt="Football" />
+        <div class="cat-card-overlay">
+          <div class="cat-card-name">Football</div>
+          <div class="cat-card-count">Browse albums</div>
+          <div class="cat-card-btn">View Albums &rarr;</div>
+        </div>
+      </div>
+      <div class="cat-card" onclick="openSport('baseball','Baseball')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_0977-Enhanced-NR_snhzek.jpg" alt="Baseball" />
+        <div class="cat-card-overlay">
+          <div class="cat-card-name">Baseball</div>
+          <div class="cat-card-count">Browse albums</div>
+          <div class="cat-card-btn">View Albums &rarr;</div>
+        </div>
+      </div>
+      <div class="cat-card" onclick="openSport('lacrosse','Lacrosse')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_2830_wrviss.jpg" alt="Lacrosse" />
+        <div class="cat-card-overlay">
+          <div class="cat-card-name">Lacrosse</div>
+          <div class="cat-card-count">Browse albums</div>
+          <div class="cat-card-btn">View Albums &rarr;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2 — ALBUMS -->
+  <div id="view-albums">
+    <div class="album-grid" id="albums-basketball" style="display:none">
+      <!--
+      HOW TO ADD A NEW BASKETBALL ALBUM:
+      <div class="album-card" onclick="openAlbum('bball-ALBUMID','ALBUM TITLE')">
+        <img src="YOUR_COVER_URL" alt="Cover" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Team A vs Team B</div>
+          <div class="album-card-date">Month DD, YYYY</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+      -->
+      <div class="album-card" onclick="openAlbum('bball-test-album','Test Album')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8398_rcaojk.jpg" alt="Test Album" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Test Album</div>
+          <div class="album-card-date">Basketball</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+    </div>
+    <div class="album-grid" id="albums-soccer" style="display:none">
+      <div class="album-card" onclick="openAlbum('soccer-example','Example Match')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6195-Enhanced-NR_yngxvr.jpg" alt="Soccer" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Example Match</div>
+          <div class="album-card-date">Add game name &amp; date</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+    </div>
+    <div class="album-grid" id="albums-football" style="display:none">
+      <div class="album-card" onclick="openAlbum('football-example','Example Game')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_5656_ma6teq.jpg" alt="Football" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Example Game</div>
+          <div class="album-card-date">Add game name &amp; date</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+    </div>
+    <div class="album-grid" id="albums-baseball" style="display:none">
+      <div class="album-card" onclick="openAlbum('baseball-example','Example Game')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_0977-Enhanced-NR_snhzek.jpg" alt="Baseball" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Example Game</div>
+          <div class="album-card-date">Add game name &amp; date</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+    </div>
+    <div class="album-grid" id="albums-lacrosse" style="display:none">
+      <div class="album-card" onclick="openAlbum('lacrosse-example','Example Game')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_2830_wrviss.jpg" alt="Lacrosse" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Example Game</div>
+          <div class="album-card-date">Add game name &amp; date</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 3 — PHOTOS -->
+  <div id="view-photos">
+    <div style="padding:1.2rem 2.5rem;background:#f7f5f0;border-bottom:1px solid #e8e7e2;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+      <p id="album-desc" style="font-size:0.85rem;color:#4a4a47;margin:0;">Browse and click any photo to purchase.</p>
+      <span style="font-size:0.78rem;color:#737370;font-weight:500;">$15 per photo — instant email delivery</span>
+    </div>
+
+    <!-- Bulk importer -->
+    <div id="bulk-importer" style="background:#fdfcfa;border-bottom:1px solid #e8e7e2;padding:1rem 2.5rem;">
+      <div style="max-width:900px;margin:0 auto;">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleImporter()">
+          <span style="font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#1c1c1b;">+ Bulk Photo Importer</span>
+          <span id="importer-toggle-label" style="font-size:0.68rem;color:#a8a8a4;">Click to expand</span>
+        </div>
+        <div id="importer-body" style="display:none;margin-top:1rem;">
+          <p style="font-size:0.8rem;color:#737370;margin-bottom:0.8rem;">Paste Cloudinary filenames one per line (e.g. JOF_0372_k8yi3s.jpg). Base URL is added automatically.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div>
+              <label style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.4rem;">Paste filenames</label>
+              <textarea id="bulk-urls" style="width:100%;height:140px;font-family:monospace;font-size:0.75rem;padding:0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;resize:vertical;outline:none;"></textarea>
+              <input id="bulk-sport" type="text" placeholder="Sport (e.g. Basketball)" style="width:100%;margin-top:0.5rem;font-family:inherit;font-size:0.78rem;padding:0.5rem 0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;outline:none;" />
+              <button onclick="generateBulkCode()" style="margin-top:0.5rem;padding:0.5rem 1.2rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#1c1c1b;color:white;border:none;cursor:pointer;">Generate Code</button>
+            </div>
+            <div>
+              <label style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.4rem;">Generated code — paste into VS Code</label>
+              <textarea id="bulk-output" readonly style="width:100%;height:140px;font-family:monospace;font-size:0.7rem;padding:0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;resize:vertical;outline:none;"></textarea>
+              <button onclick="copyBulkCode()" id="copy-btn" style="margin-top:0.5rem;padding:0.5rem 1.2rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#f0ede6;color:#1c1c1b;border:1px solid #d4d4cf;cursor:pointer;">Copy to Clipboard</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BASKETBALL — Test Album -->
+    <div class="photo-grid" id="album-bball-test-album" style="display:none">
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7754_mnav3v.jpg','JOF_7754','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7754_mnav3v.jpg" alt="JOF_7754" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7754</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7755_kwpr1i.jpg','JOF_7755','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7755_kwpr1i.jpg" alt="JOF_7755" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7755</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7760_guvmis.jpg','JOF_7760','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7760_guvmis.jpg" alt="JOF_7760" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7760</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7769_tfegwt.jpg','JOF_7769','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7769_tfegwt.jpg" alt="JOF_7769" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7769</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7770_vonn7p.jpg','JOF_7770','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7770_vonn7p.jpg" alt="JOF_7770" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7770</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7775_o7wqwh.jpg','JOF_7775','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7775_o7wqwh.jpg" alt="JOF_7775" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7775</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7782_jt3mqu.jpg','JOF_7782','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7782_jt3mqu.jpg" alt="JOF_7782" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7782</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7783_z7stfp.jpg','JOF_7783','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7783_z7stfp.jpg" alt="JOF_7783" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7783</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7803_pdfjtc.jpg','JOF_7803','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7803_pdfjtc.jpg" alt="JOF_7803" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7803</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7805_be8ely.jpg','JOF_7805','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7805_be8ely.jpg" alt="JOF_7805" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7805</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7806_xbf4h8.jpg','JOF_7806','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7806_xbf4h8.jpg" alt="JOF_7806" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7806</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7816_q85hm5.jpg','JOF_7816','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7816_q85hm5.jpg" alt="JOF_7816" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7816</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7818_yqj2jk.jpg','JOF_7818','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7818_yqj2jk.jpg" alt="JOF_7818" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7818</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7821_nqfgo0.jpg','JOF_7821','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7821_nqfgo0.jpg" alt="JOF_7821" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7821</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7824_iwknmu.jpg','JOF_7824','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7824_iwknmu.jpg" alt="JOF_7824" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7824</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7825_f0buoh.jpg','JOF_7825','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7825_f0buoh.jpg" alt="JOF_7825" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7825</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7827_g5a1yt.jpg','JOF_7827','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7827_g5a1yt.jpg" alt="JOF_7827" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7827</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7828_yfcfgp.jpg','JOF_7828','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7828_yfcfgp.jpg" alt="JOF_7828" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7828</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7831_dzz09w.jpg','JOF_7831','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7831_dzz09w.jpg" alt="JOF_7831" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7831</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7834_flcm7y.jpg','JOF_7834','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7834_flcm7y.jpg" alt="JOF_7834" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7834</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7835_snwfgl.jpg','JOF_7835','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7835_snwfgl.jpg" alt="JOF_7835" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7835</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7836_frzufl.jpg','JOF_7836','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7836_frzufl.jpg" alt="JOF_7836" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7836</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7839_mtkm5w.jpg','JOF_7839','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7839_mtkm5w.jpg" alt="JOF_7839" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7839</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7841_ikz5mo.jpg','JOF_7841','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7841_ikz5mo.jpg" alt="JOF_7841" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7841</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7848_hqrpej.jpg','JOF_7848','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7848_hqrpej.jpg" alt="JOF_7848" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7848</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7851_j98m2p.jpg','JOF_7851','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7851_j98m2p.jpg" alt="JOF_7851" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7851</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7853_jtl3b0.jpg','JOF_7853','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7853_jtl3b0.jpg" alt="JOF_7853" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7853</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7856_cgs6oj.jpg','JOF_7856','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7856_cgs6oj.jpg" alt="JOF_7856" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7856</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7860_if1esm.jpg','JOF_7860','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7860_if1esm.jpg" alt="JOF_7860" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7860</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7861_ufw1ym.jpg','JOF_7861','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7861_ufw1ym.jpg" alt="JOF_7861" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7861</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7864_pzjve0.jpg','JOF_7864','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7864_pzjve0.jpg" alt="JOF_7864" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7864</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7866_pk3u6c.jpg','JOF_7866','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7866_pk3u6c.jpg" alt="JOF_7866" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7866</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7873_wwpl01.jpg','JOF_7873','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7873_wwpl01.jpg" alt="JOF_7873" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7873</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7875_kkj7kx.jpg','JOF_7875','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7875_kkj7kx.jpg" alt="JOF_7875" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7875</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7877_x5c2js.jpg','JOF_7877','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7877_x5c2js.jpg" alt="JOF_7877" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7877</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7880_a2v6z6.jpg','JOF_7880','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7880_a2v6z6.jpg" alt="JOF_7880" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7880</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7881_p95t6c.jpg','JOF_7881','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7881_p95t6c.jpg" alt="JOF_7881" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7881</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7882_t6zqjx.jpg','JOF_7882','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7882_t6zqjx.jpg" alt="JOF_7882" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7882</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7885_ek1xji.jpg','JOF_7885','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7885_ek1xji.jpg" alt="JOF_7885" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7885</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7890_vhrfdc.jpg','JOF_7890','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7890_vhrfdc.jpg" alt="JOF_7890" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7890</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7891_dxfmia.jpg','JOF_7891','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7891_dxfmia.jpg" alt="JOF_7891" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7891</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7892_nbrhor.jpg','JOF_7892','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7892_nbrhor.jpg" alt="JOF_7892" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7892</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7896_vkd1lv.jpg','JOF_7896','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7896_vkd1lv.jpg" alt="JOF_7896" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7896</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7897_ev4k5i.jpg','JOF_7897','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7897_ev4k5i.jpg" alt="JOF_7897" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7897</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7899_m4jcoo.jpg','JOF_7899','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7899_m4jcoo.jpg" alt="JOF_7899" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7899</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7900_lhkaeu.jpg','JOF_7900','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7900_lhkaeu.jpg" alt="JOF_7900" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7900</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7902_c0txkk.jpg','JOF_7902','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7902_c0txkk.jpg" alt="JOF_7902" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7902</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7903_xqtvni.jpg','JOF_7903','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7903_xqtvni.jpg" alt="JOF_7903" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7903</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7905_z4ikgv.jpg','JOF_7905','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7905_z4ikgv.jpg" alt="JOF_7905" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7905</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7918_f0u4d3.jpg','JOF_7918','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7918_f0u4d3.jpg" alt="JOF_7918" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7918</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7920_f8yrmj.jpg','JOF_7920','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7920_f8yrmj.jpg" alt="JOF_7920" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7920</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7929_snqt27.jpg','JOF_7929','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7929_snqt27.jpg" alt="JOF_7929" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7929</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7945_sog8uy.jpg','JOF_7945','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7945_sog8uy.jpg" alt="JOF_7945" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7945</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7946_ufkz2r.jpg','JOF_7946','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7946_ufkz2r.jpg" alt="JOF_7946" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7946</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7947_iuljlk.jpg','JOF_7947','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7947_iuljlk.jpg" alt="JOF_7947" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7947</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7948_vryhns.jpg','JOF_7948','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7948_vryhns.jpg" alt="JOF_7948" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7948</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7949_cwvwbn.jpg','JOF_7949','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7949_cwvwbn.jpg" alt="JOF_7949" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7949</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7950_v3pyd7.jpg','JOF_7950','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7950_v3pyd7.jpg" alt="JOF_7950" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7950</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7952_umvbqq.jpg','JOF_7952','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7952_umvbqq.jpg" alt="JOF_7952" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7952</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7953_qdlzyq.jpg','JOF_7953','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7953_qdlzyq.jpg" alt="JOF_7953" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7953</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7954_kytem4.jpg','JOF_7954','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7954_kytem4.jpg" alt="JOF_7954" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7954</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7955_uap6aw.jpg','JOF_7955','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7955_uap6aw.jpg" alt="JOF_7955" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7955</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7957_cx04mj.jpg','JOF_7957','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7957_cx04mj.jpg" alt="JOF_7957" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7957</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7962_arga2j.jpg','JOF_7962','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7962_arga2j.jpg" alt="JOF_7962" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7962</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7974_ebuvyb.jpg','JOF_7974','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7974_ebuvyb.jpg" alt="JOF_7974" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7974</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7976_mtko2n.jpg','JOF_7976','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7976_mtko2n.jpg" alt="JOF_7976" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7976</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7979_jkgtja.jpg','JOF_7979','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7979_jkgtja.jpg" alt="JOF_7979" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7979</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7981_gqyecc.jpg','JOF_7981','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7981_gqyecc.jpg" alt="JOF_7981" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7981</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7982_udofwt.jpg','JOF_7982','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7982_udofwt.jpg" alt="JOF_7982" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7982</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7985_urw1hb.jpg','JOF_7985','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7985_urw1hb.jpg" alt="JOF_7985" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7985</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7986_tzwnjk.jpg','JOF_7986','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7986_tzwnjk.jpg" alt="JOF_7986" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7986</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7991_pphy3v.jpg','JOF_7991','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7991_pphy3v.jpg" alt="JOF_7991" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7991</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7992_v1sfkb.jpg','JOF_7992','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7992_v1sfkb.jpg" alt="JOF_7992" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7992</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_7993_x3rsfl.jpg','JOF_7993','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_7993_x3rsfl.jpg" alt="JOF_7993" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_7993</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8004_eygwgv.jpg','JOF_8004','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8004_eygwgv.jpg" alt="JOF_8004" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8004</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8005_kahmcp.jpg','JOF_8005','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8005_kahmcp.jpg" alt="JOF_8005" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8005</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8011_u6oarx.jpg','JOF_8011','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8011_u6oarx.jpg" alt="JOF_8011" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8011</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8012_cnxisn.jpg','JOF_8012','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8012_cnxisn.jpg" alt="JOF_8012" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8012</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8016_qhayt7.jpg','JOF_8016','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8016_qhayt7.jpg" alt="JOF_8016" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8016</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8017_fu11gy.jpg','JOF_8017','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8017_fu11gy.jpg" alt="JOF_8017" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8017</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8024_kqp3tr.jpg','JOF_8024','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8024_kqp3tr.jpg" alt="JOF_8024" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8024</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8025_c4pthl.jpg','JOF_8025','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8025_c4pthl.jpg" alt="JOF_8025" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8025</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8026_ogs7kt.jpg','JOF_8026','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8026_ogs7kt.jpg" alt="JOF_8026" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8026</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8041_zoyfac.jpg','JOF_8041','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8041_zoyfac.jpg" alt="JOF_8041" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8041</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8045_nccjtq.jpg','JOF_8045','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8045_nccjtq.jpg" alt="JOF_8045" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8045</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8052_rf2jn8.jpg','JOF_8052','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8052_rf2jn8.jpg" alt="JOF_8052" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8052</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8053_buxzsu.jpg','JOF_8053','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8053_buxzsu.jpg" alt="JOF_8053" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8053</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8058_fjj0yv.jpg','JOF_8058','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8058_fjj0yv.jpg" alt="JOF_8058" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8058</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8087_k2j5bv.jpg','JOF_8087','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8087_k2j5bv.jpg" alt="JOF_8087" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8087</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8090_mvs1wn.jpg','JOF_8090','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8090_mvs1wn.jpg" alt="JOF_8090" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8090</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8092_pcnich.jpg','JOF_8092','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8092_pcnich.jpg" alt="JOF_8092" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8092</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8093_r44goh.jpg','JOF_8093','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8093_r44goh.jpg" alt="JOF_8093" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8093</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8094_jaq0y8.jpg','JOF_8094','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8094_jaq0y8.jpg" alt="JOF_8094" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8094</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8099_iyctxf.jpg','JOF_8099','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8099_iyctxf.jpg" alt="JOF_8099" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8099</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8101_junwpt.jpg','JOF_8101','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8101_junwpt.jpg" alt="JOF_8101" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8101</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8104_xlzrec.jpg','JOF_8104','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8104_xlzrec.jpg" alt="JOF_8104" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8104</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8105_ysnxfx.jpg','JOF_8105','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8105_ysnxfx.jpg" alt="JOF_8105" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8105</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8115_ihrlrc.jpg','JOF_8115','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8115_ihrlrc.jpg" alt="JOF_8115" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8115</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8116_b2qazh.jpg','JOF_8116','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8116_b2qazh.jpg" alt="JOF_8116" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8116</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8119_xlmyee.jpg','JOF_8119','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8119_xlmyee.jpg" alt="JOF_8119" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8119</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8121_rtkta7.jpg','JOF_8121','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8121_rtkta7.jpg" alt="JOF_8121" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8121</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8125_plth9p.jpg','JOF_8125','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8125_plth9p.jpg" alt="JOF_8125" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8125</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8133_qszkuu.jpg','JOF_8133','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8133_qszkuu.jpg" alt="JOF_8133" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8133</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8139_hcuap5.jpg','JOF_8139','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8139_hcuap5.jpg" alt="JOF_8139" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8139</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8148_xe2s72.jpg','JOF_8148','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8148_xe2s72.jpg" alt="JOF_8148" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8148</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8152_bqd6ib.jpg','JOF_8152','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8152_bqd6ib.jpg" alt="JOF_8152" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8152</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8153_i7axix.jpg','JOF_8153','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8153_i7axix.jpg" alt="JOF_8153" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8153</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8158_wgpzzk.jpg','JOF_8158','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8158_wgpzzk.jpg" alt="JOF_8158" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8158</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8160_gbhiz1.jpg','JOF_8160','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8160_gbhiz1.jpg" alt="JOF_8160" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8160</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8162_cpxjls.jpg','JOF_8162','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8162_cpxjls.jpg" alt="JOF_8162" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8162</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8173_ohd1h8.jpg','JOF_8173','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8173_ohd1h8.jpg" alt="JOF_8173" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8173</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8177_bfvv4t.jpg','JOF_8177','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8177_bfvv4t.jpg" alt="JOF_8177" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8177</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8178_vbktkg.jpg','JOF_8178','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8178_vbktkg.jpg" alt="JOF_8178" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8178</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8181_yekrtv.jpg','JOF_8181','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8181_yekrtv.jpg" alt="JOF_8181" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8181</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8182_jn92b1.jpg','JOF_8182','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8182_jn92b1.jpg" alt="JOF_8182" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8182</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8183_zfzkvv.jpg','JOF_8183','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8183_zfzkvv.jpg" alt="JOF_8183" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8183</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8184_whfc6y.jpg','JOF_8184','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8184_whfc6y.jpg" alt="JOF_8184" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8184</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8191_t6sgjs.jpg','JOF_8191','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8191_t6sgjs.jpg" alt="JOF_8191" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8191</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8196_aywlhd.jpg','JOF_8196','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8196_aywlhd.jpg" alt="JOF_8196" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8196</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8200_c1rsoj.jpg','JOF_8200','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8200_c1rsoj.jpg" alt="JOF_8200" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8200</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8202_ju4abt.jpg','JOF_8202','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8202_ju4abt.jpg" alt="JOF_8202" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8202</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8233_p9keht.jpg','JOF_8233','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8233_p9keht.jpg" alt="JOF_8233" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8233</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8246_h86qhh.jpg','JOF_8246','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8246_h86qhh.jpg" alt="JOF_8246" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8246</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8258_zib6pb.jpg','JOF_8258','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8258_zib6pb.jpg" alt="JOF_8258" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8258</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8261_yer7kf.jpg','JOF_8261','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8261_yer7kf.jpg" alt="JOF_8261" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8261</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8262_ifo08f.jpg','JOF_8262','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8262_ifo08f.jpg" alt="JOF_8262" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8262</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8285_vmrcx3.jpg','JOF_8285','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8285_vmrcx3.jpg" alt="JOF_8285" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8285</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8301_r9xlsy.jpg','JOF_8301','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8301_r9xlsy.jpg" alt="JOF_8301" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8301</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8302_riruxo.jpg','JOF_8302','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8302_riruxo.jpg" alt="JOF_8302" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8302</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8306_z34y6k.jpg','JOF_8306','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8306_z34y6k.jpg" alt="JOF_8306" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8306</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8308_cepwbh.jpg','JOF_8308','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8308_cepwbh.jpg" alt="JOF_8308" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8308</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8310_m6qm7o.jpg','JOF_8310','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8310_m6qm7o.jpg" alt="JOF_8310" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8310</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8313_tfxuve.jpg','JOF_8313','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8313_tfxuve.jpg" alt="JOF_8313" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8313</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8323_uq0k6m.jpg','JOF_8323','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8323_uq0k6m.jpg" alt="JOF_8323" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8323</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8326_a8ngc5.jpg','JOF_8326','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8326_a8ngc5.jpg" alt="JOF_8326" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8326</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8328_pannfu.jpg','JOF_8328','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8328_pannfu.jpg" alt="JOF_8328" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8328</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8329_rlzmua.jpg','JOF_8329','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8329_rlzmua.jpg" alt="JOF_8329" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8329</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8340_iooocc.jpg','JOF_8340','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8340_iooocc.jpg" alt="JOF_8340" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8340</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8341_vozugb.jpg','JOF_8341','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8341_vozugb.jpg" alt="JOF_8341" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8341</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8342_ae0sxs.jpg','JOF_8342','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8342_ae0sxs.jpg" alt="JOF_8342" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8342</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8344_qlqxkc.jpg','JOF_8344','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8344_qlqxkc.jpg" alt="JOF_8344" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8344</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8351_u0cgo5.jpg','JOF_8351','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8351_u0cgo5.jpg" alt="JOF_8351" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8351</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8355_dwnedr.jpg','JOF_8355','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8355_dwnedr.jpg" alt="JOF_8355" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8355</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8358_hie6fr.jpg','JOF_8358','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8358_hie6fr.jpg" alt="JOF_8358" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8358</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8368_lfyjfw.jpg','JOF_8368','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8368_lfyjfw.jpg" alt="JOF_8368" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8368</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8372_jymhym.jpg','JOF_8372','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8372_jymhym.jpg" alt="JOF_8372" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8372</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8376_odup40.jpg','JOF_8376','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8376_odup40.jpg" alt="JOF_8376" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8376</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8384_wh854b.jpg','JOF_8384','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8384_wh854b.jpg" alt="JOF_8384" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8384</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8398_rcaojk.jpg','JOF_8398','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8398_rcaojk.jpg" alt="JOF_8398" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8398</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_8426_fxinsw.jpg','JOF_8426','Basketball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_8426_fxinsw.jpg" alt="JOF_8426" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Basketball</span>
+            <strong class="pc-title">JOF_8426</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <!-- BULK IMPORTED PHOTOS GO HERE -->
+    </div>
+
+    <!-- SOCCER example -->
+    <div class="photo-grid" id="album-soccer-example" style="display:none">
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6195-Enhanced-NR_yngxvr.jpg','J0F_6195','Soccer',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6195-Enhanced-NR_yngxvr.jpg" alt="J0F_6195" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Soccer</span>
+            <strong class="pc-title">J0F_6195</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <!-- BULK IMPORTED PHOTOS GO HERE -->
+    </div>
+
+    <!-- FOOTBALL example -->
+    <div class="photo-grid" id="album-football-example" style="display:none">
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_5656_ma6teq.jpg','J0F_5656','Football',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_5656_ma6teq.jpg" alt="J0F_5656" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Football</span>
+            <strong class="pc-title">J0F_5656</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <!-- BULK IMPORTED PHOTOS GO HERE -->
+    </div>
+
+    <!-- BASEBALL example -->
+    <div class="photo-grid" id="album-baseball-example" style="display:none">
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_0977-Enhanced-NR_snhzek.jpg','J0F_0977','Baseball',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_0977-Enhanced-NR_snhzek.jpg" alt="J0F_0977" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Baseball</span>
+            <strong class="pc-title">J0F_0977</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <!-- BULK IMPORTED PHOTOS GO HERE -->
+    </div>
+
+    <!-- LACROSSE example -->
+    <div class="photo-grid" id="album-lacrosse-example" style="display:none">
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_2830_wrviss.jpg','JOF_2830','Lacrosse',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_2830_wrviss.jpg" alt="JOF_2830" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Lacrosse</span>
+            <strong class="pc-title">JOF_2830</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <!-- BULK IMPORTED PHOTOS GO HERE -->
+    </div>
+
+  </div><!-- end view-photos -->
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">JoFliks<span>Photography</span></div>
+        <p>Sports &amp; Event Photography<br />Boston, MA</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-social">
+        <p class="footer-label">Follow Along</p>
+        <a href="https://www.instagram.com/jo.flikss_/" class="social-link" target="_blank">Instagram</a>
+        <a href="#" class="social-link">Facebook</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p>&copy; 2025 JoFliks Photography. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    var currentSport = '';
+    var currentSportLabel = '';
+    var currentAlbum = '';
+    var currentAlbumLabel = '';
+    var currentAlbumNameGlobal = '';
+    var currentPhotoData = null;
+
+    // ---- NAVIGATION ----
+    function updateBreadcrumb() {
+      var bc = document.getElementById('breadcrumb');
+      var html = '<span onclick="goHome()">Gallery</span>';
+      if (currentSport) html += ' <span class="bc-sep">/</span> <span onclick="goToSport()">' + currentSportLabel + '</span>';
+      if (currentAlbum) html += ' <span class="bc-sep">/</span> <span class="bc-current">' + currentAlbumLabel + '</span>';
+      if (!currentSport && !currentAlbum) html = '<span class="bc-current">Gallery</span>';
+      bc.innerHTML = html;
+    }
+
+    function goHome() {
+      currentSport = ''; currentSportLabel = ''; currentAlbum = ''; currentAlbumLabel = ''; currentAlbumNameGlobal = '';
+      document.getElementById('view-sports').style.display = 'block';
+      document.getElementById('view-albums').style.display = 'none';
+      document.getElementById('view-photos').style.display = 'none';
+      updateBreadcrumb();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openSport(sport, label) {
+      currentSport = sport; currentSportLabel = label; currentAlbum = ''; currentAlbumLabel = '';
+      document.getElementById('view-sports').style.display = 'none';
+      document.getElementById('view-albums').style.display = 'block';
+      document.getElementById('view-photos').style.display = 'none';
+      document.querySelectorAll('.album-grid').forEach(function(g) { g.style.display = 'none'; });
+      document.getElementById('albums-' + sport).style.display = 'grid';
+      updateBreadcrumb();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToSport() {
+      currentAlbum = ''; currentAlbumLabel = ''; currentAlbumNameGlobal = '';
+      document.getElementById('view-sports').style.display = 'none';
+      document.getElementById('view-albums').style.display = 'block';
+      document.getElementById('view-photos').style.display = 'none';
+      document.querySelectorAll('.album-grid').forEach(function(g) { g.style.display = 'none'; });
+      document.getElementById('albums-' + currentSport).style.display = 'grid';
+      updateBreadcrumb();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openAlbum(albumId, albumLabel) {
+      currentAlbum = albumId; currentAlbumLabel = albumLabel; currentAlbumNameGlobal = albumLabel;
+      document.getElementById('view-sports').style.display = 'none';
+      document.getElementById('view-albums').style.display = 'none';
+      document.getElementById('view-photos').style.display = 'block';
+      document.querySelectorAll('.photo-grid').forEach(function(g) { g.style.display = 'none'; });
+      var grid = document.getElementById('album-' + albumId);
+      if (grid) grid.style.display = 'grid';
+      document.getElementById('album-desc').textContent = albumLabel + ' — click any photo to purchase for $15.';
+      updateBreadcrumb();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ---- PHOTO MODAL ----
+    function openPhotoModal(url, name, sport, album) {
+      currentPhotoData = { url: url, name: name, sport: sport, album: album };
+      document.getElementById('modalImg').src = url;
+      document.getElementById('modalName').textContent = name;
+      document.getElementById('modalMeta').textContent = sport + ' — ' + album;
+      document.getElementById('modalBuyBtn').textContent = 'Buy This Photo — $15';
+      document.getElementById('modalBuyBtn').disabled = false;
+      document.getElementById('photoModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePhotoModal() {
+      document.getElementById('photoModal').classList.remove('open');
+      document.body.style.overflow = '';
+      currentPhotoData = null;
+    }
+
+    document.getElementById('photoModal').addEventListener('click', function(e) {
+      if (e.target === this) closePhotoModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePhotoModal();
+    });
+
+    // ---- BUY PHOTO ----
+    async function handleBuyPhoto() {
+      if (!currentPhotoData) return;
+      var btn = document.getElementById('modalBuyBtn');
+      btn.textContent = 'Loading...';
+      btn.disabled = true;
+      try {
+        var res = await fetch('/.netlify/functions/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            photoUrl: currentPhotoData.url,
+            photoName: currentPhotoData.name,
+            albumName: currentPhotoData.album,
+            sport: currentPhotoData.sport
+          })
+        });
+        var data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Something went wrong. Please try again.');
+          btn.textContent = 'Buy This Photo — $15';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Something went wrong. Please try again.');
+        btn.textContent = 'Buy This Photo — $15';
+        btn.disabled = false;
+      }
+    }
+
+    // ---- BULK IMPORTER ----
+    function toggleImporter() {
+      var body = document.getElementById('importer-body');
+      var label = document.getElementById('importer-toggle-label');
+      if (body.style.display === 'none') {
+        var pwd = prompt('Enter password:');
+        if (pwd !== 'CCypress7!') { alert('Incorrect password.'); return; }
+        body.style.display = 'block';
+        label.textContent = 'Click to collapse';
+      } else {
+        body.style.display = 'none';
+        label.textContent = 'Click to expand';
+      }
+    }
+
+    function generateBulkCode() {
+      var base = 'https://res.cloudinary.com/dxthbasef/image/upload/';
+      var inputs = document.getElementById('bulk-urls').value.trim().split('\n').filter(function(u) { return u.trim(); });
+      var sport = document.getElementById('bulk-sport').value.trim() || 'Sport';
+      if (!inputs.length) { alert('Paste at least one filename.'); return; }
+      var code = '';
+      inputs.forEach(function(u) {
+        u = u.trim();
+        var url = u.startsWith('http') ? u : base + u;
+        var name = u.replace(/\.[^.]+$/, '').split('/').pop().replace(/_[a-z0-9]{6,}$/, '').toUpperCase();
+        code += '      <div class="photo-card" onclick="openPhotoModal(\'' + url + '\',\'' + name + '\',\'' + sport + '\',currentAlbumNameGlobal)">\n';
+        code += '        <img src="' + url + '" alt="' + name + '" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />\n';
+        code += '        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">' + sport + '</span><strong class="pc-title">' + name + '</strong></div><div class="pc-buy-hint">Tap to purchase — $15</div></div>\n';
+        code += '      </div>\n\n';
+      });
+      document.getElementById('bulk-output').value = code;
+    }
+
+    function copyBulkCode() {
+      var out = document.getElementById('bulk-output');
+      if (!out.value) { alert('Generate code first.'); return; }
+      out.select();
+      document.execCommand('copy');
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy to Clipboard'; }, 2000);
+    }
+
+    // Disable right-click on images
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target.tagName === 'IMG') e.preventDefault();
+    });
+
+    // Nav scroll
+    var header = document.getElementById('site-header');
+    window.addEventListener('scroll', function() { header.classList.toggle('scrolled', window.scrollY > 20); });
+
+    // Mobile menu
+    var hamburger = document.getElementById('hamburger');
+    var mobileNav = document.getElementById('mobile-nav');
+    hamburger.addEventListener('click', function() {
+      var open = mobileNav.classList.toggle('open');
+      var bars = hamburger.querySelectorAll('span');
+      if (open) {
+        bars[0].style.transform = 'translateY(6.5px) rotate(45deg)';
+        bars[1].style.opacity = '0';
+        bars[2].style.transform = 'translateY(-6.5px) rotate(-45deg)';
+      } else {
+        bars[0].style.transform = '';
+        bars[1].style.opacity = '';
+        bars[2].style.transform = '';
+      }
+    });
+  </script>
+
+</body>
+</html>

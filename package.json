@@ -1,0 +1,8 @@
+{
+  "name": "jofliks-photography",
+  "version": "1.0.0",
+  "dependencies": {
+    "stripe": "^14.0.0",
+    "@sendgrid/mail": "^8.0.0"
+  }
+}
