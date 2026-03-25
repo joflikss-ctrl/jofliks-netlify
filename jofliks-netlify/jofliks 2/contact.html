@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — JoFliks Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">JoFliks<span>Photography</span></a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="index.html">Home</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <p class="page-eyebrow">Let's Work Together</p>
+      <h1>Contact</h1>
+      <p class="page-sub">Have an upcoming event or season? Get in touch and let's make something great.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT LAYOUT -->
+  <section class="contact-layout">
+    <div class="contact-info">
+      <h2>Get in touch</h2>
+      <p>Based in Boston, MA. Available for events across New England and beyond. Response time is typically within 24 hours.</p>
+
+      <div class="contact-detail">
+        <span class="contact-detail-label">Email</span>
+        <!-- Replace with your actual email -->
+        <a href="mailto:joflikss@gmail.com" class="contact-detail-value">joflikss@gmail.com</a>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Location</span>
+        <span class="contact-detail-value">Boston, MA</span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Availability</span>
+        <span class="contact-detail-value">Weekdays &amp; Weekends</span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Instagram</span>
+        <!-- Replace with your Instagram handle -->
+        <a href="https://www.instagram.com/jo.flikss_/" class="contact-detail-value" target="_blank">@jo.flikss_</a>
+      </div>
+
+      <div class="contact-note">
+        <p><strong>For digital download help</strong> — if you've purchased a photo and need assistance, include your order number in the message below.</p>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap">
+      <!-- 
+        FORM SETUP NOTE:
+        This form uses Formspree for free email delivery.
+        1. Go to https://formspree.io and create a free account
+        2. Create a new form and copy your form endpoint
+        3. Replace "YOUR_FORMSPREE_ID" below with your actual form ID
+        Example: action="https://formspree.io/f/xpzvwabk"
+      -->
+      <form class="contact-form" action="https://formspree.io/f/mbdzekog" method="POST" id="contact-form">
+
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">What's this about?</label>
+          <select id="subject" name="subject">
+            <option value="">Select an option...</option>
+            <option value="booking-half-day">Book — Half Day ($299)</option>
+            <option value="booking-full-day">Book — Full Day ($549)</option>
+            <option value="booking-season">Book — Season Package ($1,899)</option>
+            <option value="custom">Custom / Other Package</option>
+            <option value="download-help">Digital Download Help</option>
+            <option value="general">General Enquiry</option>
+          </select>
+        </div>
+
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label for="event-date">Event Date</label>
+            <input type="date" id="event-date" name="event_date" />
+          </div>
+          <div class="form-group">
+            <label for="event-location">Event Location</label>
+            <input type="text" id="event-location" name="event_location" placeholder="City, State" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Tell me about your event — what's the occasion, expected attendance, and anything else I should know?" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-submit">Send Message</button>
+        <p class="form-notice">I'll get back to you within 24 hours.</p>
+
+        <div id="form-success" class="form-success" style="display:none">
+          <strong>Message sent!</strong> Thank you — I'll be in touch within 24 hours.
+        </div>
+        <div id="form-error" class="form-error" style="display:none">
+          Something went wrong. Please try again or email directly.
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">JoFliks<span>Photography</span></div>
+        <p>Sports &amp; Event Photography<br />Boston, MA</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-social">
+        <p class="footer-label">Follow Along</p>
+        <a href="https://www.instagram.com/jo.flikss_/" class="social-link" target="_blank">Instagram</a>
+        <a href="#" class="social-link">Facebook</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p>&copy; 2025 JoFliks Photography. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Handle form submission with Formspree AJAX
+    const form = document.getElementById('contact-form');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = form.querySelector('.btn-submit');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.reset();
+          document.getElementById('form-success').style.display = 'block';
+          document.getElementById('form-error').style.display = 'none';
+          btn.textContent = 'Sent!';
+        } else {
+          throw new Error('Server error');
+        }
+      } catch {
+        document.getElementById('form-error').style.display = 'block';
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
