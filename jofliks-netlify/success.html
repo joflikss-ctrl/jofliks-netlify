@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase Successful — JoFliks Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .success-wrap {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+    }
+    .success-card {
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      padding: 3rem 2.5rem;
+      border: 1px solid var(--faint);
+      background: var(--white);
+    }
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.4rem;
+    }
+    .success-card h1 {
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0.8rem;
+    }
+    .success-card p {
+      font-size: 0.88rem;
+      color: var(--graphite);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .success-steps {
+      text-align: left;
+      margin: 1.5rem 0;
+      padding: 1.2rem 1.4rem;
+      background: var(--beige);
+      border-left: 3px solid var(--ink);
+    }
+    .success-steps p {
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
+    }
+    .success-steps ol {
+      margin: 0;
+      padding-left: 1.2rem;
+      font-size: 0.84rem;
+      color: var(--graphite);
+      line-height: 1.9;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">JoFliks<span>Photography</span></a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="success-wrap">
+    <div class="success-card">
+      <div class="success-icon">✓</div>
+      <h1>Purchase Successful!</h1>
+      <p>Thank you for your purchase from JoFliks Photography. A confirmation email has been sent to your inbox with everything you need.</p>
+
+      <div class="success-steps" id="steps-partial">
+        <p>What happens next:</p>
+        <ol>
+          <li>Check your email for your order confirmation</li>
+          <li>Go back to the gallery and note the filenames of the photos you want</li>
+          <li>Reply to your confirmation email with your chosen filenames</li>
+          <li>Your photos will arrive within 24 hours</li>
+        </ol>
+      </div>
+
+      <div style="margin-top:1.5rem;display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;">
+        <a href="gallery.html" class="btn btn-dark">Back to Gallery</a>
+        <a href="index.html" class="btn btn-dark" style="background:transparent;color:var(--ink);border-color:var(--light);">Home</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">JoFliks<span>Photography</span></div>
+        <p>Sports &amp; Event Photography<br />Boston, MA</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-social">
+        <p class="footer-label">Follow Along</p>
+        <a href="https://www.instagram.com/jo.flikss_/" class="social-link" target="_blank">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p>&copy; 2025 JoFliks Photography. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
