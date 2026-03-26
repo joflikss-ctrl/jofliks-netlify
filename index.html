@@ -89,22 +89,22 @@
  <section class="featured-work">
   <div class="section-header">
     <h2>Featured Work</h2>
-    <a href="gallery.html" class="link-arrow">View all photos →</a>
+    <a href="portfolio.html" class="link-arrow">View all photos →</a>
   </div>
   <div class="featured-grid">
-    <div class="fg-item fg-large">
+    <div class="fg-item fg-large" onclick="idxPlbOpen(0)">
       <div class="fg-photo">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_0852_umxnqn" alt="Featured Photo" style="object-fit:cover;width:100%;height:100%;" />
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_0852_umxnqn" alt="Featured Photo" style="object-fit:cover;width:100%;height:100%;pointer-events:none;" />
       </div>
     </div>
-    <div class="fg-item">
+    <div class="fg-item" onclick="idxPlbOpen(1)">
       <div class="fg-photo">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_2741_je17tk" alt="Featured Photo" style="object-fit:cover;width:100%;height:100%;" />
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_2741_je17tk" alt="Featured Photo" style="object-fit:cover;width:100%;height:100%;pointer-events:none;" />
       </div>
     </div>
-    <div class="fg-item">
+    <div class="fg-item" onclick="idxPlbOpen(2)">
       <div class="fg-photo">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6350-Enhanced-NR_aioyd8" alt="Featured Photo" style="object-fit:cover;width:100%;height:100%;" />
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6350-Enhanced-NR_aioyd8" alt="Featured Photo" style="object-fit:cover;width:100%;height:100%;pointer-events:none;" />
       </div>
     </div>
 </section>
@@ -168,5 +168,54 @@
   </footer>
 
   <script src="js/main.js"></script>
+
+  <!-- INDEX LIGHTBOX -->
+  <div class="portfolio-lightbox-backdrop" id="idxPlbBackdrop" onclick="idxPlbClickOutside(event)">
+    <div class="portfolio-lightbox-inner">
+      <button class="plb-close" onclick="idxPlbClose()">✕</button>
+      <button class="plb-btn plb-prev" onclick="idxPlbStep(-1)">&#8592;</button>
+      <img id="idxPlbImg" src="" alt="Photo" draggable="false" />
+      <button class="plb-btn plb-next" onclick="idxPlbStep(1)">&#8594;</button>
+      <div class="plb-counter" id="idxPlbCounter"></div>
+    </div>
+  </div>
+
+  <script>
+    var idxPlbSrcs = [
+      'https://res.cloudinary.com/dxthbasef/image/upload/JOF_0852_umxnqn',
+      'https://res.cloudinary.com/dxthbasef/image/upload/J0F_2741_je17tk',
+      'https://res.cloudinary.com/dxthbasef/image/upload/J0F_6350-Enhanced-NR_aioyd8'
+    ];
+    var idxPlbIdx = 0;
+
+    function idxPlbOpen(idx) {
+      idxPlbIdx = idx;
+      idxPlbShow();
+      document.getElementById('idxPlbBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function idxPlbShow() {
+      document.getElementById('idxPlbImg').src = idxPlbSrcs[idxPlbIdx];
+      document.getElementById('idxPlbCounter').textContent = (idxPlbIdx + 1) + ' / ' + idxPlbSrcs.length;
+    }
+    function idxPlbStep(dir) {
+      idxPlbIdx = (idxPlbIdx + dir + idxPlbSrcs.length) % idxPlbSrcs.length;
+      idxPlbShow();
+    }
+    function idxPlbClose() {
+      document.getElementById('idxPlbBackdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function idxPlbClickOutside(e) {
+      if (e.target === document.getElementById('idxPlbBackdrop')) idxPlbClose();
+    }
+    document.addEventListener('keydown', function(e) {
+      var bd = document.getElementById('idxPlbBackdrop');
+      if (!bd.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') idxPlbStep(-1);
+      if (e.key === 'ArrowRight') idxPlbStep(1);
+      if (e.key === 'Escape') idxPlbClose();
+    });
+  </script>
 </body>
 </html>

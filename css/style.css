@@ -735,12 +735,12 @@ em { font-family: var(--serif); font-style: italic; }
 .photo-card {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4/5;
   cursor: pointer;
 }
 .photo-card.pc-wide {
   grid-column: span 2;
-  aspect-ratio: 8/3;
+  aspect-ratio: 8/5;
 }
 .photo-bg {
   width: 100%; height: 100%;
@@ -1180,7 +1180,7 @@ a.contact-detail-value:hover { text-decoration: underline; }
   .pg-tall, .pg-wide { grid-column: auto; grid-row: auto; aspect-ratio: 4/3; }
 
   .photo-grid { grid-template-columns: 1fr 1fr; }
-  .photo-card.pc-wide { grid-column: auto; aspect-ratio: 4/3; }
+  .photo-card.pc-wide { grid-column: auto; aspect-ratio: 4/5; }
 
   .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
 
@@ -1206,4 +1206,205 @@ a.contact-detail-value:hover { text-decoration: underline; }
   .photo-grid { grid-template-columns: 1fr; }
   .photo-card.pc-wide { grid-column: auto; }
   .hero-title { font-size: 2.4rem; }
+}
+
+/* =============================================
+   MOBILE OVERHAUL — comprehensive responsive fixes
+   ============================================= */
+
+/* ---- Category cards: 1:1 square on all screens ---- */
+.cat-card { aspect-ratio: 1/1 !important; }
+
+/* ---- Album cards (browse view): 1:1 ---- */
+.album-card { aspect-ratio: 1/1 !important; }
+
+/* ---- Photo cards inside albums: always 4:5 ---- */
+.photo-card { aspect-ratio: 4/5 !important; }
+.photo-card.pc-wide { aspect-ratio: 4/5 !important; }
+
+/* ---- Gallery category grid: bigger, 2 cols on mobile ---- */
+.category-select {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+}
+
+/* ---- Album grid: adapt nicely ---- */
+.album-grid {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 4px;
+  padding: 4px;
+}
+
+/* ---- Lightbox / photo modal improvements ---- */
+.photo-modal-backdrop {
+  padding: 0 !important;
+  align-items: flex-end !important;
+}
+
+.photo-modal {
+  max-width: 900px !important;
+  width: 100% !important;
+  grid-template-columns: 3fr 2fr !important;
+  max-height: 90vh !important;
+  border-radius: 0 !important;
+}
+
+.photo-modal-img {
+  min-height: 400px !important;
+}
+
+/* ---- Portfolio lightbox ---- */
+.portfolio-lightbox-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.portfolio-lightbox-backdrop.open { opacity: 1; pointer-events: all; }
+.portfolio-lightbox-inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex; align-items: center;
+}
+.portfolio-lightbox-inner img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.plb-btn {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white; font-size: 1.3rem;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.plb-btn:hover { background: rgba(255,255,255,0.25); }
+.plb-prev { left: -56px; }
+.plb-next { right: -56px; }
+.plb-close {
+  position: absolute;
+  top: -48px; right: 0;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white; font-size: 1rem;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.plb-close:hover { background: rgba(255,255,255,0.25); }
+.plb-counter {
+  position: absolute;
+  bottom: -36px; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,0.55);
+  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+}
+
+/* cursor pointer on portfolio/index images */
+.pg-item, .fg-item { cursor: pointer; }
+.pg-photo, .fg-item img { pointer-events: none; }
+
+@media (max-width: 900px) {
+  .photo-modal {
+    grid-template-columns: 1fr !important;
+    max-height: 95vh !important;
+  }
+  .photo-modal-img { min-height: 300px !important; max-height: 55vw !important; }
+  .plb-prev { left: 4px; }
+  .plb-next { right: 4px; }
+  .plb-btn { background: rgba(0,0,0,0.5); }
+}
+
+@media (max-width: 768px) {
+  /* ---- Nav ---- */
+  .nav-links { display: none !important; }
+  .hamburger { display: flex !important; }
+
+  /* ---- Hero ---- */
+  .hero-title { font-size: 2.4rem; }
+  .hero-content { padding: 0 1.5rem; }
+  .hero-actions { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+
+  /* ---- Intro strip ---- */
+  .intro-strip { grid-template-columns: 1fr; }
+  .intro-text { border-right: none; border-bottom: 1px solid var(--faint); }
+  .intro-stats { grid-template-columns: 1fr 1fr; }
+
+  /* ---- Featured grid ---- */
+  .featured-grid { grid-template-columns: 1fr; }
+  .fg-large, .fg-wide { grid-column: auto; }
+  .fg-item { aspect-ratio: 4/3; }
+
+  /* ---- Services ---- */
+  .services-inner { grid-template-columns: 1fr; }
+  .service-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+  /* ---- Portfolio grid ---- */
+  .portfolio-grid { grid-template-columns: 1fr 1fr; padding: 0.5rem; gap: 4px; }
+  .pg-tall, .pg-wide { grid-column: auto; grid-row: auto; aspect-ratio: 4/3; }
+  .pg-item { aspect-ratio: 4/3; }
+
+  /* ---- Gallery category: 2 cols on mobile ---- */
+  .category-select { grid-template-columns: 1fr 1fr !important; }
+  .cat-card { aspect-ratio: 1/1 !important; }
+  .cat-card-name { font-size: 1.2rem; }
+
+  /* ---- Album grid: 2 cols on mobile ---- */
+  .album-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* ---- Photo grid: 2 cols ---- */
+  .photo-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* ---- Footer ---- */
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+
+  /* ---- Contact ---- */
+  .contact-layout { grid-template-columns: 1fr; }
+  .contact-info { border-right: none; border-bottom: 1px solid var(--faint); }
+
+  /* ---- FAQ ---- */
+  .faq-grid { grid-template-columns: 1fr; }
+
+  /* ---- Pricing ---- */
+  .pricing-cards { grid-template-columns: 1fr; }
+  .digital-pricing-inner { grid-template-columns: 1fr; }
+  .digital-pricing-cards { grid-template-columns: 1fr; }
+  .dl-card-wide { grid-column: auto; }
+
+  /* ---- Photo modal ---- */
+  .photo-modal-backdrop { align-items: flex-end !important; padding: 0 !important; }
+  .photo-modal { grid-template-columns: 1fr !important; border-radius: 12px 12px 0 0 !important; }
+  .photo-modal-img { min-height: 260px !important; max-height: 50vh !important; }
+  .photo-modal-info { padding: 1.25rem !important; }
+  .photo-modal-close { top: 0.6rem !important; right: 0.6rem !important; }
+
+  /* lightbox arrows on small screens */
+  .plb-prev { left: 6px; }
+  .plb-next { right: 6px; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 2rem; }
+  .portfolio-grid { grid-template-columns: 1fr 1fr; gap: 3px; }
+  .pg-item { aspect-ratio: 1/1; }
+  .photo-grid { grid-template-columns: 1fr 1fr !important; }
+  .category-select { grid-template-columns: 1fr 1fr !important; }
+  .album-grid { grid-template-columns: 1fr 1fr !important; }
+  .cat-card-name { font-size: 1rem; }
+  .page-hero h1 { font-size: 2.2rem; }
+  .pricing-cards { gap: 1rem; }
+  .stat-num { font-size: 2.5rem; }
 }

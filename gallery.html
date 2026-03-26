@@ -40,20 +40,21 @@
     #view-albums { display:none; }
     #view-photos { display:none; }
 
-    /* PHOTO MODAL */
+    /* PHOTO MODAL — large immersive */
     .photo-modal-backdrop {
-      position:fixed; inset:0; background:rgba(0,0,0,0.85);
+      position:fixed; inset:0; background:rgba(0,0,0,0.92);
       z-index:1000; display:flex; align-items:center; justify-content:center;
-      padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.3s;
+      padding:1rem; opacity:0; pointer-events:none; transition:opacity 0.3s;
     }
     .photo-modal-backdrop.open { opacity:1; pointer-events:all; }
     .photo-modal {
-      background:#fdfcfa; max-width:700px; width:100%;
-      display:grid; grid-template-columns:1fr 1fr;
-      max-height:90vh; overflow:hidden;
+      background:#fdfcfa; max-width:1050px; width:100%;
+      display:grid; grid-template-columns:3fr 2fr;
+      max-height:92vh; overflow:hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6);
     }
     .photo-modal-img {
-      position:relative; overflow:hidden; min-height:300px;
+      position:relative; overflow:hidden; min-height:520px;
     }
     .photo-modal-img img {
       width:100%; height:100%; object-fit:cover;
@@ -74,23 +75,30 @@
       font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
       z-index:10;
     }
-    .modal-photo-name { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:400; margin-bottom:0.3rem; }
+    .modal-photo-name { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:400; margin-bottom:0.3rem; }
     .modal-photo-meta { font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:#737370; margin-bottom:1.5rem; }
-    .modal-price { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:400; margin-bottom:0.5rem; }
-    .modal-price-note { font-size:0.75rem; color:#737370; line-height:1.7; margin-bottom:1.5rem; }
+    .modal-price { font-family:'Playfair Display',serif; font-size:2.8rem; font-weight:400; margin-bottom:0.5rem; }
+    .modal-price-note { font-size:0.78rem; color:#737370; line-height:1.7; margin-bottom:1.5rem; }
     .modal-buy-btn {
-      display:block; width:100%; padding:0.85rem; text-align:center;
+      display:block; width:100%; padding:1rem; text-align:center;
       background:#1c1c1b; color:white; border:none; cursor:pointer;
-      font-family:inherit; font-size:0.75rem; font-weight:500;
+      font-family:inherit; font-size:0.78rem; font-weight:500;
       letter-spacing:0.14em; text-transform:uppercase; transition:background 0.2s;
     }
     .modal-buy-btn:hover { background:#2e2e2c; }
     .modal-buy-btn:disabled { background:#a8a8a4; cursor:not-allowed; }
     .modal-cancel { display:block; text-align:center; margin-top:0.8rem; font-size:0.72rem; color:#a8a8a4; cursor:pointer; }
     .modal-cancel:hover { color:#1c1c1b; }
-    @media (max-width:600px) {
-      .photo-modal { grid-template-columns:1fr; max-height:95vh; }
-      .photo-modal-img { min-height:200px; max-height:250px; }
+    .photo-modal-info { padding:2.5rem 2rem; display:flex; flex-direction:column; justify-content:space-between; overflow-y:auto; }
+    .modal-divider { border:none; border-top:1px solid #e8e7e2; margin:1.2rem 0; }
+    .modal-feature-list { list-style:none; padding:0; margin:0 0 1.5rem; }
+    .modal-feature-list li { font-size:0.76rem; color:#737370; padding:0.3rem 0; display:flex; align-items:center; gap:0.5rem; }
+    .modal-feature-list li::before { content:'✓'; color:#1c1c1b; font-weight:600; }
+    @media (max-width:800px) {
+      .photo-modal { grid-template-columns:1fr; max-height:96vh; border-radius:12px 12px 0 0; }
+      .photo-modal-img { min-height:260px; max-height:50vw; }
+      .photo-modal-info { padding:1.5rem; }
+      .photo-modal-backdrop { align-items:flex-end; padding:0; }
     }
   </style>
 </head>
@@ -128,10 +136,18 @@
       </div>
       <div class="photo-modal-info">
         <div>
+          <p style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;margin-bottom:0.5rem;">JoFliks Photography</p>
           <p class="modal-photo-name" id="modalName"></p>
           <p class="modal-photo-meta" id="modalMeta"></p>
+          <hr class="modal-divider" />
           <div class="modal-price" id="modal-price-display">$15</div>
           <p class="modal-price-note" id="modal-price-note">High-resolution JPEG delivered instantly to your email after payment. Personal &amp; social media use included.</p>
+          <ul class="modal-feature-list">
+            <li>Full-resolution JPEG file</li>
+            <li>Personal &amp; social media license</li>
+            <li>Instant delivery to your email</li>
+            <li>Watermark removed on purchase</li>
+          </ul>
         </div>
         <div>
           <button class="modal-buy-btn" id="modalBuyBtn" onclick="handleBuyPhoto()">
@@ -147,7 +163,7 @@
     <div class="page-hero-inner">
       <p class="page-eyebrow">Browse &amp; Purchase</p>
       <h1>Gallery</h1>
-      <p class="page-sub" style="font-size:1rem;font-weight:500;color:#1c1c1b;">Click any photo to purchase it for $15. High-resolution file delivered to your email instantly.</p>
+      <p class="page-sub" style="font-size:1rem;font-weight:600;color:#1c1c1b;letter-spacing:0.08em;text-transform:uppercase;">Click any category for its sport</p>
     </div>
   </section>
 
@@ -194,6 +210,14 @@
         <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_2830_wrviss.jpg" alt="Lacrosse" />
         <div class="cat-card-overlay">
           <div class="cat-card-name">Lacrosse</div>
+          <div class="cat-card-count">Browse albums</div>
+          <div class="cat-card-btn">View Albums &rarr;</div>
+        </div>
+      </div>
+      <div class="cat-card" onclick="openSport('events','Events')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/v1774534872/JOF_2904_z7klf5.jpg" alt="Events" />
+        <div class="cat-card-overlay">
+          <div class="cat-card-name">Events</div>
           <div class="cat-card-count">Browse albums</div>
           <div class="cat-card-btn">View Albums &rarr;</div>
         </div>
@@ -268,6 +292,16 @@
         <div class="album-card-overlay">
           <div class="album-card-title">St.Georges vs NAPS</div>
           <div class="album-card-date">3/10/26 &amp; date</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+    </div>
+    <div class="album-grid" id="albums-events" style="display:none">
+      <div class="album-card" onclick="openAlbum('events-main','Events')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/v1774534872/JOF_2904_z7klf5.jpg" alt="Events" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Events</div>
+          <div class="album-card-date">Browse all event photos</div>
           <div class="album-card-arrow">View Photos &rarr;</div>
         </div>
       </div>
@@ -2593,6 +2627,21 @@
       </div>
 
 <!-- BULK IMPORTED PHOTOS GO HERE -->
+    </div>
+
+    <!-- EVENTS album -->
+    <div class="photo-grid" id="album-events-main" style="display:none">
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/v1774534872/JOF_2904_z7klf5.jpg','JOF_2904','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/v1774534872/JOF_2904_z7klf5.jpg" alt="JOF_2904" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay">
+          <div class="pc-meta">
+            <span class="pc-cat">Events</span>
+            <strong class="pc-title">JOF_2904</strong>
+          </div>
+          <div class="pc-buy-hint">Tap to purchase — $15</div>
+        </div>
+      </div>
+      <!-- BULK IMPORTED PHOTOS GO HERE -->
     </div>
 
   </div><!-- end view-photos -->

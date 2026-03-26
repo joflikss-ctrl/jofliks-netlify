@@ -39,7 +39,7 @@
     <div class="page-hero-inner">
       <p class="page-eyebrow">Selected Work</p>
       <h1>Portfolio</h1>
-      <p class="page-sub">A curated body of work spanning sports, events, and documentary photography from 2020–2024.</p>
+      <p class="page-sub">A curated body of work spanning sports, events, and documentary photography from 2020–2026.</p>
     </div>
   </section>
 
@@ -144,5 +144,68 @@
   </footer>
 
   <script src="js/main.js"></script>
+
+  <!-- PORTFOLIO LIGHTBOX -->
+  <div class="portfolio-lightbox-backdrop" id="plbBackdrop" onclick="plbClickOutside(event)">
+    <div class="portfolio-lightbox-inner" id="plbInner">
+      <button class="plb-close" onclick="plbClose()">✕</button>
+      <button class="plb-btn plb-prev" onclick="plbStep(-1)">&#8592;</button>
+      <img id="plbImg" src="" alt="Photo" draggable="false" />
+      <button class="plb-btn plb-next" onclick="plbStep(1)">&#8594;</button>
+      <div class="plb-counter" id="plbCounter"></div>
+    </div>
+  </div>
+
+  <script>
+    var plbImages = [];
+    var plbIndex = 0;
+
+    function buildPlbImages() {
+      plbImages = [];
+      document.querySelectorAll('.pg-item img').forEach(function(img) {
+        plbImages.push(img.src);
+      });
+    }
+
+    function plbOpen(idx) {
+      buildPlbImages();
+      plbIndex = idx;
+      plbShow();
+      document.getElementById('plbBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function plbShow() {
+      document.getElementById('plbImg').src = plbImages[plbIndex];
+      document.getElementById('plbCounter').textContent = (plbIndex + 1) + ' / ' + plbImages.length;
+    }
+
+    function plbStep(dir) {
+      plbIndex = (plbIndex + dir + plbImages.length) % plbImages.length;
+      plbShow();
+    }
+
+    function plbClose() {
+      document.getElementById('plbBackdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function plbClickOutside(e) {
+      if (e.target === document.getElementById('plbBackdrop')) plbClose();
+    }
+
+    document.addEventListener('keydown', function(e) {
+      var bd = document.getElementById('plbBackdrop');
+      if (!bd.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') plbStep(-1);
+      if (e.key === 'ArrowRight') plbStep(1);
+      if (e.key === 'Escape') plbClose();
+    });
+
+    // Attach click to all portfolio items
+    document.querySelectorAll('.pg-item').forEach(function(item, idx) {
+      item.addEventListener('click', function() { plbOpen(idx); });
+    });
+  </script>
 </body>
 </html>
