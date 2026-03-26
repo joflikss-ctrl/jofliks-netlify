@@ -1318,11 +1318,6 @@ a.contact-detail-value:hover { text-decoration: underline; }
 .pg-photo, .fg-item img { pointer-events: none; }
 
 @media (max-width: 900px) {
-  .photo-modal {
-    grid-template-columns: 1fr !important;
-    max-height: 95vh !important;
-  }
-  .photo-modal-img { min-height: 300px !important; max-height: 55vw !important; }
   .plb-prev { left: 4px; }
   .plb-next { right: 4px; }
   .plb-btn { background: rgba(0,0,0,0.5); }
@@ -1385,12 +1380,6 @@ a.contact-detail-value:hover { text-decoration: underline; }
   .dl-card-wide { grid-column: auto; }
 
   /* ---- Photo modal ---- */
-  .photo-modal-backdrop { align-items: flex-end !important; padding: 0 !important; }
-  .photo-modal { grid-template-columns: 1fr !important; border-radius: 12px 12px 0 0 !important; }
-  .photo-modal-img { min-height: 260px !important; max-height: 50vh !important; }
-  .photo-modal-info { padding: 1.25rem !important; }
-  .photo-modal-close { top: 0.6rem !important; right: 0.6rem !important; }
-
   /* lightbox arrows on small screens */
   .plb-prev { left: 6px; }
   .plb-next { right: 6px; }
