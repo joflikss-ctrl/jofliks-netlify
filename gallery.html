@@ -25,7 +25,7 @@
     .cat-card-btn { font-size:0.65rem; letter-spacing:0.14em; text-transform:uppercase; color:white; border:1px solid rgba(255,255,255,0.5); padding:0.35rem 1rem; opacity:0; transform:translateY(6px); transition:all 0.25s; }
     .cat-card:hover .cat-card-btn { opacity:1; transform:translateY(0); }
     .album-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; padding:3px; }
-    .album-card { position:relative; aspect-ratio:4/5; overflow:hidden; cursor:pointer; }
+    .album-card { position:relative; aspect-ratio:4/3; overflow:hidden; cursor:pointer; }
     .album-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.45s ease; }
     .album-card:hover img { transform:scale(1.05); }
     .album-card-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(17,17,16,0.88) 0%,transparent 55%); display:flex; flex-direction:column; justify-content:flex-end; padding:1.2rem 1.4rem; }
@@ -33,6 +33,7 @@
     .album-card-date { font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:0.5rem; }
     .album-card-arrow { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6); opacity:0; transform:translateX(-4px); transition:all 0.25s; }
     .album-card:hover .album-card-arrow { opacity:1; transform:translateX(0); }
+    .album-card-free-badge { position:absolute; top:0.7rem; right:0.7rem; background:#2e7d32; color:white; font-size:0.6rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; padding:0.25rem 0.55rem; border-radius:2px; }
     .pc-buy-hint { font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-top:0.3rem; opacity:0; transition:opacity 0.25s; }
     .photo-card:hover .pc-buy-hint { opacity:1; }
     #view-sports { display:block; }
@@ -129,8 +130,8 @@
         <div>
           <p class="modal-photo-name" id="modalName"></p>
           <p class="modal-photo-meta" id="modalMeta"></p>
-          <div class="modal-price">$15</div>
-          <p class="modal-price-note">High-resolution JPEG delivered instantly to your email after payment. Personal &amp; social media use included.</p>
+          <div class="modal-price" id="modal-price-display">$15</div>
+          <p class="modal-price-note" id="modal-price-note">High-resolution JPEG delivered instantly to your email after payment. Personal &amp; social media use included.</p>
         </div>
         <div>
           <button class="modal-buy-btn" id="modalBuyBtn" onclick="handleBuyPhoto()">
@@ -225,10 +226,10 @@
     </div>
     <div class="album-grid" id="albums-soccer" style="display:none">
       <div class="album-card" onclick="openAlbum('soccer-example','Example Match')">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6195-Enhanced-NR_yngxvr.jpg" alt="Soccer" />
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6315-Enhanced-NR_hxtrdd.jpg" alt="Soccer" />
         <div class="album-card-overlay">
-          <div class="album-card-title">Example Match</div>
-          <div class="album-card-date">Add game name &amp; date</div>
+        <div class="album-card-title">St.Georges vs Lawrence Academy</div>
+          <div class="album-card-date"> 10/25/25 &amp; date</div>
           <div class="album-card-arrow">View Photos &rarr;</div>
         </div>
       </div>
@@ -269,29 +270,47 @@
   <div id="view-photos">
     <div style="padding:1.2rem 2.5rem;background:#f7f5f0;border-bottom:1px solid #e8e7e2;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
       <p id="album-desc" style="font-size:0.85rem;color:#4a4a47;margin:0;">Browse and click any photo to purchase.</p>
-      <span style="font-size:0.78rem;color:#737370;font-weight:500;">$15 per photo — instant email delivery</span>
+      <span id="album-price-badge" style="font-size:0.78rem;color:#737370;font-weight:500;">$15 per photo — instant email delivery</span>
     </div>
 
     <!-- Bulk importer -->
     <div id="bulk-importer" style="background:#fdfcfa;border-bottom:1px solid #e8e7e2;padding:1rem 2.5rem;">
-      <div style="max-width:900px;margin:0 auto;">
+      <div style="max-width:960px;margin:0 auto;">
         <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleImporter()">
-          <span style="font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#1c1c1b;">+ Bulk Photo Importer</span>
-          <span id="importer-toggle-label" style="font-size:0.68rem;color:#a8a8a4;">Click to expand</span>
+          <span style="font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#1c1c1b;">⚙ Add Photos / Create New Album</span>
+          <span id="importer-toggle-label" style="font-size:0.68rem;color:#a8a8a4;">Click to expand (password required)</span>
         </div>
-        <div id="importer-body" style="display:none;margin-top:1rem;">
-          <p style="font-size:0.8rem;color:#737370;margin-bottom:0.8rem;">Paste Cloudinary filenames one per line (e.g. JOF_0372_k8yi3s.jpg). Base URL is added automatically.</p>
+        <div id="importer-body" style="display:none;margin-top:1.2rem;">
+
+          <!-- HOW IT WORKS BOX -->
+          <div style="background:#f0ede6;border-left:3px solid #1c1c1b;padding:1rem 1.2rem;margin-bottom:1.4rem;font-size:0.8rem;color:#4a4a47;line-height:1.8;">
+            <strong style="display:block;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:#1c1c1b;margin-bottom:0.6rem;">How to add photos to any album — 3 steps</strong>
+            <b>Step 1.</b> Upload your photos to Cloudinary. Copy the filename of each photo (e.g. <code style="background:#e8e5de;padding:0.1rem 0.3rem;">JOF_1234_abc123.jpg</code>).<br/>
+            <b>Step 2.</b> Paste the filenames below, pick the sport, and click <em>Generate Code</em>. The code for each photo card will appear on the right.<br/>
+            <b>Step 3.</b> Open <strong>gallery.html</strong> in VS Code. Find the correct album's photo grid (search for <code style="background:#e8e5de;padding:0.1rem 0.3rem;">id="album-YOUR-ALBUM-ID"</code>) and paste the generated code just before the <code style="background:#e8e5de;padding:0.1rem 0.3rem;">&lt;!-- BULK IMPORTED PHOTOS GO HERE --&gt;</code> comment. Save and deploy.<br/><br/>
+            <strong style="display:block;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:#1c1c1b;margin-bottom:0.4rem;">⚠ Why did my soccer photos not show up?</strong>
+            This tool only <em>generates</em> the HTML code — it does not automatically insert it into the page. You must copy the generated code and paste it into gallery.html in VS Code, then save and re-deploy to Netlify. If you skipped that last step, the photos won't appear.<br/><br/>
+            <strong style="display:block;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:#1c1c1b;margin-bottom:0.4rem;">Creating a brand-new album</strong>
+            1. Add an <code style="background:#e8e5de;padding:0.1rem 0.3rem;">album-card</code> div inside the sport's <code style="background:#e8e5de;padding:0.1rem 0.3rem;">albums-SPORT</code> grid (use the commented template already there).<br/>
+            2. Add a matching <code style="background:#e8e5de;padding:0.1rem 0.3rem;">photo-grid</code> div with the same album ID (copy an existing one).<br/>
+            3. To set a custom price, add one line to <code style="background:#e8e5de;padding:0.1rem 0.3rem;">ALBUM_PRICES</code> at the top of the &lt;script&gt; tag. Use <code style="background:#e8e5de;padding:0.1rem 0.3rem;">0</code> for free.
+          </div>
+
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
             <div>
-              <label style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.4rem;">Paste filenames</label>
-              <textarea id="bulk-urls" style="width:100%;height:140px;font-family:monospace;font-size:0.75rem;padding:0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;resize:vertical;outline:none;"></textarea>
-              <input id="bulk-sport" type="text" placeholder="Sport (e.g. Basketball)" style="width:100%;margin-top:0.5rem;font-family:inherit;font-size:0.78rem;padding:0.5rem 0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;outline:none;" />
+              <label style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.4rem;">Step 1 — Paste Cloudinary filenames (one per line)</label>
+              <textarea id="bulk-urls" placeholder="JOF_1234_abc123.jpg&#10;JOF_1235_def456.jpg&#10;JOF_1236_ghi789.jpg" style="width:100%;height:140px;font-family:monospace;font-size:0.75rem;padding:0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
+              <input id="bulk-sport" type="text" placeholder="Sport label shown on photo (e.g. Soccer)" style="width:100%;margin-top:0.5rem;font-family:inherit;font-size:0.78rem;padding:0.5rem 0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;outline:none;box-sizing:border-box;" />
               <button onclick="generateBulkCode()" style="margin-top:0.5rem;padding:0.5rem 1.2rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#1c1c1b;color:white;border:none;cursor:pointer;">Generate Code</button>
             </div>
             <div>
-              <label style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.4rem;">Generated code — paste into VS Code</label>
-              <textarea id="bulk-output" readonly style="width:100%;height:140px;font-family:monospace;font-size:0.7rem;padding:0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;resize:vertical;outline:none;"></textarea>
-              <button onclick="copyBulkCode()" id="copy-btn" style="margin-top:0.5rem;padding:0.5rem 1.2rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#f0ede6;color:#1c1c1b;border:1px solid #d4d4cf;cursor:pointer;">Copy to Clipboard</button>
+              <label style="font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.4rem;">Step 2 — Copy this code → paste into gallery.html in VS Code</label>
+              <textarea id="bulk-output" readonly placeholder="Generated code will appear here after clicking Generate Code above..." style="width:100%;height:140px;font-family:monospace;font-size:0.7rem;padding:0.7rem;border:1px solid #d4d4cf;background:#fdfcfa;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
+              <div style="display:flex;align-items:center;gap:0.7rem;margin-top:0.5rem;flex-wrap:wrap;">
+                <button onclick="copyBulkCode()" id="copy-btn" style="padding:0.5rem 1.2rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#f0ede6;color:#1c1c1b;border:1px solid #d4d4cf;cursor:pointer;">Copy to Clipboard</button>
+                <span id="bulk-count-label" style="font-size:0.7rem;color:#a8a8a4;"></span>
+              </div>
+              <p style="margin-top:0.6rem;font-size:0.72rem;color:#a8a8a4;line-height:1.6;">After copying, open <strong>gallery.html</strong> in VS Code, find the right album's photo grid, and paste before the <code>&lt;!-- BULK IMPORTED PHOTOS GO HERE --&gt;</code> comment. Then save &amp; redeploy.</p>
             </div>
           </div>
         </div>
@@ -1806,7 +1825,7 @@
     <!-- SOCCER example -->
     <div class="photo-grid" id="album-soccer-example" style="display:none">
       <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6195-Enhanced-NR_yngxvr.jpg','J0F_6195','Soccer',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6195-Enhanced-NR_yngxvr.jpg" alt="J0F_6195" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6249-Enhanced-NR_iwnf7o.jpg" alt="J0F_6195" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
         <div class="photo-card-overlay">
           <div class="pc-meta">
             <span class="pc-cat">Soccer</span>
@@ -1815,7 +1834,348 @@
           <div class="pc-buy-hint">Tap to purchase — $15</div>
         </div>
       </div>
-      <!-- BULK IMPORTED PHOTOS GO HERE -->
+      
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6251-Enhanced-NR_qtlua3.jpg','J0F_6251-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6251-Enhanced-NR_qtlua3.jpg" alt="J0F_6251-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6251-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6252-Enhanced-NR_or287d.jpg','J0F_6252-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6252-Enhanced-NR_or287d.jpg" alt="J0F_6252-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6252-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6253-Enhanced-NR_sblpga.jpg','J0F_6253-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6253-Enhanced-NR_sblpga.jpg" alt="J0F_6253-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6253-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6254-Enhanced-NR_i5vhxk.jpg','J0F_6254-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6254-Enhanced-NR_i5vhxk.jpg" alt="J0F_6254-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6254-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6255-Enhanced-NR_i4hwd1.jpg','J0F_6255-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6255-Enhanced-NR_i4hwd1.jpg" alt="J0F_6255-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6255-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6256-Enhanced-NR_mntxjm.jpg','J0F_6256-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6256-Enhanced-NR_mntxjm.jpg" alt="J0F_6256-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6256-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6257-Enhanced-NR_rwmhbu.jpg','J0F_6257-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6257-Enhanced-NR_rwmhbu.jpg" alt="J0F_6257-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6257-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6258-Enhanced-NR_s0eymg.jpg','J0F_6258-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6258-Enhanced-NR_s0eymg.jpg" alt="J0F_6258-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6258-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6259-Enhanced-NR_f9bajp.jpg','J0F_6259-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6259-Enhanced-NR_f9bajp.jpg" alt="J0F_6259-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6259-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6260-Enhanced-NR_msuorg.jpg','J0F_6260-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6260-Enhanced-NR_msuorg.jpg" alt="J0F_6260-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6260-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6261-Enhanced-NR_qer1ru.jpg','J0F_6261-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6261-Enhanced-NR_qer1ru.jpg" alt="J0F_6261-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6261-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6262-Enhanced-NR_e29ean.jpg','J0F_6262-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6262-Enhanced-NR_e29ean.jpg" alt="J0F_6262-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6262-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6263-Enhanced-NR_nwiasb.jpg','J0F_6263-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6263-Enhanced-NR_nwiasb.jpg" alt="J0F_6263-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6263-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6268-Enhanced-NR_yuv2m3.jpg','J0F_6268-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6268-Enhanced-NR_yuv2m3.jpg" alt="J0F_6268-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6268-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6270-Enhanced-NR_j8cb9o.jpg','J0F_6270-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6270-Enhanced-NR_j8cb9o.jpg" alt="J0F_6270-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6270-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6273-Enhanced-NR_jftdgr.jpg','J0F_6273-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6273-Enhanced-NR_jftdgr.jpg" alt="J0F_6273-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6273-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6274-Enhanced-NR_iqyuvd.jpg','J0F_6274-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6274-Enhanced-NR_iqyuvd.jpg" alt="J0F_6274-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6274-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6276-Enhanced-NR_ntt4f7.jpg','J0F_6276-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6276-Enhanced-NR_ntt4f7.jpg" alt="J0F_6276-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6276-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6277-Enhanced-NR_ayhzkw.jpg','J0F_6277-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6277-Enhanced-NR_ayhzkw.jpg" alt="J0F_6277-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6277-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6278-Enhanced-NR_cgotog.jpg','J0F_6278-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6278-Enhanced-NR_cgotog.jpg" alt="J0F_6278-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6278-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6279-Enhanced-NR_xkczw6.jpg','J0F_6279-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6279-Enhanced-NR_xkczw6.jpg" alt="J0F_6279-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6279-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6280-Enhanced-NR_btpafn.jpg','J0F_6280-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6280-Enhanced-NR_btpafn.jpg" alt="J0F_6280-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6280-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6285-Enhanced-NR_f9wt1u.jpg','J0F_6285-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6285-Enhanced-NR_f9wt1u.jpg" alt="J0F_6285-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6285-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6288-Enhanced-NR_bt75t9.jpg','J0F_6288-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6288-Enhanced-NR_bt75t9.jpg" alt="J0F_6288-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6288-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6290-Enhanced-NR_xkxguu.jpg','J0F_6290-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6290-Enhanced-NR_xkxguu.jpg" alt="J0F_6290-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6290-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6291-Enhanced-NR_vwolby.jpg','J0F_6291-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6291-Enhanced-NR_vwolby.jpg" alt="J0F_6291-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6291-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6295-Enhanced-NR_k1iahl.jpg','J0F_6295-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6295-Enhanced-NR_k1iahl.jpg" alt="J0F_6295-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6295-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6296-Enhanced-NR_azus6h.jpg','J0F_6296-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6296-Enhanced-NR_azus6h.jpg" alt="J0F_6296-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6296-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6297-Enhanced-NR_l4cosi.jpg','J0F_6297-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6297-Enhanced-NR_l4cosi.jpg" alt="J0F_6297-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6297-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6298-Enhanced-NR_wpkpl6.jpg','J0F_6298-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6298-Enhanced-NR_wpkpl6.jpg" alt="J0F_6298-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6298-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6299-Enhanced-NR_z8ys0y.jpg','J0F_6299-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6299-Enhanced-NR_z8ys0y.jpg" alt="J0F_6299-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6299-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6301-Enhanced-NR_icz6ap.jpg','J0F_6301-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6301-Enhanced-NR_icz6ap.jpg" alt="J0F_6301-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6301-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6303-Enhanced-NR_p73a9v.jpg','J0F_6303-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6303-Enhanced-NR_p73a9v.jpg" alt="J0F_6303-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6303-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6304-Enhanced-NR_vzwjbp.jpg','J0F_6304-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6304-Enhanced-NR_vzwjbp.jpg" alt="J0F_6304-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6304-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6305-Enhanced-NR_tlrxik.jpg','J0F_6305-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6305-Enhanced-NR_tlrxik.jpg" alt="J0F_6305-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6305-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6306-Enhanced-NR_cojzcy.jpg','J0F_6306-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6306-Enhanced-NR_cojzcy.jpg" alt="J0F_6306-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6306-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6307-Enhanced-NR_nz6t9f.jpg','J0F_6307-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6307-Enhanced-NR_nz6t9f.jpg" alt="J0F_6307-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6307-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6308-Enhanced-NR_ypx5yo.jpg','J0F_6308-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6308-Enhanced-NR_ypx5yo.jpg" alt="J0F_6308-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6308-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6309-Enhanced-NR_jafdfi.jpg','J0F_6309-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6309-Enhanced-NR_jafdfi.jpg" alt="J0F_6309-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6309-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6310-Enhanced-NR_txgdnl.jpg','J0F_6310-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6310-Enhanced-NR_txgdnl.jpg" alt="J0F_6310-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6310-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6311-Enhanced-NR_pbgk1w.jpg','J0F_6311-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6311-Enhanced-NR_pbgk1w.jpg" alt="J0F_6311-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6311-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6313-Enhanced-NR_zgxu9x.jpg','J0F_6313-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6313-Enhanced-NR_zgxu9x.jpg" alt="J0F_6313-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6313-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6314-Enhanced-NR_im7qej.jpg','J0F_6314-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6314-Enhanced-NR_im7qej.jpg" alt="J0F_6314-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6314-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6315-Enhanced-NR_hxtrdd.jpg','J0F_6315-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6315-Enhanced-NR_hxtrdd.jpg" alt="J0F_6315-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6315-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6316-Enhanced-NR_o6tt9u.jpg','J0F_6316-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6316-Enhanced-NR_o6tt9u.jpg" alt="J0F_6316-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6316-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6318-Enhanced-NR_w1gobx.jpg','J0F_6318-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6318-Enhanced-NR_w1gobx.jpg" alt="J0F_6318-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6318-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6319-Enhanced-NR_vf6fce.jpg','J0F_6319-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6319-Enhanced-NR_vf6fce.jpg" alt="J0F_6319-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6319-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6320-Enhanced-NR_ha7vf6.jpg','J0F_6320-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6320-Enhanced-NR_ha7vf6.jpg" alt="J0F_6320-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6320-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6322-Enhanced-NR_nyvmnc.jpg','J0F_6322-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6322-Enhanced-NR_nyvmnc.jpg" alt="J0F_6322-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6322-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6323-Enhanced-NR_drvtnl.jpg','J0F_6323-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6323-Enhanced-NR_drvtnl.jpg" alt="J0F_6323-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6323-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6324-Enhanced-NR_ojszok.jpg','J0F_6324-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6324-Enhanced-NR_ojszok.jpg" alt="J0F_6324-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6324-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6325-Enhanced-NR_svsfnr.jpg','J0F_6325-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6325-Enhanced-NR_svsfnr.jpg" alt="J0F_6325-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6325-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6326-Enhanced-NR_ibeq8s.jpg','J0F_6326-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6326-Enhanced-NR_ibeq8s.jpg" alt="J0F_6326-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6326-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6328-Enhanced-NR_m6qhls.jpg','J0F_6328-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6328-Enhanced-NR_m6qhls.jpg" alt="J0F_6328-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6328-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6329-Enhanced-NR_gzc4xj.jpg','J0F_6329-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6329-Enhanced-NR_gzc4xj.jpg" alt="J0F_6329-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6329-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6331-Enhanced-NR_aid45p.jpg','J0F_6331-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6331-Enhanced-NR_aid45p.jpg" alt="J0F_6331-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6331-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6332-Enhanced-NR_hoavbw.jpg','J0F_6332-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6332-Enhanced-NR_hoavbw.jpg" alt="J0F_6332-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6332-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6336-Enhanced-NR_ddh7qj.jpg','J0F_6336-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6336-Enhanced-NR_ddh7qj.jpg" alt="J0F_6336-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6336-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6338-Enhanced-NR_awnnsh.jpg','J0F_6338-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6338-Enhanced-NR_awnnsh.jpg" alt="J0F_6338-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6338-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6339-Enhanced-NR_osotpy.jpg','J0F_6339-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6339-Enhanced-NR_osotpy.jpg" alt="J0F_6339-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6339-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6344-Enhanced-NR_zznzls.jpg','J0F_6344-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6344-Enhanced-NR_zznzls.jpg" alt="J0F_6344-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6344-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6350-Enhanced-NR_krmzfi.jpg','J0F_6350-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6350-Enhanced-NR_krmzfi.jpg" alt="J0F_6350-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6350-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6351-Enhanced-NR_udv9gk.jpg','J0F_6351-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6351-Enhanced-NR_udv9gk.jpg" alt="J0F_6351-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6351-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6359-Enhanced-NR_o0rhxe.jpg','J0F_6359-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6359-Enhanced-NR_o0rhxe.jpg" alt="J0F_6359-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6359-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6361-Enhanced-NR_pyw5mo.jpg','J0F_6361-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6361-Enhanced-NR_pyw5mo.jpg" alt="J0F_6361-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6361-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6363-Enhanced-NR_qlcxw6.jpg','J0F_6363-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6363-Enhanced-NR_qlcxw6.jpg" alt="J0F_6363-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6363-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6365-Enhanced-NR_bn0y1b.jpg','J0F_6365-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6365-Enhanced-NR_bn0y1b.jpg" alt="J0F_6365-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6365-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_6366-Enhanced-NR_ihi2wn.jpg','J0F_6366-ENHANCED-NR','Sport',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_6366-Enhanced-NR_ihi2wn.jpg" alt="J0F_6366-ENHANCED-NR" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Sport</span><strong class="pc-title">J0F_6366-ENHANCED-NR</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+ <!-- BULK IMPORTED PHOTOS GO HERE -->
     </div>
 
     <!-- FOOTBALL example -->
@@ -1890,12 +2250,25 @@
   </footer>
 
   <script>
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    //  ALBUM PRICING CONFIG — edit prices here, one line per album
+    //  Use 0 for FREE albums. Default price applies to all others.
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    var DEFAULT_PHOTO_PRICE = 15;   // $ price for any album not listed below
+    var ALBUM_PRICES = {
+      'bball-test-album': 0,        // FREE — test album
+      // 'soccer-example':  10,     // Example: $10 for a specific album
+      // 'bball-march-2025': 15,    // Example: $15 for another album
+    };
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
     var currentSport = '';
     var currentSportLabel = '';
     var currentAlbum = '';
     var currentAlbumLabel = '';
     var currentAlbumNameGlobal = '';
     var currentPhotoData = null;
+    var currentAlbumPrice = DEFAULT_PHOTO_PRICE;
 
     // ---- NAVIGATION ----
     function updateBreadcrumb() {
@@ -1940,25 +2313,36 @@
 
     function openAlbum(albumId, albumLabel) {
       currentAlbum = albumId; currentAlbumLabel = albumLabel; currentAlbumNameGlobal = albumLabel;
+      // Resolve price for this album
+      currentAlbumPrice = (albumId in ALBUM_PRICES) ? ALBUM_PRICES[albumId] : DEFAULT_PHOTO_PRICE;
       document.getElementById('view-sports').style.display = 'none';
       document.getElementById('view-albums').style.display = 'none';
       document.getElementById('view-photos').style.display = 'block';
       document.querySelectorAll('.photo-grid').forEach(function(g) { g.style.display = 'none'; });
       var grid = document.getElementById('album-' + albumId);
       if (grid) grid.style.display = 'grid';
-      document.getElementById('album-desc').textContent = albumLabel + ' — click any photo to purchase for $15.';
+      var priceLabel = currentAlbumPrice === 0 ? 'FREE' : ('$' + currentAlbumPrice + ' per photo');
+      document.getElementById('album-desc').textContent = albumLabel + ' — click any photo to ' + (currentAlbumPrice === 0 ? 'download for free.' : 'purchase for $' + currentAlbumPrice + '.');
+      // Update the price badge in the toolbar
+      document.getElementById('album-price-badge').textContent = currentAlbumPrice === 0 ? 'FREE download' : ('$' + currentAlbumPrice + ' per photo — instant email delivery');
       updateBreadcrumb();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // ---- PHOTO MODAL ----
     function openPhotoModal(url, name, sport, album) {
-      currentPhotoData = { url: url, name: name, sport: sport, album: album };
+      currentPhotoData = { url: url, name: name, sport: sport, album: album, price: currentAlbumPrice };
       document.getElementById('modalImg').src = url;
       document.getElementById('modalName').textContent = name;
       document.getElementById('modalMeta').textContent = sport + ' — ' + album;
-      document.getElementById('modalBuyBtn').textContent = 'Buy This Photo — $15';
-      document.getElementById('modalBuyBtn').disabled = false;
+      var isFree = currentAlbumPrice === 0;
+      document.getElementById('modal-price-display').textContent = isFree ? 'FREE' : ('$' + currentAlbumPrice);
+      document.getElementById('modal-price-note').textContent = isFree
+        ? 'High-resolution JPEG — free to download. Click below to get the full-res file sent to your email.'
+        : 'High-resolution JPEG delivered instantly to your email after payment. Personal & social media use included.';
+      var btn = document.getElementById('modalBuyBtn');
+      btn.textContent = isFree ? 'Download Free Photo' : ('Buy This Photo — $' + currentAlbumPrice);
+      btn.disabled = false;
       document.getElementById('photoModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -1977,10 +2361,16 @@
       if (e.key === 'Escape') closePhotoModal();
     });
 
-    // ---- BUY PHOTO ----
+    // ---- BUY / DOWNLOAD PHOTO ----
     async function handleBuyPhoto() {
       if (!currentPhotoData) return;
       var btn = document.getElementById('modalBuyBtn');
+      // FREE album — open full-res image directly in a new tab
+      if (currentPhotoData.price === 0) {
+        window.open(currentPhotoData.url, '_blank');
+        closePhotoModal();
+        return;
+      }
       btn.textContent = 'Loading...';
       btn.disabled = true;
       try {
@@ -1991,7 +2381,8 @@
             photoUrl: currentPhotoData.url,
             photoName: currentPhotoData.name,
             albumName: currentPhotoData.album,
-            sport: currentPhotoData.sport
+            sport: currentPhotoData.sport,
+            price: currentPhotoData.price
           })
         });
         var data = await res.json();
@@ -1999,13 +2390,13 @@
           window.location.href = data.url;
         } else {
           alert('Something went wrong. Please try again.');
-          btn.textContent = 'Buy This Photo — $15';
+          btn.textContent = 'Buy This Photo — $' + currentPhotoData.price;
           btn.disabled = false;
         }
       } catch (err) {
         console.error(err);
         alert('Something went wrong. Please try again.');
-        btn.textContent = 'Buy This Photo — $15';
+        btn.textContent = 'Buy This Photo — $' + currentPhotoData.price;
         btn.disabled = false;
       }
     }
@@ -2037,10 +2428,11 @@
         var name = u.replace(/\.[^.]+$/, '').split('/').pop().replace(/_[a-z0-9]{6,}$/, '').toUpperCase();
         code += '      <div class="photo-card" onclick="openPhotoModal(\'' + url + '\',\'' + name + '\',\'' + sport + '\',currentAlbumNameGlobal)">\n';
         code += '        <img src="' + url + '" alt="' + name + '" class="photo-bg" style="object-fit:cover;width:100%;height:100%;" />\n';
-        code += '        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">' + sport + '</span><strong class="pc-title">' + name + '</strong></div><div class="pc-buy-hint">Tap to purchase — $15</div></div>\n';
+        code += '        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">' + sport + '</span><strong class="pc-title">' + name + '</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>\n';
         code += '      </div>\n\n';
       });
       document.getElementById('bulk-output').value = code;
+      document.getElementById('bulk-count-label').textContent = inputs.length + ' photo card' + (inputs.length !== 1 ? 's' : '') + ' generated';
     }
 
     function copyBulkCode() {
