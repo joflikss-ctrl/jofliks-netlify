@@ -3133,12 +3133,41 @@
       bc.innerHTML = html;
     }
 
+    // ---- ALBUM ID → SPORT MAP (for deep linking) ----
+    var ALBUM_SPORT_MAP = {
+      'lacrosse-example': 'lacrosse',
+      'lacrosse-natick-algonquin-032826': 'lacrosse',
+      'bball-ALBUMID': 'basketball',
+      'bball-test-album': 'basketball',
+      'bball-stgeorges-standrews-022526': 'basketball',
+      'soccer-example': 'soccer',
+      'football-example': 'football',
+      'baseball-example': 'baseball',
+      'events-main': 'events'
+    };
+    var ALBUM_LABEL_MAP = {
+      'lacrosse-example': 'St.Georges vs NAPS',
+      'lacrosse-natick-algonquin-032826': 'Natick vs Algonquin',
+      'bball-ALBUMID': 'Team A vs Team B',
+      'bball-test-album': 'Test Album',
+      'bball-stgeorges-standrews-022526': 'St. Georges vs St. Andrews',
+      'soccer-example': 'St. Georges vs Lawrence Academy',
+      'football-example': 'Football Practice (1)',
+      'baseball-example': 'N/Ar',
+      'events-main': 'Events'
+    };
+    var SPORT_LABEL_MAP = {
+      'lacrosse': 'Lacrosse', 'basketball': 'Basketball', 'soccer': 'Soccer',
+      'football': 'Football', 'baseball': 'Baseball', 'events': 'Events'
+    };
+
     function goHome() {
       currentSport = ''; currentSportLabel = ''; currentAlbum = ''; currentAlbumLabel = ''; currentAlbumNameGlobal = '';
       document.getElementById('view-sports').style.display = 'block';
       document.getElementById('view-albums').style.display = 'none';
       document.getElementById('view-photos').style.display = 'none';
       updateBreadcrumb();
+      history.replaceState(null, '', window.location.pathname);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -3179,8 +3208,23 @@
       // Update the price badge in the toolbar
       document.getElementById('album-price-badge').textContent = currentAlbumPrice === 0 ? 'FREE download' : ('$' + currentAlbumPrice + ' per photo — instant email delivery');
       updateBreadcrumb();
+      // Update URL hash for deep linking
+      history.replaceState(null, '', '#' + albumId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // ---- DEEP LINK: read hash on page load ----
+    (function() {
+      var hash = window.location.hash.replace('#', '');
+      if (hash && document.getElementById('album-' + hash)) {
+        var sport = ALBUM_SPORT_MAP[hash] || '';
+        var label = ALBUM_LABEL_MAP[hash] || hash;
+        var sportLabel = SPORT_LABEL_MAP[sport] || sport;
+        currentSport = sport;
+        currentSportLabel = sportLabel;
+        openAlbum(hash, label);
+      }
+    })();
 
     // ---- PHOTO MODAL ----
     function openPhotoModal(url, name, sport, album) {
