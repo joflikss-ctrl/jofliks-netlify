@@ -3915,17 +3915,21 @@
     // ---- DEEP LINK: read hash on page load ----
     window.addEventListener('load', function() {
       var hash = window.location.hash.replace('#', '');
-      if (!hash) return;
-      // Small delay to ensure all openAlbum wrappers (loader, masonry) are in place
-      setTimeout(function() {
-        if (!document.getElementById('album-' + hash)) return;
-        var sport = ALBUM_SPORT_MAP[hash] || '';
-        var label = ALBUM_LABEL_MAP[hash] || hash;
-        currentSport = sport;
-        currentSportLabel = SPORT_LABEL_MAP[sport] || sport;
-        // Call window.openAlbum so all wrappers (masonry, loader) fire correctly
-        window.openAlbum(hash, label);
-      }, 100);
+      if (!hash || !document.getElementById('album-' + hash)) return;
+      var sport = ALBUM_SPORT_MAP[hash] || '';
+      var label = ALBUM_LABEL_MAP[hash] || hash;
+      currentSport = sport;
+      currentSportLabel = SPORT_LABEL_MAP[sport] || sport;
+      // Call window.openAlbum so all wrappers (masonry, loader) fire correctly
+      window.openAlbum(hash, label);
+      // Hide the page loader immediately — no need for the 2.25s intro animation
+      // when arriving via a direct link
+      var loader = document.getElementById('jof-loader');
+      if (loader) {
+        document.body.classList.remove('jof-loading');
+        loader.classList.add('jof-hidden');
+        setTimeout(function() { loader.style.display = 'none'; }, 900);
+      }
     });
 
     // ---- PHOTO MODAL ----
