@@ -3876,7 +3876,7 @@
       }
       document.querySelectorAll('.photo-grid').forEach(function(g) { g.style.display = 'none'; });
       var grid = document.getElementById('album-' + albumId);
-      if (grid) grid.style.display = 'grid';
+      if (grid) grid.style.display = 'block';
       document.getElementById('album-desc').textContent = albumLabel + ' — click any photo to ' + (currentAlbumPrice === 0 ? 'download for free.' : 'purchase for $' + currentAlbumPrice + '.');
       document.getElementById('album-price-badge').textContent = currentAlbumPrice === 0 ? 'FREE download' : ('$' + currentAlbumPrice + ' per photo — instant email delivery');
       updateBreadcrumb();
@@ -3915,14 +3915,17 @@
     // ---- DEEP LINK: read hash on page load ----
     window.addEventListener('load', function() {
       var hash = window.location.hash.replace('#', '');
-      if (hash && document.getElementById('album-' + hash)) {
+      if (!hash) return;
+      // Small delay to ensure all openAlbum wrappers (loader, masonry) are in place
+      setTimeout(function() {
+        if (!document.getElementById('album-' + hash)) return;
         var sport = ALBUM_SPORT_MAP[hash] || '';
         var label = ALBUM_LABEL_MAP[hash] || hash;
-        var sportLabel = SPORT_LABEL_MAP[sport] || sport;
         currentSport = sport;
-        currentSportLabel = sportLabel;
-        openAlbum(hash, label);
-      }
+        currentSportLabel = SPORT_LABEL_MAP[sport] || sport;
+        // Call window.openAlbum so all wrappers (masonry, loader) fire correctly
+        window.openAlbum(hash, label);
+      }, 100);
     });
 
     // ---- PHOTO MODAL ----
