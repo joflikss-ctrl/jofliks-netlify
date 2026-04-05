@@ -735,15 +735,15 @@ em { font-family: var(--serif); font-style: italic; }
 .photo-card {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4/5;
   cursor: pointer;
 }
 .photo-card.pc-wide {
   grid-column: span 2;
-  aspect-ratio: 8/5;
 }
 .photo-bg {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: auto;
+  display: block;
   transition: transform 0.45s ease;
 }
 .photo-card:hover .photo-bg { transform: scale(1.05); }
@@ -1180,7 +1180,7 @@ a.contact-detail-value:hover { text-decoration: underline; }
   .pg-tall, .pg-wide { grid-column: auto; grid-row: auto; aspect-ratio: 4/3; }
 
   .photo-grid { grid-template-columns: 1fr 1fr; }
-  .photo-card.pc-wide { grid-column: auto; aspect-ratio: 4/5; }
+  .photo-card.pc-wide { grid-column: auto; aspect-ratio: unset; }
 
   .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
 
@@ -1218,9 +1218,9 @@ a.contact-detail-value:hover { text-decoration: underline; }
 /* ---- Album cards (browse view): 1:1 ---- */
 .album-card { aspect-ratio: 1/1 !important; }
 
-/* ---- Photo cards inside albums: always 4:5 ---- */
-.photo-card { aspect-ratio: 4/5 !important; }
-.photo-card.pc-wide { aspect-ratio: 4/5 !important; }
+/* ---- Photo cards inside albums: natural aspect ratio (JS masonry handles layout) ---- */
+.photo-card { aspect-ratio: unset; }
+.photo-card.pc-wide { aspect-ratio: unset; }
 
 /* ---- Gallery category grid: bigger, 2 cols on mobile ---- */
 .category-select {
@@ -1360,8 +1360,8 @@ a.contact-detail-value:hover { text-decoration: underline; }
   /* ---- Album grid: 2 cols on mobile ---- */
   .album-grid { grid-template-columns: 1fr 1fr !important; }
 
-  /* ---- Photo grid: 2 cols ---- */
-  .photo-grid { grid-template-columns: 1fr 1fr !important; }
+  /* ---- Photo grid: masonry engine handles columns, no grid-template override needed ---- */
+  .photo-card { aspect-ratio: unset !important; height: auto !important; }
 
   /* ---- Footer ---- */
   .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
@@ -1389,11 +1389,51 @@ a.contact-detail-value:hover { text-decoration: underline; }
   .hero-title { font-size: 2rem; }
   .portfolio-grid { grid-template-columns: 1fr 1fr; gap: 3px; }
   .pg-item { aspect-ratio: 1/1; }
-  .photo-grid { grid-template-columns: 1fr 1fr !important; }
+  .photo-card { aspect-ratio: unset !important; height: auto !important; }
   .category-select { grid-template-columns: 1fr 1fr !important; }
   .album-grid { grid-template-columns: 1fr 1fr !important; }
   .cat-card-name { font-size: 1rem; }
   .page-hero h1 { font-size: 2.2rem; }
   .pricing-cards { gap: 1rem; }
   .stat-num { font-size: 2.5rem; }
+}
+
+/* =============================================
+   PHOTO GRID — JS MASONRY
+   Cards are positioned absolutely by masonry.js
+   in gallery.html. These rules support that.
+   ============================================= */
+.photo-grid {
+  position: relative;
+  padding: 3px;
+}
+.photo-grid .photo-card {
+  position: absolute;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: unset !important;
+  box-sizing: border-box;
+}
+.photo-grid .photo-card img.photo-bg {
+  width: 100%;
+  height: 100% !important;
+  display: block;
+  object-fit: cover;
+}
+.photo-grid .photo-card .photo-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(17,17,16,0.82) 0%, transparent 55%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.8rem 1rem;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.photo-grid .photo-card:hover .photo-card-overlay {
+  opacity: 1;
+}
+.photo-grid .photo-card .pc-buy-hint {
+  opacity: 1 !important;
 }
