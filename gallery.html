@@ -440,13 +440,6 @@
 
   <!-- VIEW 3 — PHOTOS -->
   <div id="view-photos" style="display:none">
-    <!-- Athletes-only banner (hidden by default) -->
-    <div id="athletes-banner" style="display:none;padding:1rem 2.5rem;background:#1c1c1b;color:white;text-align:center;">
-      <p style="margin:0;font-size:0.88rem;line-height:1.7;">
-        🏆 <strong>Athletes-only album</strong> — all photos are <strong>$5 each.</strong>
-        Buying multiple photos? Text <a href="sms:7744804229" style="color:#d4c9a8;font-weight:600;">774-480-4229</a> and we'll work out a deal. 📲
-      </p>
-    </div>
     <div style="padding:1.2rem 2.5rem;background:#f7f5f0;border-bottom:1px solid #e8e7e2;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
       <p id="album-desc" style="font-size:0.85rem;color:#4a4a47;margin:0;">Browse and click any photo to purchase.</p>
       <span id="album-price-badge" style="font-size:0.78rem;color:#737370;font-weight:500;">$15 per photo — instant email delivery</span>
@@ -3083,14 +3076,6 @@
         <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_3260</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
       </div>
     </div>
-
-    <!-- LACROSSE Natick vs Algonquin — Athletes-only ($5) -->
-    <div class="photo-grid" id="album-lacrosse-natick-algonquin-032826-athletes" style="display:none">
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_1111_uynqhj.jpg','J0F_1111','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_1111_uynqhj.jpg" alt="J0F_1111" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">J0F_1111</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
       <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/J0F_1124_etkidc.jpg','J0F_1124','Lacrosse',currentAlbumNameGlobal)">
         <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_1124_etkidc.jpg" alt="J0F_1124" class="photo-bg" />
         <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">J0F_1124</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
@@ -3713,20 +3698,24 @@
     </div>
 
   </div><!-- end view-photos -->
-
-  <!-- ATHLETE LINK GENERATOR (owner only) -->
-  <div id="athlete-link-panel" style="display:none; background:#fdfcfa; border-top:1px solid #e8e7e2;">
-    <div id="athlete-link-tab" onclick="unlockAthletePanel()" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.2rem;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;cursor:pointer;user-select:none;">
-      🔒 Generate Athlete Link
-    </div>
-    <div id="athlete-link-content" style="display:none;padding:0 2.5rem 1.2rem;">
-      <div style="max-width:600px;">
-        <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
-          <input id="athlete-link-output" readonly style="flex:1;min-width:200px;font-size:0.78rem;padding:0.55rem 0.8rem;border:1px solid #d4d4cf;background:#f7f5f0;color:#1c1c1b;font-family:monospace;outline:none;" />
-          <button onclick="copyAthleteLink()" style="padding:0.55rem 1.2rem;font-family:inherit;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#1c1c1b;color:white;border:none;cursor:pointer;white-space:nowrap;">Copy Link</button>
-        </div>
-        <p style="font-size:0.7rem;color:#a8a8a4;margin-top:0.5rem;">Share this with athletes only — $5/photo, hidden from the public gallery.</p>
+  <!-- ── ATHLETE LINK GENERATOR (owner only, shown below every album) ── -->
+  <div id="athlete-gen" style="display:none; background:#fdfcfa; border-top:1px solid #e8e7e2; padding:1rem 2.5rem;">
+    <div style="max-width:680px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;">
+      <div>
+        <p style="font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;margin:0 0 0.2rem;">Owner Tools</p>
+        <p style="font-size:0.8rem;color:#4a4a47;margin:0;">Generate a private, time-limited athlete link for this album.</p>
       </div>
+      <button id="athlete-gen-btn" onclick="generateAthleteLink()" style="padding:0.6rem 1.4rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#1c1c1b;color:white;border:none;cursor:pointer;white-space:nowrap;">
+        🔒 Generate Athlete Link
+      </button>
+    </div>
+    <div id="athlete-gen-result" style="display:none; margin-top:0.9rem; max-width:680px;">
+      <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
+        <input id="athlete-gen-url" readonly style="flex:1;min-width:220px;font-size:0.76rem;padding:0.5rem 0.75rem;border:1px solid #d4d4cf;background:#f0ede6;color:#1c1c1b;font-family:monospace;outline:none;border-radius:2px;" />
+        <button onclick="copyAthleteGenLink()" id="athlete-copy-btn" style="padding:0.5rem 1.1rem;font-family:inherit;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#2e7d32;color:white;border:none;cursor:pointer;border-radius:2px;">Copy Link</button>
+        <button onclick="generateAthleteLink()" style="padding:0.5rem 1rem;font-family:inherit;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;background:transparent;color:#737370;border:1px solid #d4d4cf;cursor:pointer;border-radius:2px;">Regenerate</button>
+      </div>
+      <p style="font-size:0.68rem;color:#a8a8a4;margin-top:0.5rem;">⏱ Link expires in 72 hours &nbsp;·&nbsp; Athletes pay $5–$30 depending on bundle &nbsp;·&nbsp; Not publicly listed</p>
     </div>
   </div>
 
@@ -3764,7 +3753,6 @@
       'bball-test-album': 0,        // FREE — test album
       // 'soccer-example':  10,     // Example: $10 for a specific album
       // 'bball-march-2025': 15,    // Example: $15 for another album
-      'lacrosse-natick-algonquin-032826-athletes': 5,  // Athletes-only discount
     };
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -3790,7 +3778,6 @@
     var ALBUM_SPORT_MAP = {
       'lacrosse-example': 'lacrosse',
       'lacrosse-natick-algonquin-032826': 'lacrosse',
-      'lacrosse-natick-algonquin-032826-athletes': 'lacrosse',
       'bball-ALBUMID': 'basketball',
       'bball-test-album': 'basketball',
       'bball-stgeorges-standrews-022526': 'basketball',
@@ -3802,7 +3789,6 @@
     var ALBUM_LABEL_MAP = {
       'lacrosse-example': 'St.Georges vs NAPS',
       'lacrosse-natick-algonquin-032826': 'Natick vs Algonquin',
-      'lacrosse-natick-algonquin-032826-athletes': 'Natick vs Algonquin — Players',
       'bball-ALBUMID': 'Team A vs Team B',
       'bball-test-album': 'Test Album',
       'bball-stgeorges-standrews-022526': 'St. Georges vs St. Andrews',
@@ -3821,6 +3807,7 @@
       document.getElementById('view-sports').style.display = 'block';
       document.getElementById('view-albums').style.display = 'none';
       document.getElementById('view-photos').style.display = 'none';
+      hideAthleteGen();
       updateBreadcrumb();
       history.replaceState(null, '', window.location.pathname);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3831,6 +3818,7 @@
       document.getElementById('view-sports').style.display = 'none';
       document.getElementById('view-albums').style.display = 'block';
       document.getElementById('view-photos').style.display = 'none';
+      hideAthleteGen();
       document.querySelectorAll('.album-grid').forEach(function(g) { g.style.display = 'none'; });
       document.getElementById('albums-' + sport).style.display = 'grid';
       updateBreadcrumb();
@@ -3842,6 +3830,7 @@
       document.getElementById('view-sports').style.display = 'none';
       document.getElementById('view-albums').style.display = 'block';
       document.getElementById('view-photos').style.display = 'none';
+      hideAthleteGen();
       document.querySelectorAll('.album-grid').forEach(function(g) { g.style.display = 'none'; });
       document.getElementById('albums-' + currentSport).style.display = 'grid';
       updateBreadcrumb();
@@ -3854,26 +3843,6 @@
       document.getElementById('view-sports').style.display = 'none';
       document.getElementById('view-albums').style.display = 'none';
       document.getElementById('view-photos').style.display = 'block';
-      // Show/hide athletes banner
-      var banner = document.getElementById('athletes-banner');
-      if (banner) banner.style.display = albumId.indexOf('-athletes') !== -1 ? 'block' : 'none';
-      // Show athlete link tab if this album has an athlete version
-      var athletePanel = document.getElementById('athlete-link-panel');
-      var athleteContent = document.getElementById('athlete-link-content');
-      var athleteId = albumId + '-athletes';
-      var isAthleteAlbum = albumId.indexOf('-athletes') !== -1;
-      if (athletePanel) {
-        if (!isAthleteAlbum) {
-          var base = window.location.href.startsWith('file:') ? 'https://jofliks.com/gallery.html' : window.location.href.split('#')[0];
-          document.getElementById('athlete-link-output').value = base + '#' + athleteId;
-          athletePanel.style.display = 'block';
-          athleteContent.style.display = 'none';
-          athletePanel.setAttribute('data-unlocked', 'false');
-          document.getElementById('athlete-link-tab').style.color = '#a8a8a4';
-        } else {
-          athletePanel.style.display = 'none';
-        }
-      }
       document.querySelectorAll('.photo-grid').forEach(function(g) { g.style.display = 'none'; });
       var grid = document.getElementById('album-' + albumId);
       if (grid) grid.style.display = 'block';
@@ -3882,35 +3851,9 @@
       updateBreadcrumb();
       history.replaceState(null, '', '#' + albumId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      showAthleteGen();
     }
 
-    function unlockAthletePanel() {
-      var panel = document.getElementById('athlete-link-panel');
-      var content = document.getElementById('athlete-link-content');
-      if (!panel || !content) return;
-      if (panel.getAttribute('data-unlocked') === 'true') {
-        // Toggle collapsed/expanded if already unlocked
-        content.style.display = content.style.display === 'none' ? 'block' : 'none';
-        return;
-      }
-      var pwd = prompt('Enter password:');
-      if (pwd === 'CCypress7!') {
-        content.style.display = 'block';
-        panel.setAttribute('data-unlocked', 'true');
-        document.getElementById('athlete-link-tab').style.color = '#1c1c1b';
-      } else if (pwd !== null) {
-        alert('Incorrect password.');
-      }
-    }
-
-    function copyAthleteLink() {
-      var input = document.getElementById('athlete-link-output');
-      if (!input || !input.value) return;
-      navigator.clipboard ? navigator.clipboard.writeText(input.value) : (input.select(), document.execCommand('copy'));
-      var btn = event.target;
-      btn.textContent = 'Copied!';
-      setTimeout(function() { btn.textContent = 'Copy Link'; }, 2000);
-    }
 
     // ---- DEEP LINK: read hash on page load ----
     window.addEventListener('load', function() {
@@ -4046,6 +3989,95 @@
       var btn = document.getElementById('copy-btn');
       btn.textContent = 'Copied!';
       setTimeout(function() { btn.textContent = 'Copy to Clipboard'; }, 2000);
+    }
+
+
+    // ─── ATHLETE LINK GENERATOR ──────────────────────────────────────────
+    // Shows the panel whenever an album is open, generates a secure
+    // token via the Netlify function, and lets the owner copy the link.
+
+    var _athleteGenUnlocked = false;   // stays unlocked for the session
+
+    // Called from openAlbum — show the generator panel
+    function showAthleteGen() {
+      var panel = document.getElementById('athlete-gen');
+      if (panel) panel.style.display = 'block';
+      // Reset result row whenever album changes
+      var result = document.getElementById('athlete-gen-result');
+      if (result) result.style.display = 'none';
+    }
+
+    // Called from openSport / goHome — hide the panel
+    function hideAthleteGen() {
+      var panel = document.getElementById('athlete-gen');
+      if (panel) panel.style.display = 'none';
+    }
+
+    // Owner clicks "Generate Athlete Link"
+    async function generateAthleteLink() {
+      // Password gate (once per session)
+      if (!_athleteGenUnlocked) {
+        var pwd = prompt('Enter owner password:');
+        if (pwd === null) return;                        // cancelled
+        if (pwd !== 'CCypress7!') {
+          alert('Incorrect password.');
+          return;
+        }
+        _athleteGenUnlocked = true;
+      }
+
+      var btn = document.getElementById('athlete-gen-btn');
+      btn.textContent = 'Generating…';
+      btn.disabled    = true;
+
+      try {
+        var resp = await fetch('/.netlify/functions/generate-athlete-token', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            albumId:    currentAlbum,
+            albumLabel: currentAlbumLabel,
+            password:   'CCypress7!',   // server validates independently
+          }),
+        });
+
+        var data = await resp.json();
+
+        if (data.url) {
+          document.getElementById('athlete-gen-url').value = data.url;
+          document.getElementById('athlete-gen-result').style.display = 'block';
+          document.getElementById('athlete-copy-btn').textContent = 'Copy Link';
+        } else {
+          alert('Error generating link: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        // Fallback for local file:// preview — build a demo URL
+        console.warn('Netlify function unavailable (local preview), using demo URL:', err.message);
+        var base   = 'https://jofliks.com/athlete.html';
+        var demoToken = 'demo-' + Math.random().toString(36).slice(2, 18);
+        var demoUrl   = base + '?token=' + demoToken + '&album=' + encodeURIComponent(currentAlbum);
+        document.getElementById('athlete-gen-url').value = demoUrl;
+        document.getElementById('athlete-gen-result').style.display = 'block';
+        document.getElementById('athlete-copy-btn').textContent = 'Copy Link';
+      }
+
+      btn.textContent = '🔒 Generate Athlete Link';
+      btn.disabled    = false;
+    }
+
+    // Copy the generated URL to clipboard
+    function copyAthleteGenLink() {
+      var input = document.getElementById('athlete-gen-url');
+      if (!input || !input.value) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(input.value);
+      } else {
+        input.select();
+        document.execCommand('copy');
+      }
+      var btn = document.getElementById('athlete-copy-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(function() { btn.textContent = 'Copy Link'; }, 2000);
     }
 
     // Disable right-click on images
