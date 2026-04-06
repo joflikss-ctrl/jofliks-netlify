@@ -9,773 +9,481 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    /* ── ATHLETE PAGE BASE ─────────────────────────────────────────────── */
-    body { background: #0e0e0c; color: #fdfcfa; }
-
-    /* ── BANNER ───────────────────────────────────────────────────────── */
-    .athlete-banner {
-      background: linear-gradient(135deg, #1c1c1b 0%, #2e2418 100%);
-      border-bottom: 2px solid #c9a84c;
-      padding: 1.4rem 2rem;
-      text-align: center;
-    }
-    .athlete-banner .badge {
-      display: inline-block;
-      background: #c9a84c;
-      color: #1c1c1b;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.9rem;
-      border-radius: 2px;
-      margin-bottom: 0.6rem;
-    }
-    .athlete-banner h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.4rem, 4vw, 2rem);
-      font-weight: 400;
-      color: #fdfcfa;
-      margin-bottom: 0.3rem;
-    }
-    .athlete-banner p {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.55);
-      letter-spacing: 0.04em;
-    }
-
-    /* ── LOADING / ERROR STATES ───────────────────────────────────────── */
-    .state-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 60vh;
-      text-align: center;
-      padding: 2rem;
-    }
-    .state-screen .icon { font-size: 3rem; margin-bottom: 1rem; }
-    .state-screen h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.5rem; }
-    .state-screen p { color: rgba(255,255,255,0.5); font-size: 0.88rem; max-width: 380px; line-height: 1.7; }
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid rgba(255,255,255,0.12);
-      border-top-color: #c9a84c;
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-      margin-bottom: 1.2rem;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── PRICING SECTION ──────────────────────────────────────────────── */
-    .pricing-section {
-      background: #131311;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      padding: 2.5rem 2rem;
-    }
-    .pricing-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      font-weight: 400;
-      color: #fdfcfa;
-      text-align: center;
-      margin-bottom: 0.3rem;
-    }
-    .pricing-section .pricing-sub {
-      text-align: center;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.8rem;
-    }
-    .pricing-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      max-width: 780px;
-      margin: 0 auto 1.5rem;
-    }
-    .pricing-card {
-      background: #1c1c1b;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px;
-      padding: 1.2rem 0.8rem;
-      text-align: center;
-      position: relative;
-      transition: border-color 0.2s, transform 0.2s;
-      cursor: default;
-    }
-    .pricing-card:hover { border-color: #c9a84c; transform: translateY(-2px); }
-    .pricing-card.popular {
-      border-color: #c9a84c;
-      background: linear-gradient(160deg, #221e14 0%, #1c1c1b 100%);
-    }
-    .pricing-card .popular-badge {
-      position: absolute;
-      top: -10px; left: 50%; transform: translateX(-50%);
-      background: #c9a84c;
-      color: #1c1c1b;
-      font-size: 0.55rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      border-radius: 2px;
-      white-space: nowrap;
-    }
-    .pricing-card .pc-qty {
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 0.5rem;
-    }
-    .pricing-card .pc-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.9rem;
-      font-weight: 400;
-      color: #fdfcfa;
-      line-height: 1;
-    }
-    .pricing-card .pc-price sup { font-size: 1rem; vertical-align: top; margin-top: 4px; }
-    .pricing-card .pc-per {
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.35);
-      margin-top: 0.3rem;
-    }
-    .pricing-card .pc-save {
-      display: inline-block;
-      background: rgba(201,168,76,0.15);
-      color: #c9a84c;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.5rem;
-      border-radius: 2px;
-      margin-top: 0.5rem;
-    }
-    .pricing-note {
-      text-align: center;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.35);
-      max-width: 540px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-    .pricing-note strong { color: rgba(255,255,255,0.6); }
-
-    /* ── PURCHASE CTA BANNER ──────────────────────────────────────────── */
-    .cta-bar {
-      background: #1a1a18;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      padding: 0.9rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-    .cta-bar p { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin: 0; }
-    .cta-bar strong { color: #c9a84c; }
-    .cta-bar a {
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-      text-decoration: underline;
-    }
-
-    /* ── PHOTO GRID ───────────────────────────────────────────────────── */
-    .album-header {
-      padding: 1.5rem 2rem 0.8rem;
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-    }
-    .album-header h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 400;
-    }
-    .album-header span {
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    #photo-grid {
-      position: relative;
-      padding: 3px;
-      min-height: 200px;
-    }
-
-    /* photo-card styles (dark theme override) */
-    #photo-grid .photo-card {
-      position: absolute;
-      overflow: hidden;
-      cursor: pointer;
-      box-sizing: border-box;
-    }
-    #photo-grid .photo-card img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    #photo-grid .photo-card:hover img { transform: scale(1.04); }
-    #photo-grid .photo-card .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0.8rem;
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-    #photo-grid .photo-card:hover .overlay { opacity: 1; }
-    #photo-grid .photo-card .overlay .p-name {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 0.4rem;
-    }
-    #photo-grid .photo-card .overlay .p-buy {
-      display: inline-block;
-      background: #c9a84c;
-      color: #1c1c1b;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.7rem;
-      border-radius: 2px;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    /* Watermark overlay on thumbnail */
-    #photo-grid .photo-card .wm {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Ctext transform='rotate(-38,60,60)' x='-5' y='72' font-family='Georgia,serif' font-size='11' font-style='italic' fill='rgba(255,255,255,0.22)' letter-spacing='1'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E");
-      background-size: 120px 120px;
-      background-repeat: repeat;
-    }
-
-    /* ── PURCHASE MODAL ───────────────────────────────────────────────── */
-    .modal-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 1000;
-      display: flex; align-items: center; justify-content: center;
-      padding: 1rem;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .modal-backdrop.open { opacity: 1; pointer-events: all; }
-    .modal {
-      background: #1a1a18;
-      border: 1px solid rgba(255,255,255,0.1);
-      max-width: 900px; width: 100%;
-      display: grid; grid-template-columns: 3fr 2fr;
-      max-height: 90vh; overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.7);
-      position: relative;
-    }
-    .modal-img {
-      position: relative; overflow: hidden; min-height: 420px;
-    }
-    .modal-img img { width: 100%; height: 100%; object-fit: cover; }
-    .modal-img .wm-large {
-      position: absolute; inset: 0; pointer-events: none;
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Ctext transform='rotate(-38,70,70)' x='-8' y='84' font-family='Georgia,serif' font-size='13' font-style='italic' fill='rgba(255,255,255,0.28)' letter-spacing='1'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-size='42' font-style='italic' fill='rgba(255,255,255,0.38)' letter-spacing='3'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E");
-      background-size: 140px 140px, 100% 100%;
-      background-repeat: repeat, no-repeat;
-      background-position: 0 0, center;
-    }
-    .modal-close {
-      position: absolute; top: 0.8rem; right: 0.8rem;
-      background: rgba(0,0,0,0.5); color: white;
-      border: none; width: 32px; height: 32px;
-      border-radius: 50%; font-size: 1rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 10;
-    }
-    .modal-info {
-      padding: 2rem 1.6rem;
-      display: flex; flex-direction: column;
-      overflow-y: auto;
-      gap: 0;
-    }
-    .modal-eyebrow {
-      font-size: 0.62rem; letter-spacing: 0.16em;
-      text-transform: uppercase; color: #c9a84c;
-      margin-bottom: 0.3rem;
-    }
-    .modal-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem; font-weight: 400;
-      color: #fdfcfa; margin-bottom: 1.2rem;
-    }
-    /* mini pricing selector inside modal */
-    .modal-pricing-label {
-      font-size: 0.62rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(255,255,255,0.4);
-      margin-bottom: 0.6rem;
-    }
-    .modal-tier-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 6px; margin-bottom: 1.2rem;
-    }
-    .modal-tier {
-      background: #111110; border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 4px; padding: 0.6rem 0.5rem;
-      text-align: center; cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    .modal-tier:hover, .modal-tier.selected {
-      border-color: #c9a84c;
-    }
-    .modal-tier .t-qty {
-      font-size: 0.6rem; color: rgba(255,255,255,0.4);
-      text-transform: uppercase; letter-spacing: 0.1em;
-      margin-bottom: 0.2rem;
-    }
-    .modal-tier .t-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; color: #fdfcfa;
-    }
-    .modal-tier.selected .t-qty { color: #c9a84c; }
-    .modal-divider {
-      border: none; border-top: 1px solid rgba(255,255,255,0.07);
-      margin: 1rem 0;
-    }
-    .modal-buy-btn {
-      display: block; width: 100%;
-      padding: 0.95rem; text-align: center;
-      background: #c9a84c; color: #1c1c1b;
-      border: none; cursor: pointer;
-      font-family: inherit; font-size: 0.75rem;
-      font-weight: 600; letter-spacing: 0.14em;
-      text-transform: uppercase;
-      transition: background 0.2s;
-      margin-bottom: 0.5rem;
-    }
-    .modal-buy-btn:hover { background: #d4b55a; }
-    .modal-buy-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
-    .modal-note {
-      font-size: 0.7rem; color: rgba(255,255,255,0.3);
-      text-align: center; line-height: 1.6;
-    }
-    .modal-features {
-      list-style: none; padding: 0; margin: 0 0 1rem;
-    }
-    .modal-features li {
-      font-size: 0.73rem; color: rgba(255,255,255,0.45);
-      padding: 0.25rem 0;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .modal-features li::before { content: '✓'; color: #c9a84c; font-weight: 700; }
-
-    /* ── RESPONSIVE ───────────────────────────────────────────────────── */
-    @media (max-width: 700px) {
-      .modal { grid-template-columns: 1fr; max-height: 95vh; }
-      .modal-img { min-height: 220px; max-height: 250px; }
-      .pricing-cards { grid-template-columns: repeat(3, 1fr); }
-      .athlete-banner { padding: 1rem; }
-    }
-    @media (max-width: 480px) {
-      .pricing-cards { grid-template-columns: repeat(2, 1fr); }
-    }
+    body{background:#0e0e0c;color:#fdfcfa;margin:0;padding:0;font-family:'Outfit',sans-serif;}
+    .athlete-banner{background:linear-gradient(135deg,#1c1c1b 0%,#2e2418 100%);border-bottom:2px solid #c9a84c;padding:1.4rem 2rem;text-align:center;}
+    .athlete-banner .badge{display:inline-block;background:#c9a84c;color:#1c1c1b;font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .9rem;border-radius:2px;margin-bottom:.6rem;}
+    .athlete-banner h1{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,4vw,2rem);font-weight:400;color:#fdfcfa;margin:.2rem 0;}
+    .athlete-banner p{font-size:.82rem;color:rgba(255,255,255,.5);margin:0;}
+    .state-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:2rem;}
+    .state-screen h2{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:.5rem;}
+    .state-screen p{color:rgba(255,255,255,.5);font-size:.88rem;max-width:380px;line-height:1.7;}
+    .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.12);border-top-color:#c9a84c;border-radius:50%;animation:spin .9s linear infinite;margin-bottom:1.2rem;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .pricing-section{background:#131311;border-bottom:1px solid rgba(255,255,255,.07);padding:2.2rem 2rem;}
+    .pricing-section h2{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:400;color:#fdfcfa;text-align:center;margin-bottom:.2rem;}
+    .pricing-sub{text-align:center;font-size:.72rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem;}
+    .pricing-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;max-width:760px;margin:0 auto 1.2rem;}
+    .pricing-card{background:#1c1c1b;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:1.1rem .7rem;text-align:center;position:relative;}
+    .pricing-card.popular{border-color:#c9a84c;background:linear-gradient(160deg,#221e14 0%,#1c1c1b 100%);}
+    .pricing-card .popular-badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#c9a84c;color:#1c1c1b;font-size:.52rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:.18rem .55rem;border-radius:2px;white-space:nowrap;}
+    .pricing-card .pc-qty{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.4rem;}
+    .pricing-card .pc-price{font-family:'Playfair Display',serif;font-size:1.8rem;color:#fdfcfa;line-height:1;}
+    .pricing-card .pc-price sup{font-size:.95rem;vertical-align:top;margin-top:4px;}
+    .pricing-card .pc-per{font-size:.62rem;color:rgba(255,255,255,.3);margin-top:.25rem;}
+    .pricing-card .pc-save{display:inline-block;background:rgba(201,168,76,.15);color:#c9a84c;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .45rem;border-radius:2px;margin-top:.4rem;}
+    .pricing-note{text-align:center;font-size:.74rem;color:rgba(255,255,255,.3);max-width:520px;margin:0 auto;line-height:1.7;}
+    .pricing-note strong{color:rgba(255,255,255,.55);}
+    #cart-bar{position:sticky;top:0;z-index:200;background:#1a1a18;border-bottom:1px solid rgba(201,168,76,.3);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+    #cart-bar.empty{opacity:.5;pointer-events:none;}
+    .cart-info{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;}
+    .cart-count-badge{background:#c9a84c;color:#1c1c1b;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .65rem;border-radius:2px;}
+    #cart-summary-text{font-size:.82rem;color:rgba(255,255,255,.65);}
+    #cart-price-text{font-family:'Playfair Display',serif;font-size:1.3rem;color:#c9a84c;}
+    .cart-actions{display:flex;gap:.5rem;align-items:center;}
+    #cart-checkout-btn{padding:.6rem 1.4rem;font-family:inherit;font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:#c9a84c;color:#1c1c1b;border:none;cursor:pointer;border-radius:2px;}
+    #cart-checkout-btn:hover{background:#d4b55a;}
+    #cart-clear-btn{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);background:transparent;border:none;cursor:pointer;text-decoration:underline;font-family:inherit;}
+    .album-header{padding:1.4rem 2rem .6rem;display:flex;align-items:baseline;gap:1rem;}
+    .album-header h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;}
+    .album-header span{font-size:.7rem;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;}
+    .tap-hint{text-align:center;font-size:.75rem;color:rgba(255,255,255,.3);padding:.3rem 2rem .8rem;letter-spacing:.04em;}
+    #photo-grid{position:relative;padding:3px;min-height:200px;}
+    #photo-grid .photo-card{position:absolute;overflow:hidden;cursor:pointer;box-sizing:border-box;border:2px solid transparent;transition:border-color .2s;}
+    #photo-grid .photo-card.in-cart{border-color:#c9a84c;}
+    #photo-grid .photo-card img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .4s ease;}
+    #photo-grid .photo-card:hover img{transform:scale(1.04);}
+    #photo-grid .photo-card .wm{position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ctext transform='rotate(-38,50,50)' x='-8' y='60' font-family='Georgia,serif' font-size='10' font-style='italic' fill='rgba(255,255,255,0.38)' letter-spacing='1'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E");background-size:100px 100px;background-repeat:repeat;}
+    #photo-grid .photo-card .cart-indicator{position:absolute;top:.45rem;right:.45rem;width:22px;height:22px;border-radius:50%;background:#c9a84c;color:#1c1c1b;display:none;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;}
+    #photo-grid .photo-card.in-cart .cart-indicator{display:flex;}
+    #photo-grid .photo-card .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:.7rem;opacity:0;transition:opacity .25s;}
+    #photo-grid .photo-card:hover .overlay,#photo-grid .photo-card.in-cart .overlay{opacity:1;}
+    #photo-grid .photo-card .overlay .p-name{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:.35rem;}
+    #photo-grid .photo-card .overlay .p-btn{display:inline-block;border:none;cursor:pointer;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .65rem;border-radius:2px;font-family:inherit;}
+    #photo-grid .photo-card .overlay .p-btn.add{background:#c9a84c;color:#1c1c1b;}
+    #photo-grid .photo-card .overlay .p-btn.remove{background:rgba(255,255,255,.15);color:#fdfcfa;}
+    #cart-drawer{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);}
+    #cart-drawer.open{display:flex;align-items:flex-end;justify-content:center;}
+    #cart-panel{background:#1a1a18;border:1px solid rgba(255,255,255,.1);border-bottom:none;width:100%;max-width:640px;border-radius:14px 14px 0 0;padding:1.5rem 1.5rem 2rem;max-height:85vh;overflow-y:auto;}
+    .cart-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
+    .cart-panel-header h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:400;}
+    #cart-close-drawer{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.1rem;cursor:pointer;}
+    #cart-items-list{list-style:none;padding:0;margin:0 0 1.2rem;}
+    #cart-items-list li{display:flex;align-items:center;gap:.8rem;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.06);}
+    #cart-items-list li img{width:52px;height:52px;object-fit:cover;border-radius:3px;flex-shrink:0;}
+    #cart-items-list li .item-name{flex:1;font-size:.8rem;color:rgba(255,255,255,.75);}
+    #cart-items-list li .item-remove{background:none;border:none;color:rgba(255,255,255,.25);cursor:pointer;font-size:.85rem;padding:.2rem .4rem;}
+    .bundle-section{margin-bottom:1.2rem;}
+    .bundle-section h4{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.7rem;}
+    #bundle-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:7px;}
+    .bundle-opt{background:#111110;border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:.65rem .5rem;text-align:center;cursor:pointer;transition:border-color .2s;}
+    .bundle-opt:hover:not(.locked){border-color:rgba(201,168,76,.5);}
+    .bundle-opt.selected{border-color:#c9a84c;background:rgba(201,168,76,.08);}
+    .bundle-opt.locked{opacity:.35;cursor:not-allowed;}
+    .bundle-opt .b-qty{font-size:.6rem;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem;}
+    .bundle-opt .b-price{font-family:'Playfair Display',serif;font-size:1.15rem;color:#fdfcfa;}
+    .bundle-opt.selected .b-qty{color:#c9a84c;}
+    .bundle-opt .b-save{font-size:.55rem;color:#c9a84c;display:block;margin-top:.2rem;}
+    .bundle-opt .b-locked-msg{font-size:.55rem;color:rgba(255,255,255,.35);display:block;margin-top:.2rem;}
+    .cart-total-row{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-top:1px solid rgba(255,255,255,.08);margin-bottom:1rem;}
+    .cart-total-row .label{font-size:.75rem;color:rgba(255,255,255,.5);}
+    .cart-total-row .amount{font-family:'Playfair Display',serif;font-size:1.6rem;color:#c9a84c;}
+    #drawer-checkout-btn{display:block;width:100%;padding:1rem;font-family:inherit;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;background:#c9a84c;color:#1c1c1b;border:none;cursor:pointer;border-radius:3px;margin-bottom:.6rem;}
+    #drawer-checkout-btn:hover{background:#d4b55a;}
+    #drawer-checkout-btn:disabled{background:#444;color:#888;cursor:not-allowed;}
+    .cart-note{font-size:.7rem;color:rgba(255,255,255,.3);text-align:center;line-height:1.6;}
+    .cart-features{list-style:none;padding:0;margin:.8rem 0;}
+    .cart-features li{font-size:.72rem;color:rgba(255,255,255,.4);padding:.2rem 0;display:flex;align-items:center;gap:.5rem;}
+    .cart-features li::before{content:'checkmark';color:#c9a84c;font-weight:700;}
+    @media(max-width:600px){.pricing-cards{grid-template-columns:repeat(3,1fr);}#cart-bar{padding:.65rem 1rem;}}
+    @media(max-width:420px){.pricing-cards{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
 
-  <!-- ── LOADING STATE ──────────────────────────────────────────────────── -->
-  <div id="state-loading" class="state-screen">
-    <div class="spinner"></div>
-    <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;">Verifying your access link…</p>
+<div id="state-loading" class="state-screen">
+  <div class="spinner"></div>
+  <p style="color:rgba(255,255,255,.4);font-size:.85rem;">Verifying your access link...</p>
+</div>
+
+<div id="state-error" class="state-screen" style="display:none;">
+  <div style="font-size:3rem;margin-bottom:1rem;">&#x1F512;</div>
+  <h2>Link Unavailable</h2>
+  <p id="error-msg">This athlete link is invalid or has expired. Contact JoFliks Photography to get a new one.</p>
+  <a href="gallery.html" style="margin-top:1.5rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:underline;">Back to Gallery</a>
+</div>
+
+<div id="main-content" style="display:none;">
+
+  <div class="athlete-banner">
+    <div class="badge">&#x1F3C6; Athletes Only</div>
+    <h1 id="album-title">Game Photos</h1>
+    <p>Exclusive discounted pricing &mdash; add photos to your cart, then checkout.</p>
   </div>
 
-  <!-- ── ERROR STATE (shown if token invalid/expired) ───────────────────── -->
-  <div id="state-error" class="state-screen" style="display:none;">
-    <div class="icon">🔒</div>
-    <h2>Link Unavailable</h2>
-    <p id="error-msg">This athlete link is invalid or has expired. Please contact JoFliks Photography to request a new one.</p>
-    <a href="gallery.html" style="margin-top:1.5rem;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);text-decoration:underline;">← Back to Gallery</a>
+  <div class="pricing-section">
+    <h2>Athlete Pricing</h2>
+    <p class="pricing-sub">Add photos to your cart &mdash; price auto-adjusts to your bundle</p>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <div class="pc-qty">1 Photo</div>
+        <div class="pc-price"><sup>$</sup>5</div>
+        <div class="pc-per">$5.00 each</div>
+      </div>
+      <div class="pricing-card">
+        <div class="pc-qty">2 Photos</div>
+        <div class="pc-price"><sup>$</sup>7</div>
+        <div class="pc-per">$3.50 each</div>
+        <div class="pc-save">Save 30%</div>
+      </div>
+      <div class="pricing-card popular">
+        <div class="popular-badge">&#11088; Best Value</div>
+        <div class="pc-qty">3 Photos</div>
+        <div class="pc-price"><sup>$</sup>10</div>
+        <div class="pc-per">$3.33 each</div>
+        <div class="pc-save">Save 33%</div>
+      </div>
+      <div class="pricing-card">
+        <div class="pc-qty">5&ndash;10 Photos</div>
+        <div class="pc-price"><sup>$</sup>15</div>
+        <div class="pc-per">as low as $1.50</div>
+        <div class="pc-save">Save 70%</div>
+      </div>
+      <div class="pricing-card">
+        <div class="pc-qty">10&ndash;20 Photos</div>
+        <div class="pc-price"><sup>$</sup>30</div>
+        <div class="pc-per">as low as $1.50</div>
+        <div class="pc-save">Best Deal</div>
+      </div>
+    </div>
+    <p class="pricing-note"><strong>How it works:</strong> Tap any photo to add it to your cart. Your bundle price updates automatically. Watermark removed on purchase.</p>
   </div>
 
-  <!-- ── MAIN CONTENT (shown after token verified) ──────────────────────── -->
-  <div id="main-content" style="display:none;">
-
-    <!-- Banner -->
-    <div class="athlete-banner">
-      <div class="badge">🏆 Athletes Only</div>
-      <h1 id="album-title">Game Photos</h1>
-      <p>Exclusive discounted pricing — just for you. Not publicly available.</p>
+  <div id="cart-bar" class="empty">
+    <div class="cart-info">
+      <span class="cart-count-badge" id="cart-count-badge">0 photos</span>
+      <span id="cart-summary-text">Add photos to get started</span>
     </div>
-
-    <!-- Pricing Section -->
-    <div class="pricing-section">
-      <h2>Athlete Pricing</h2>
-      <p class="pricing-sub">Tap any photo to purchase</p>
-      <div class="pricing-cards">
-
-        <div class="pricing-card">
-          <div class="pc-qty">1 Photo</div>
-          <div class="pc-price"><sup>$</sup>5</div>
-          <div class="pc-per">per photo</div>
-        </div>
-
-        <div class="pricing-card">
-          <div class="pc-qty">2 Photos</div>
-          <div class="pc-price"><sup>$</sup>7</div>
-          <div class="pc-per">$3.50 each</div>
-          <div class="pc-save">Save 30%</div>
-        </div>
-
-        <div class="pricing-card popular">
-          <div class="popular-badge">⭐ Best Value</div>
-          <div class="pc-qty">3 Photos</div>
-          <div class="pc-price"><sup>$</sup>10</div>
-          <div class="pc-per">$3.33 each</div>
-          <div class="pc-save">Save 33%</div>
-        </div>
-
-        <div class="pricing-card">
-          <div class="pc-qty">5–10 Photos</div>
-          <div class="pc-price"><sup>$</sup>15</div>
-          <div class="pc-per">as low as $1.50 each</div>
-          <div class="pc-save">Save 70%</div>
-        </div>
-
-        <div class="pricing-card">
-          <div class="pc-qty">10–20 Photos</div>
-          <div class="pc-price"><sup>$</sup>30</div>
-          <div class="pc-per">as low as $1.50 each</div>
-          <div class="pc-save">Best Deal</div>
-        </div>
-
-      </div>
-      <p class="pricing-note">
-        <strong>How it works:</strong> Click any photo below, choose your bundle, and pay securely via Stripe.
-        Your high-res photos arrive in your inbox instantly — watermark-free. 📸
-      </p>
-    </div>
-
-    <!-- CTA Bar -->
-    <div class="cta-bar">
-      <p>Watermarked previews shown — <strong>watermark removed on purchase.</strong></p>
-      <a href="mailto:joseph@jofliks.com">Questions? Email us</a>
-    </div>
-
-    <!-- Album photos -->
-    <div class="album-header">
-      <h3 id="album-header-title">Photos</h3>
-      <span id="photo-count"></span>
-    </div>
-    <div id="photo-grid"></div>
-
-  </div><!-- /main-content -->
-
-  <!-- ── PURCHASE MODAL ─────────────────────────────────────────────────── -->
-  <div class="modal-backdrop" id="modal-backdrop" onclick="handleBackdropClick(event)">
-    <div class="modal">
-      <div class="modal-img">
-        <img id="modal-img" src="" alt="" />
-        <div class="wm-large"></div>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div class="modal-info">
-        <div class="modal-eyebrow">JoFliks Photography — Athletes Only</div>
-        <div class="modal-name" id="modal-name"></div>
-
-        <div class="modal-pricing-label">Choose your bundle</div>
-        <div class="modal-tier-grid" id="modal-tiers">
-          <!-- Populated by JS -->
-        </div>
-
-        <hr class="modal-divider" />
-        <ul class="modal-features">
-          <li>Full-resolution JPEG file</li>
-          <li>Watermark removed on purchase</li>
-          <li>Personal &amp; social media license</li>
-          <li>Instant email delivery</li>
-        </ul>
-
-        <button class="modal-buy-btn" id="modal-buy-btn" onclick="handlePurchase()">
-          Purchase — Select Bundle Above
-        </button>
-        <p class="modal-note">Secure checkout via Stripe. No account needed.</p>
-      </div>
+    <div class="cart-actions">
+      <span id="cart-price-text"></span>
+      <button id="cart-clear-btn" onclick="clearCart()">Clear</button>
+      <button id="cart-checkout-btn" onclick="openCartDrawer()">Review Cart &rarr;</button>
     </div>
   </div>
 
-  <script>
-    // ─── PRICING TIERS ─────────────────────────────────────────────────────
-    const TIERS = [
-      { qty: '1 photo',     price: 5,  unit: 5.00,  label: '1',    stripeAmount: 500  },
-      { qty: '2 photos',    price: 7,  unit: 3.50,  label: '2',    stripeAmount: 700  },
-      { qty: '3 photos',    price: 10, unit: 3.33,  label: '3',    stripeAmount: 1000 },
-      { qty: '5–10 photos', price: 15, unit: 1.50,  label: '5-10', stripeAmount: 1500 },
-      { qty: '10–20 photos',price: 30, unit: 1.50,  label: '10-20',stripeAmount: 3000 },
-    ];
+  <div class="album-header">
+    <h3 id="album-header-title">Photos</h3>
+    <span id="photo-count"></span>
+  </div>
+  <p class="tap-hint">Tap any photo to add it to your cart</p>
+  <div id="photo-grid"></div>
 
-    // ─── STATE ─────────────────────────────────────────────────────────────
-    let albumId      = '';
-    let albumLabel   = '';
-    let token        = '';
-    let photos       = [];          // [{ url, name }]
-    let selectedTier = null;
-    let currentPhoto = null;
+</div>
 
-    // ─── INIT ──────────────────────────────────────────────────────────────
-    window.addEventListener('load', async () => {
-      const params = new URLSearchParams(window.location.search);
-      token   = params.get('token')  || '';
-      albumId = params.get('album')  || '';
+<div id="cart-drawer" onclick="handleDrawerBackdrop(event)">
+  <div id="cart-panel">
+    <div class="cart-panel-header">
+      <h3>Your Cart</h3>
+      <button id="cart-close-drawer" onclick="closeCartDrawer()">&#x2715;</button>
+    </div>
+    <ul id="cart-items-list"></ul>
+    <div class="bundle-section">
+      <h4>Choose your bundle</h4>
+      <div id="bundle-options"></div>
+    </div>
+    <ul class="cart-features">
+      <li>Full-resolution JPEG &mdash; watermark removed</li>
+      <li>Personal &amp; social media license</li>
+      <li>Instant delivery to your email</li>
+    </ul>
+    <div class="cart-total-row">
+      <span class="label">Total</span>
+      <span class="amount" id="drawer-total">$0</span>
+    </div>
+    <button id="drawer-checkout-btn" onclick="handleCheckout()">
+      Checkout &mdash; $<span id="drawer-btn-price">0</span>
+    </button>
+    <p class="cart-note">Secure checkout via Stripe. No account needed.</p>
+  </div>
+</div>
 
-      if (!token || !albumId) return showError('No access token found in URL.');
+<script>
+// ── PRICING TIERS ──────────────────────────────────────────────────────────
+const TIERS = [
+  { label:'1 photo',      min:1,  max:1,  price:5,  stripeAmount:500,  save:'',         perPhoto:'$5.00 each' },
+  { label:'2 photos',     min:2,  max:2,  price:7,  stripeAmount:700,  save:'Save 30%', perPhoto:'$3.50 each' },
+  { label:'3 photos',     min:3,  max:4,  price:10, stripeAmount:1000, save:'Save 33%', perPhoto:'$3.33 each' },
+  { label:'5-10 photos',  min:5,  max:10, price:15, stripeAmount:1500, save:'Save 70%', perPhoto:'as low as $1.50' },
+  { label:'10-20 photos', min:10, max:20, price:30, stripeAmount:3000, save:'Best Deal',perPhoto:'as low as $1.50' },
+];
 
-      try {
-        // Verify token with backend
-        const resp = await fetch(
-          `/.netlify/functions/generate-athlete-token/verify?token=${encodeURIComponent(token)}&album=${encodeURIComponent(albumId)}`
-        );
-        const data = await resp.json();
+// Returns the best applicable tier for the given cart count
+function getBestTier(count) {
+  if (count === 0) return null;
+  // Find exact range match first
+  for (const t of TIERS) {
+    if (count >= t.min && count <= t.max) return t;
+  }
+  // Fallback: highest min that count exceeds
+  let best = null;
+  for (const t of TIERS) {
+    if (count >= t.min) best = t;
+  }
+  return best;
+}
 
-        if (!data.valid) return showError(data.reason || 'Invalid or expired link.');
+// ── STATE ──────────────────────────────────────────────────────────────────
+let albumId = '', albumLabel = '', token = '';
+let photos  = [];   // all album photos
+let cart    = [];   // selected photos
+let selectedTier = null;
 
-        albumLabel = data.albumLabel || albumId;
-        loadAlbum();
+// ── INIT ───────────────────────────────────────────────────────────────────
+window.addEventListener('load', async function() {
+  var params = new URLSearchParams(window.location.search);
+  token   = params.get('token')  || '';
+  albumId = params.get('album')  || '';
+  if (!token || !albumId) return showError('No access token in URL.');
+  try {
+    var resp = await fetch('/.netlify/functions/generate-athlete-token/verify?token=' + encodeURIComponent(token) + '&album=' + encodeURIComponent(albumId));
+    var data = await resp.json();
+    if (!data.valid) return showError(data.reason || 'Invalid or expired link.');
+    albumLabel = data.albumLabel || albumId;
+    loadAlbum();
+  } catch(e) {
+    albumLabel = decodeURIComponent(albumId).replace(/-/g,' ');
+    loadAlbum();
+  }
+});
 
-      } catch (err) {
-        console.error(err);
-        // If running locally (no backend), load in demo mode
-        albumLabel = decodeURIComponent(albumId).replace(/-/g, ' ');
-        loadAlbum();
-      }
+// ── LOAD PHOTOS FROM gallery.html ──────────────────────────────────────────
+async function loadAlbum() {
+  document.getElementById('album-title').textContent        = albumLabel;
+  document.getElementById('album-header-title').textContent = albumLabel;
+  try {
+    var resp = await fetch('gallery.html');
+    var html = await resp.text();
+    var doc  = new DOMParser().parseFromString(html, 'text/html');
+    var grid = doc.getElementById('album-' + albumId);
+    if (!grid) return showError('Album "' + albumLabel + '" not found.');
+    photos = Array.from(grid.querySelectorAll('.photo-card')).map(function(card) {
+      var img  = card.querySelector('img');
+      var name = card.querySelector('.pc-title') ? card.querySelector('.pc-title').textContent : (img ? img.alt : 'Photo');
+      return { url: img ? img.src : '', name: name };
+    }).filter(function(p) { return p.url; });
+    document.getElementById('photo-count').textContent = photos.length + ' photos';
+    renderGrid();
+    showMain();
+  } catch(e) {
+    showError('Could not load album. Please try again.');
+  }
+}
+
+// ── RENDER GRID ────────────────────────────────────────────────────────────
+function renderGrid() {
+  var container = document.getElementById('photo-grid');
+  container.innerHTML = '';
+  photos.forEach(function(photo, idx) {
+    var card = document.createElement('div');
+    card.className = 'photo-card';
+    card.id = 'photo-card-' + idx;
+    card.innerHTML =
+      '<img src="' + photo.url + '" alt="' + photo.name + '" loading="lazy" onload="layoutGrid()" />' +
+      '<div class="wm"></div>' +
+      '<div class="cart-indicator">&#x2713;</div>' +
+      '<div class="overlay">' +
+        '<div class="p-name">' + photo.name + '</div>' +
+        '<button class="p-btn add" id="btn-' + idx + '" onclick="toggleCart(' + idx + ',event)">+ Add to Cart</button>' +
+      '</div>';
+    container.appendChild(card);
+  });
+  setTimeout(layoutGrid, 80);
+}
+
+// ── CART LOGIC ─────────────────────────────────────────────────────────────
+function toggleCart(idx, e) {
+  e.stopPropagation();
+  var photo = photos[idx];
+  var inCartIdx = cart.findIndex(function(p) { return p.url === photo.url; });
+  if (inCartIdx === -1) { cart.push(photo); }
+  else { cart.splice(inCartIdx, 1); }
+  updateCartUI();
+}
+
+function clearCart() {
+  cart = [];
+  updateCartUI();
+}
+
+function removeFromCart(url) {
+  cart = cart.filter(function(p) { return p.url !== url; });
+  updateCartUI();
+  if (cart.length === 0) { closeCartDrawer(); return; }
+  renderCartDrawer();
+}
+
+function updateCartUI() {
+  var count = cart.length;
+  selectedTier = getBestTier(count);
+
+  // Update each photo card state
+  photos.forEach(function(photo, idx) {
+    var card = document.getElementById('photo-card-' + idx);
+    var btn  = document.getElementById('btn-' + idx);
+    if (!card) return;
+    var inCart = cart.some(function(p) { return p.url === photo.url; });
+    card.classList.toggle('in-cart', inCart);
+    if (btn) {
+      btn.className = 'p-btn ' + (inCart ? 'remove' : 'add');
+      btn.textContent = inCart ? '&#x2713; In Cart' : '+ Add to Cart';
+    }
+  });
+
+  // Sticky bar
+  var bar = document.getElementById('cart-bar');
+  bar.classList.toggle('empty', count === 0);
+  document.getElementById('cart-count-badge').textContent = count === 1 ? '1 photo' : count + ' photos';
+  document.getElementById('cart-summary-text').textContent =
+    count === 0 ? 'Add photos to get started' :
+    (selectedTier ? selectedTier.label + ' bundle \u2014 ' + selectedTier.perPhoto : '');
+  document.getElementById('cart-price-text').textContent = selectedTier ? '$' + selectedTier.price : '';
+}
+
+// ── CART DRAWER ────────────────────────────────────────────────────────────
+function openCartDrawer() {
+  if (cart.length === 0) return;
+  renderCartDrawer();
+  document.getElementById('cart-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCartDrawer() {
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleDrawerBackdrop(e) {
+  if (e.target === document.getElementById('cart-drawer')) closeCartDrawer();
+}
+
+function renderCartDrawer() {
+  var count = cart.length;
+
+  // Items list
+  var list = document.getElementById('cart-items-list');
+  list.innerHTML = cart.map(function(photo) {
+    return '<li>' +
+      '<img src="' + photo.url + '" alt="' + photo.name + '" />' +
+      '<span class="item-name">' + photo.name + '</span>' +
+      '<button class="item-remove" onclick="removeFromCart(\'' + photo.url.replace(/'/g,"\\'") + '\')">&times;</button>' +
+    '</li>';
+  }).join('');
+
+  // Bundle options — only show tiers where max >= count (don't show tiers that cap below cart size)
+  var bundleEl = document.getElementById('bundle-options');
+  bundleEl.innerHTML = TIERS.filter(function(t) { return t.max >= count; }).map(function(t) {
+    var available = count >= t.min && count <= t.max;
+    var tooFew    = count < t.min;
+    var isSelected = selectedTier && selectedTier.label === t.label;
+    var lockMsg   = tooFew ? 'Need ' + (t.min - count) + ' more' : '';
+    return '<div class="bundle-opt ' + (isSelected ? 'selected' : '') + ' ' + (tooFew ? 'locked' : '') + '" ' +
+      (available ? 'onclick="selectBundle(\'' + t.label + '\')"' : '') + '>' +
+      '<div class="b-qty">' + t.label + '</div>' +
+      '<div class="b-price">$' + t.price + '</div>' +
+      (t.save ? '<span class="b-save">' + t.save + '</span>' : '') +
+      (lockMsg ? '<span class="b-locked-msg">' + lockMsg + '</span>' : '') +
+    '</div>';
+  }).join('');
+
+  updateDrawerTotal();
+}
+
+function selectBundle(label) {
+  selectedTier = TIERS.find(function(t) { return t.label === label; }) || selectedTier;
+  renderCartDrawer();
+  updateCartUI();
+}
+
+function updateDrawerTotal() {
+  var price = selectedTier ? selectedTier.price : 0;
+  document.getElementById('drawer-total').textContent    = '$' + price;
+  document.getElementById('drawer-btn-price').textContent = price;
+  var btn = document.getElementById('drawer-checkout-btn');
+  btn.disabled = !selectedTier || cart.length === 0;
+}
+
+// ── CHECKOUT ───────────────────────────────────────────────────────────────
+async function handleCheckout() {
+  if (!selectedTier || cart.length === 0) return;
+  var btn = document.getElementById('drawer-checkout-btn');
+  btn.disabled    = true;
+  btn.innerHTML   = 'Redirecting...';
+  try {
+    var resp = await fetch('/.netlify/functions/create-checkout', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        photoUrl:   cart[0].url,
+        photoName:  cart.map(function(p){return p.name;}).join(', '),
+        albumName:  albumLabel,
+        sport:      'Lacrosse',
+        price:      selectedTier.stripeAmount,
+        bundle:     selectedTier.label,
+        cartCount:  cart.length,
+        photoUrls:  cart.map(function(p){return p.url;}),
+        isAthlete:  true,
+      }),
     });
+    var data = await resp.json();
+    if (data.url) { window.location.href = data.url; }
+    else { throw new Error(data.error || 'Checkout failed'); }
+  } catch(e) {
+    alert('Something went wrong. Please try again or email joseph@jofliks.com');
+    btn.disabled  = false;
+    btn.innerHTML = 'Checkout &mdash; $' + selectedTier.price;
+  }
+}
 
-    // ─── LOAD ALBUM PHOTOS FROM THE MAIN gallery.html ─────────────────────
-    // We scrape the photo grid from gallery.html client-side so images
-    // are never duplicated in storage — single source of truth.
-    async function loadAlbum() {
-      document.getElementById('album-title').textContent       = albumLabel;
-      document.getElementById('album-header-title').textContent = albumLabel;
+// ── MASONRY ────────────────────────────────────────────────────────────────
+var GAP = 3;
+function getColCount() { var w=window.innerWidth; return w<=600?2:w<=900?3:4; }
+function layoutGrid() {
+  var container = document.getElementById('photo-grid');
+  if (!container) return;
+  var cards = Array.from(container.querySelectorAll('.photo-card'));
+  if (!cards.length) return;
+  var cols=getColCount(), totalW=container.clientWidth-GAP*2;
+  var colW=(totalW-GAP*(cols-1))/cols, heights=new Array(cols).fill(GAP);
+  cards.forEach(function(card) {
+    var img=card.querySelector('img');
+    var ratio=(img&&img.naturalWidth&&img.naturalHeight)?img.naturalWidth/img.naturalHeight:1;
+    var span=(ratio>1.25&&cols>1)?2:1, col=0;
+    if (span===2) {
+      var best=Infinity;
+      for(var c=0;c<=cols-2;c++){var s=Math.max(heights[c],heights[c+1]);if(s<best){best=s;col=c;}}
+    } else { var minH=Math.min.apply(null,heights); col=heights.indexOf(minH); }
+    var cardW=span===2?colW*2+GAP:colW;
+    var top=span===2?Math.max(heights[col],heights[col+1]):heights[col];
+    var left=GAP+col*(colW+GAP), cardH=Math.round(cardW/ratio);
+    card.style.width=cardW+'px'; card.style.height=cardH+'px';
+    card.style.left=left+'px'; card.style.top=top+'px';
+    var bottom=top+cardH+GAP; heights[col]=bottom;
+    if(span===2) heights[col+1]=bottom;
+  });
+  container.style.height=Math.max.apply(null,heights)+GAP+'px';
+}
+window.addEventListener('resize',function(){clearTimeout(window._rt);window._rt=setTimeout(layoutGrid,100);});
 
-      try {
-        const resp = await fetch('gallery.html');
-        const html  = await resp.text();
-        const parser = new DOMParser();
-        const doc    = parser.parseFromString(html, 'text/html');
-
-        // Find the photo grid for this album
-        const grid = doc.getElementById('album-' + albumId);
-        if (!grid) {
-          return showError(`Album "${albumLabel}" not found. It may have been removed or renamed.`);
-        }
-
-        // Extract photos
-        photos = Array.from(grid.querySelectorAll('.photo-card')).map(card => {
-          const img  = card.querySelector('img');
-          const name = card.querySelector('.pc-title')?.textContent || img?.alt || 'Photo';
-          return { url: img?.src || '', name };
-        }).filter(p => p.url);
-
-        document.getElementById('photo-count').textContent = `${photos.length} photos`;
-        renderGrid();
-        showMain();
-
-      } catch (err) {
-        console.error(err);
-        showError('Could not load album photos. Please try again.');
-      }
-    }
-
-    // ─── RENDER MASONRY GRID ───────────────────────────────────────────────
-    function renderGrid() {
-      const container = document.getElementById('photo-grid');
-      container.innerHTML = '';
-
-      photos.forEach((photo, idx) => {
-        const card = document.createElement('div');
-        card.className = 'photo-card';
-        card.innerHTML = `
-          <img src="${photo.url}" alt="${photo.name}" loading="lazy" onload="layoutGrid()" />
-          <div class="wm"></div>
-          <div class="overlay">
-            <div class="p-name">${photo.name}</div>
-            <button class="p-buy" onclick="openModal(${idx})">Purchase</button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      // Initial layout (images may not be loaded yet, onload triggers relayout)
-      setTimeout(layoutGrid, 100);
-    }
-
-    // ─── MASONRY LAYOUT ───────────────────────────────────────────────────
-    const GAP = 3;
-    function getColCount() {
-      const w = window.innerWidth;
-      if (w <= 600) return 2;
-      if (w <= 900) return 3;
-      return 4;
-    }
-
-    function layoutGrid() {
-      const container = document.getElementById('photo-grid');
-      if (!container) return;
-      const cards  = Array.from(container.querySelectorAll('.photo-card'));
-      if (!cards.length) return;
-
-      const cols       = getColCount();
-      const totalW     = container.clientWidth - GAP * 2;
-      const colW       = (totalW - GAP * (cols - 1)) / cols;
-      const colHeights = new Array(cols).fill(GAP);
-
-      cards.forEach(card => {
-        const img   = card.querySelector('img');
-        const ratio = (img && img.naturalWidth && img.naturalHeight)
-          ? img.naturalWidth / img.naturalHeight : 1;
-        const span  = (ratio > 1.25 && cols > 1) ? 2 : 1;
-
-        let col = 0;
-        if (span === 2) {
-          let best = Infinity;
-          for (let c = 0; c <= cols - 2; c++) {
-            const s = Math.max(colHeights[c], colHeights[c + 1]);
-            if (s < best) { best = s; col = c; }
-          }
-        } else {
-          let min = Math.min(...colHeights);
-          col = colHeights.indexOf(min);
-        }
-
-        const cardW  = span === 2 ? colW * 2 + GAP : colW;
-        const top    = span === 2 ? Math.max(colHeights[col], colHeights[col + 1]) : colHeights[col];
-        const left   = GAP + col * (colW + GAP);
-        const cardH  = Math.round(cardW / ratio);
-
-        card.style.width  = cardW + 'px';
-        card.style.height = cardH + 'px';
-        card.style.left   = left + 'px';
-        card.style.top    = top + 'px';
-
-        const bottom = top + cardH + GAP;
-        colHeights[col] = bottom;
-        if (span === 2) colHeights[col + 1] = bottom;
-      });
-
-      container.style.height = Math.max(...colHeights) + GAP + 'px';
-    }
-
-    window.addEventListener('resize', () => { clearTimeout(window._rt); window._rt = setTimeout(layoutGrid, 100); });
-
-    // ─── MODAL ────────────────────────────────────────────────────────────
-    function openModal(idx) {
-      currentPhoto = photos[idx];
-      selectedTier = null;
-
-      document.getElementById('modal-img').src   = currentPhoto.url;
-      document.getElementById('modal-name').textContent = currentPhoto.name;
-      document.getElementById('modal-buy-btn').textContent = 'Purchase — Select Bundle Above';
-      document.getElementById('modal-buy-btn').disabled    = true;
-
-      // Render tier buttons
-      const tierGrid = document.getElementById('modal-tiers');
-      tierGrid.innerHTML = TIERS.map((t, i) => `
-        <div class="modal-tier" onclick="selectTier(${i})" id="tier-${i}">
-          <div class="t-qty">${t.qty}</div>
-          <div class="t-price">$${t.price}</div>
-        </div>
-      `).join('');
-
-      document.getElementById('modal-backdrop').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function selectTier(idx) {
-      selectedTier = TIERS[idx];
-      document.querySelectorAll('.modal-tier').forEach((el, i) => {
-        el.classList.toggle('selected', i === idx);
-      });
-      const btn = document.getElementById('modal-buy-btn');
-      btn.textContent = `Purchase ${selectedTier.qty} — $${selectedTier.price}`;
-      btn.disabled = false;
-    }
-
-    function closeModal() {
-      document.getElementById('modal-backdrop').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    function handleBackdropClick(e) {
-      if (e.target === document.getElementById('modal-backdrop')) closeModal();
-    }
-
-    // ─── PURCHASE ────────────────────────────────────────────────────────
-    async function handlePurchase() {
-      if (!selectedTier || !currentPhoto) return;
-
-      const btn = document.getElementById('modal-buy-btn');
-      btn.disabled    = true;
-      btn.textContent = 'Redirecting to checkout…';
-
-      try {
-        const resp = await fetch('/.netlify/functions/create-checkout', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            photoUrl:   currentPhoto.url,
-            photoName:  currentPhoto.name,
-            albumName:  albumLabel,
-            sport:      'Lacrosse',
-            price:      selectedTier.stripeAmount,  // in cents
-            bundle:     selectedTier.label,
-            isAthlete:  true,
-          }),
-        });
-        const data = await resp.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          throw new Error(data.error || 'Checkout failed');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Something went wrong. Please try again or email joseph@jofliks.com');
-        btn.disabled    = false;
-        btn.textContent = `Purchase ${selectedTier.qty} — $${selectedTier.price}`;
-      }
-    }
-
-    // ─── UI STATE HELPERS ─────────────────────────────────────────────────
-    function showMain() {
-      document.getElementById('state-loading').style.display = 'none';
-      document.getElementById('state-error').style.display   = 'none';
-      document.getElementById('main-content').style.display  = 'block';
-    }
-
-    function showError(msg) {
-      document.getElementById('state-loading').style.display = 'none';
-      document.getElementById('error-msg').textContent = msg;
-      document.getElementById('state-error').style.display   = 'flex';
-    }
-  </script>
-
+// ── UI HELPERS ─────────────────────────────────────────────────────────────
+function showMain(){
+  document.getElementById('state-loading').style.display='none';
+  document.getElementById('state-error').style.display='none';
+  document.getElementById('main-content').style.display='block';
+}
+function showError(msg){
+  document.getElementById('state-loading').style.display='none';
+  document.getElementById('error-msg').textContent=msg;
+  document.getElementById('state-error').style.display='flex';
+}
+</script>
 </body>
 </html>

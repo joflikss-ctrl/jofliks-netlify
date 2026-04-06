@@ -82,9 +82,9 @@
       pointer-events:none;
       z-index:2;
       background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext transform='rotate(-40,80,80)' x='-10' y='95' font-family='Georgia,serif' font-size='15' font-style='italic' fill='rgba(255,255,255,0.55)' letter-spacing='2'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-size='52' font-style='italic' fill='rgba(255,255,255,0.60)' letter-spacing='3'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E");
-      background-size: 160px 160px, 100% 100%;
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='130'%3E%3Ctext transform='rotate(-40,65,65)' x='-12' y='78' font-family='Georgia,serif' font-size='18' font-style='italic' fill='rgba(255,255,255,0.65)' letter-spacing='2'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-size='68' font-style='italic' fill='rgba(255,255,255,0.65)' letter-spacing='3'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E");
+      background-size: 130px 130px, 100% 100%;
       background-repeat: repeat, no-repeat;
       background-position: 0 0, center;
     }
@@ -3843,9 +3843,16 @@
       document.getElementById('view-sports').style.display = 'none';
       document.getElementById('view-albums').style.display = 'none';
       document.getElementById('view-photos').style.display = 'block';
-      document.querySelectorAll('.photo-grid').forEach(function(g) { g.style.display = 'none'; });
+      document.querySelectorAll('.photo-grid').forEach(function(g) {
+        g.style.display = 'none';
+        g.style.height = '0';
+        g.style.overflow = 'hidden';
+      });
       var grid = document.getElementById('album-' + albumId);
-      if (grid) grid.style.display = 'block';
+      if (grid) {
+        grid.style.display = 'block';
+        grid.style.overflow = 'visible';
+      }
       document.getElementById('album-desc').textContent = albumLabel + ' — click any photo to ' + (currentAlbumPrice === 0 ? 'download for free.' : 'purchase for $' + currentAlbumPrice + '.');
       document.getElementById('album-price-badge').textContent = currentAlbumPrice === 0 ? 'FREE download' : ('$' + currentAlbumPrice + ' per photo — instant email delivery');
       updateBreadcrumb();
