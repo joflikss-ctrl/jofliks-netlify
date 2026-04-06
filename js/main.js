@@ -62,7 +62,10 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-document.querySelectorAll('.stat, .service-card, .fg-item, .photo-card, .pg-item, .price-card, .faq-item, .dl-card').forEach(el => {
+// NOTE: .photo-card intentionally excluded — gallery photo cards are managed
+// entirely by gallery.html's own JS. Adding fade-up to them caused hidden
+// album photos to become visible via the IntersectionObserver.
+document.querySelectorAll('.stat, .service-card, .fg-item, .pg-item, .price-card, .faq-item, .dl-card').forEach(el => {
   el.classList.add('fade-up');
   observer.observe(el);
 });
