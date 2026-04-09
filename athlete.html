@@ -57,8 +57,10 @@
     #photo-grid .photo-card.in-cart .cart-indicator{display:flex;}
     #photo-grid .photo-card .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:.7rem;opacity:0;transition:opacity .25s;}
     #photo-grid .photo-card:hover .overlay,#photo-grid .photo-card.in-cart .overlay{opacity:1;}
+    /* On touch/mobile: always show bottom overlay so tap intent is clear */
+    @media(hover:none){#photo-grid .photo-card .overlay{opacity:1;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,transparent 45%);}}
     #photo-grid .photo-card .overlay .p-name{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:.35rem;}
-    #photo-grid .photo-card .overlay .p-btn{display:inline-block;border:none;cursor:pointer;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .65rem;border-radius:2px;font-family:inherit;}
+    #photo-grid .photo-card .overlay .p-btn{display:inline-block;border:none;cursor:pointer;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .65rem;border-radius:2px;font-family:inherit;pointer-events:none;user-select:none;}
     #photo-grid .photo-card .overlay .p-btn.add{background:#c9a84c;color:#1c1c1b;}
     #photo-grid .photo-card .overlay .p-btn.remove{background:rgba(255,255,255,.15);color:#fdfcfa;}
     #cart-drawer{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);}
@@ -286,13 +288,15 @@ function renderGrid() {
     var card = document.createElement('div');
     card.className = 'photo-card';
     card.id = 'photo-card-' + idx;
+    // Tap anywhere on card to toggle cart (works on mobile without hover)
+    card.setAttribute('onclick', 'toggleCart(' + idx + ', event)');
     card.innerHTML =
       '<img src="' + photo.url + '" alt="' + photo.name + '" loading="lazy" onload="layoutGrid()" />' +
       '<div class="wm"></div>' +
       '<div class="cart-indicator">&#x2713;</div>' +
       '<div class="overlay">' +
         '<div class="p-name">' + photo.name + '</div>' +
-        '<button class="p-btn add" id="btn-' + idx + '" onclick="toggleCart(' + idx + ',event)">+ Add to Cart</button>' +
+        '<div class="p-btn add" id="btn-' + idx + '">+ Add to Cart</div>' +
       '</div>';
     container.appendChild(card);
   });
@@ -301,7 +305,7 @@ function renderGrid() {
 
 // ── CART LOGIC ─────────────────────────────────────────────────────────────
 function toggleCart(idx, e) {
-  e.stopPropagation();
+  if (e) e.stopPropagation();
   var photo = photos[idx];
   var inCartIdx = cart.findIndex(function(p) { return p.url === photo.url; });
   if (inCartIdx === -1) { cart.push(photo); }
@@ -334,7 +338,7 @@ function updateCartUI() {
     card.classList.toggle('in-cart', inCart);
     if (btn) {
       btn.className = 'p-btn ' + (inCart ? 'remove' : 'add');
-      btn.textContent = inCart ? '&#x2713; In Cart' : '+ Add to Cart';
+      btn.textContent = inCart ? '✓ In Cart' : '+ Add to Cart';
     }
   });
 
