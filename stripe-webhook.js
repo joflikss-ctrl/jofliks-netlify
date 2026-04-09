@@ -102,7 +102,7 @@ exports.handler = async (event) => {
     // ── Buyer email ────────────────────────────────────────────────────────
     const buyerEmail = {
       to: customerEmail,
-      from: { email: 'noreply@jofliks.com', name: 'JoFliks Photography' }
+      from: { email: 'noreply@jofliks.com', name: 'JoFliks Photography' },
       replyTo: 'joflikss@gmail.com',
       subject: subjectLine,
       html: `
@@ -153,7 +153,7 @@ exports.handler = async (event) => {
     // ── Owner notification ─────────────────────────────────────────────────
     const ownerEmail = {
       to: 'joflikss@gmail.com',
-      from: { email: 'joflikss@gmail.com', name: 'JoFliks Photography' },
+      from: { email: 'noreply@jofliks.com', name: 'JoFliks Photography' },
       subject: `💰 New Sale! ${isBundle ? photoCount + ' photos' : photoName} — $${amountPaid}`,
       html: `
         <p><strong>New photo sale!</strong></p>
