@@ -1,52 +1,65 @@
 /**
  * generate-athlete-token.js
- * Netlify serverless function — generates a secure, time-limited athlete token
- * 
- * POST /api/generate-athlete-token
- * Body: { albumId, albumLabel, password }
- * Returns: { token, url, expiresAt }
+ * Generates secure athlete links that NEVER expire.
+ * Uses Netlify Blobs for persistent storage — tokens survive deploys and restarts.
+ *
+ * POST / — generate token  { albumId, albumLabel, password }
+ * GET  /verify — verify token  ?token=xxx&album=xxx
  */
 
 const crypto = require('crypto');
 
-// ─── CONFIG ─────────────────────────────────────────────────────────────────
-const OWNER_PASSWORD  = process.env.ATHLETE_PASSWORD || 'CCypress7!';
-const TOKEN_SECRET    = process.env.TOKEN_SECRET      || 'jofliks-secret-key-change-in-prod';
-const TOKEN_TTL_HOURS = 72; // links expire after 72 hours
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const OWNER_PASSWORD = process.env.ATHLETE_PASSWORD || 'CCypress7!';
+const TOKEN_SECRET   = process.env.TOKEN_SECRET     || 'jofliks-secret-change-in-prod';
 
-// In-memory store for tokens (resets on cold start).
-// For production persistence, swap this with a KV store (e.g. Netlify Blobs,
-// Upstash Redis, or Fauna DB). Structure: { token -> { albumId, albumLabel, uses, expiresAt } }
-const tokenStore = {};
+// ─── STORAGE: Netlify Blobs ───────────────────────────────────────────────────
+// Netlify Blobs persists across cold starts and deploys — tokens last forever.
+let blobStore;
+async function getStore() {
+  if (blobStore) return blobStore;
+  try {
+    const { getStore } = await import('@netlify/blobs');
+    blobStore = getStore('athlete-tokens');
+    return blobStore;
+  } catch {
+    // Fallback to in-memory if Blobs not available (local dev)
+    console.warn('Netlify Blobs unavailable — using in-memory store (local dev only)');
+    return null;
+  }
+}
 
-// ─── HELPERS ────────────────────────────────────────────────────────────────
+// In-memory fallback for local development
+const memStore = {};
 
-/**
- * Generate a cryptographically random token string.
- * Format: <random-hex>.<hmac-signature>
- * The HMAC ties the token to the albumId so it can't be reused for other albums.
- */
+async function saveToken(token, data) {
+  const store = await getStore();
+  if (store) {
+    await store.setJSON(token, data);
+  } else {
+    memStore[token] = data;
+  }
+}
+
+async function loadToken(token) {
+  const store = await getStore();
+  if (store) {
+    return await store.get(token, { type: 'json' });
+  }
+  return memStore[token] || null;
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function createToken(albumId) {
-  const random   = crypto.randomBytes(24).toString('hex');
-  const hmac     = crypto.createHmac('sha256', TOKEN_SECRET)
-                         .update(`${random}:${albumId}`)
-                         .digest('hex')
-                         .slice(0, 16);
+  const random = crypto.randomBytes(24).toString('hex');
+  const hmac   = crypto.createHmac('sha256', TOKEN_SECRET)
+                       .update(`${random}:${albumId}`)
+                       .digest('hex')
+                       .slice(0, 16);
   return `${random}.${hmac}`;
 }
 
-/**
- * Verify a token is valid, unexpired, and belongs to the claimed album.
- */
-function verifyToken(token, albumId) {
-  const entry = tokenStore[token];
-  if (!entry) return { valid: false, reason: 'Token not found' };
-  if (entry.albumId !== albumId) return { valid: false, reason: 'Album mismatch' };
-  if (Date.now() > entry.expiresAt) return { valid: false, reason: 'Token expired' };
-  return { valid: true, entry };
-}
-
-// ─── CORS HEADERS ────────────────────────────────────────────────────────────
+// ─── CORS ─────────────────────────────────────────────────────────────────────
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
   'Access-Control-Allow-Headers': 'Content-Type',
@@ -55,15 +68,13 @@ const CORS = {
 
 // ─── HANDLER ─────────────────────────────────────────────────────────────────
 exports.handler = async (event) => {
-
-  // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers: CORS, body: '' };
   }
 
   const path = event.path.replace('/.netlify/functions/generate-athlete-token', '');
 
-  // ── POST / — Generate a new token ──────────────────────────────────────────
+  // ── POST / — Generate token ──────────────────────────────────────────────
   if (event.httpMethod === 'POST' && (path === '' || path === '/')) {
     let body;
     try { body = JSON.parse(event.body); }
@@ -78,55 +89,57 @@ exports.handler = async (event) => {
       return { statusCode: 401, headers: CORS, body: JSON.stringify({ error: 'Incorrect password' }) };
     }
 
-    const token      = createToken(albumId);
-    const expiresAt  = Date.now() + TOKEN_TTL_HOURS * 60 * 60 * 1000;
-    const siteUrl    = process.env.URL || 'https://jofliks.com';
-    const url        = `${siteUrl}/athlete.html?token=${token}&album=${encodeURIComponent(albumId)}`;
+    const token    = createToken(albumId);
+    const siteUrl  = process.env.URL || 'https://jofliks.com';
+    const url      = `${siteUrl}/athlete.html?token=${token}&album=${encodeURIComponent(albumId)}`;
+    const tokenData = {
+      albumId,
+      albumLabel,
+      uses: 0,
+      createdAt: Date.now(),
+      expiresAt: null, // null = never expires
+    };
 
-    tokenStore[token] = { albumId, albumLabel, uses: 0, expiresAt, createdAt: Date.now() };
+    await saveToken(token, tokenData);
 
     return {
       statusCode: 200,
       headers: CORS,
-      body: JSON.stringify({
-        token,
-        url,
-        albumId,
-        albumLabel,
-        expiresAt: new Date(expiresAt).toISOString(),
-        expiresIn: `${TOKEN_TTL_HOURS} hours`,
-      }),
+      body: JSON.stringify({ token, url, albumId, albumLabel, expiresIn: 'never' }),
     };
   }
 
-  // ── GET /verify — Validate a token (called by athlete.html on load) ─────────
+  // ── GET /verify — Validate token ─────────────────────────────────────────
   if (event.httpMethod === 'GET' && path === '/verify') {
     const { token, album } = event.queryStringParameters || {};
     if (!token || !album) {
       return { statusCode: 400, headers: CORS, body: JSON.stringify({ valid: false, reason: 'Missing token or album' }) };
     }
 
-    const result = verifyToken(token, album);
-    if (result.valid) {
-      // Increment use counter
-      tokenStore[token].uses += 1;
-      return {
-        statusCode: 200,
-        headers: CORS,
-        body: JSON.stringify({
-          valid: true,
-          albumId:    result.entry.albumId,
-          albumLabel: result.entry.albumLabel,
-          uses:       result.entry.uses,
-          expiresAt:  new Date(result.entry.expiresAt).toISOString(),
-        }),
-      };
+    const entry = await loadToken(token);
+
+    if (!entry) {
+      return { statusCode: 200, headers: CORS, body: JSON.stringify({ valid: false, reason: 'Token not found' }) };
     }
+    if (entry.albumId !== album) {
+      return { statusCode: 200, headers: CORS, body: JSON.stringify({ valid: false, reason: 'Album mismatch' }) };
+    }
+    // No expiry check — tokens last forever
+
+    // Increment use counter
+    entry.uses = (entry.uses || 0) + 1;
+    await saveToken(token, entry);
 
     return {
       statusCode: 200,
       headers: CORS,
-      body: JSON.stringify({ valid: false, reason: result.reason }),
+      body: JSON.stringify({
+        valid: true,
+        albumId:    entry.albumId,
+        albumLabel: entry.albumLabel,
+        uses:       entry.uses,
+        expiresAt:  null,
+      }),
     };
   }
 
