@@ -98,6 +98,15 @@
     .cart-features li::before{content:'checkmark';color:#c9a84c;font-weight:700;}
     @media(max-width:600px){.pricing-cards{grid-template-columns:repeat(3,1fr);}#cart-bar{padding:.65rem 1rem;}}
     @media(max-width:420px){.pricing-cards{grid-template-columns:repeat(2,1fr);}}
+    /* Image protection */
+    img {
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+      pointer-events: none;
+    }
+    #photo-grid .photo-card { pointer-events: all; cursor: pointer; }
+    button, a { pointer-events: all; }
   </style>
 </head>
 <body>
@@ -476,6 +485,14 @@ function layoutGrid() {
   container.style.height=Math.max.apply(null,heights)+GAP+'px';
 }
 window.addEventListener('resize',function(){clearTimeout(window._rt);window._rt=setTimeout(layoutGrid,100);});
+
+    // Image protection — block right-click, long-press, drag
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target.tagName === 'IMG') e.preventDefault();
+    });
+    document.addEventListener('dragstart', function(e) {
+      if (e.target.tagName === 'IMG') e.preventDefault();
+    });
 
 // ── UI HELPERS ─────────────────────────────────────────────────────────────
 function showMain(){

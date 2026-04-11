@@ -2910,10 +2910,60 @@
       setTimeout(function() { btn.textContent = 'Copy Link'; }, 2000);
     }
 
-    // Disable right-click on images
+    // ── IMAGE PROTECTION ────────────────────────────────────────────────
+    // 1. Disable right-click save on all images
     document.addEventListener('contextmenu', function(e) {
       if (e.target.tagName === 'IMG') e.preventDefault();
     });
+
+    // 2. Block mobile long-press save (touchstart/touchend detection)
+    document.addEventListener('touchstart', function(e) {
+      if (e.target.tagName === 'IMG') {
+        e.target.setAttribute('data-touch-start', Date.now());
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+      if (e.target.tagName === 'IMG') {
+        e.target.removeAttribute('data-touch-start');
+      }
+    }, { passive: true });
+
+    // 3. Prevent drag-to-save on desktop
+    document.addEventListener('dragstart', function(e) {
+      if (e.target.tagName === 'IMG') e.preventDefault();
+    });
+
+    // 4. Apply CSS protection to all images
+    var protectStyle = document.createElement('style');
+    protectStyle.textContent = `
+      img {
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+        pointer-events: none;
+      }
+      .photo-card img,
+      .photo-modal-img img {
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+        pointer-events: none;
+      }
+    `;
+    document.head.appendChild(protectStyle);
+
+    // 5. Re-enable pointer-events only on photo cards for click handling
+    // (cards themselves handle clicks, not the img inside)
+    var cardStyle = document.createElement('style');
+    cardStyle.textContent = `
+      .photo-card { pointer-events: all; cursor: pointer; }
+      .photo-modal-backdrop { pointer-events: all; }
+      .photo-modal-close { pointer-events: all; cursor: pointer; }
+      button { pointer-events: all; cursor: pointer; }
+      a { pointer-events: all; }
+    `;
+    document.head.appendChild(cardStyle);
 
     // Nav scroll
     var header = document.getElementById('site-header');
