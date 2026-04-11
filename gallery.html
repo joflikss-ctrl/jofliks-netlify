@@ -336,14 +336,6 @@
         </div>
       </div>
       -->
-      <div class="album-card" onclick="openAlbum('bball-stgeorges-wheeler-041026','St. Georges vs Wheeler Academy')">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4032_mz0z4v.jpg" alt="St. Georges vs Wheeler Academy" />
-        <div class="album-card-overlay">
-          <div class="album-card-title">St. Georges vs Wheeler Academy</div>
-          <div class="album-card-date">4/10/26</div>
-          <div class="album-card-arrow">View Photos &rarr;</div>
-        </div>
-      </div>
       <div class="album-card" onclick="openAlbum('bball-stgeorges-standrews-022526','St. Georges vs St. Andrews')">
         <img src="https://res.cloudinary.com/dxthbasef/image/upload/v1774066804/JOF_0419_tnttda.png" alt="St. Georges vs St. Andrews" />
         <div class="album-card-overlay">
@@ -374,6 +366,14 @@
       </div>
     </div>
     <div class="album-grid" id="albums-baseball" style="display:none">
+      <div class="album-card" onclick="openAlbum('baseball-stgeorges-wheeler-041026','St. Georges vs Wheeler Academy')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4032_mz0z4v.jpg" alt="St. Georges vs Wheeler Academy" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">St. Georges vs Wheeler Academy</div>
+          <div class="album-card-date">4/10/26</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
       <div class="album-card" onclick="openAlbum('baseball-example','Example Game')">
         <img src="https://res.cloudinary.com/dxthbasef/image/upload/J0F_0977-Enhanced-NR_snhzek.jpg" alt="Baseball" />
         <div class="album-card-overlay">
@@ -491,7 +491,7 @@
     </div>
 
     <!-- BASEBALL St. Georges vs Wheeler Academy -->
-    <div class="photo-grid" id="album-bball-stgeorges-wheeler-041026" style="display:none">
+    <div class="photo-grid" id="album-baseball-stgeorges-wheeler-041026" style="display:none">
       <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_3823_gtadv9.jpg','JOF_3823','Baseball',currentAlbumNameGlobal)">
         <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_3823_gtadv9.jpg" alt="JOF_3823" class="photo-bg" />
         <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Baseball</span><strong class="pc-title">JOF_3823</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
@@ -4068,7 +4068,7 @@
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     var DEFAULT_PHOTO_PRICE = 15;   // $ price for any album not listed below
     var ALBUM_PRICES = {
-      'bball-stgeorges-wheeler-041026': 15,
+      'baseball-stgeorges-wheeler-041026': 15,
       // 'soccer-example':  10,     // Example: $10 for a specific album
       // 'bball-march-2025': 15,    // Example: $15 for another album
     };
@@ -4100,7 +4100,7 @@
       'lacrosse-stgeorges-tabor-040826': 'lacrosse',
       'lacrosse-stgeorges-tabor-mens-040826': 'lacrosse',
       'bball-ALBUMID': 'basketball',
-      'bball-stgeorges-wheeler-041026': 'baseball',
+      'baseball-stgeorges-wheeler-041026': 'baseball',
       'bball-stgeorges-standrews-022526': 'basketball',
       'soccer-example': 'soccer',
       'football-example': 'football',
@@ -4114,7 +4114,7 @@
       'lacrosse-stgeorges-tabor-040826': 'St. Georges vs Tabor (Womens)',
       'lacrosse-stgeorges-tabor-mens-040826': 'St. Georges vs Tabor (Mens)',
       'bball-ALBUMID': 'Team A vs Team B',
-      'bball-stgeorges-wheeler-041026': 'St. Georges vs Wheeler Academy',
+      'baseball-stgeorges-wheeler-041026': 'St. Georges vs Wheeler Academy',
       'bball-stgeorges-standrews-022526': 'St. Georges vs St. Andrews',
       'soccer-example': 'St. Georges vs Lawrence Academy',
       'football-example': 'Football Practice (1)',
