@@ -2935,35 +2935,17 @@
     });
 
     // 4. Apply CSS protection to all images
+    // NOTE: no pointer-events:none — that breaks click handlers
+    // -webkit-touch-callout blocks the iOS long-press Save popup
     var protectStyle = document.createElement('style');
     protectStyle.textContent = `
       img {
         -webkit-user-select: none;
         -webkit-touch-callout: none;
         user-select: none;
-        pointer-events: none;
-      }
-      .photo-card img,
-      .photo-modal-img img {
-        -webkit-user-select: none;
-        -webkit-touch-callout: none;
-        user-select: none;
-        pointer-events: none;
       }
     `;
     document.head.appendChild(protectStyle);
-
-    // 5. Re-enable pointer-events only on photo cards for click handling
-    // (cards themselves handle clicks, not the img inside)
-    var cardStyle = document.createElement('style');
-    cardStyle.textContent = `
-      .photo-card { pointer-events: all; cursor: pointer; }
-      .photo-modal-backdrop { pointer-events: all; }
-      .photo-modal-close { pointer-events: all; cursor: pointer; }
-      button { pointer-events: all; cursor: pointer; }
-      a { pointer-events: all; }
-    `;
-    document.head.appendChild(cardStyle);
 
     // Nav scroll
     var header = document.getElementById('site-header');
