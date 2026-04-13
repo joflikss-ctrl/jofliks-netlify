@@ -1,6 +1,6 @@
 /**
- * generate-athlete-token.js
- * Generates secure athlete links that NEVER expire.
+ * generate-vip-token.js
+ * Generates secure VIP links that NEVER expire.
  * Uses Netlify Blobs for persistent storage — tokens survive deploys and restarts.
  *
  * POST / — generate token  { albumId, albumLabel, password }
@@ -20,7 +20,7 @@ async function getStore() {
   if (blobStore) return blobStore;
   try {
     const { getStore } = await import('@netlify/blobs');
-    blobStore = getStore('athlete-tokens');
+    blobStore = getStore('vip-tokens');
     return blobStore;
   } catch {
     // Fallback to in-memory if Blobs not available (local dev)
@@ -72,7 +72,7 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers: CORS, body: '' };
   }
 
-  const path = event.path.replace('/.netlify/functions/generate-athlete-token', '');
+  const path = event.path.replace('/.netlify/functions/generate-vip-token', '');
 
   // ── POST / — Generate token ──────────────────────────────────────────────
   if (event.httpMethod === 'POST' && (path === '' || path === '/')) {
@@ -105,7 +105,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: CORS,
-      body: JSON.stringify({ token, url, albumId, albumLabel, expiresIn: 'never' }),
+      body: JSON.stringify({ token, url, albumId, albumLabel, expiresIn: 'never — permanent' }),
     };
   }
 
