@@ -251,6 +251,12 @@
           </ul>
         </div>
         <div>
+          <div style="margin-bottom:0.7rem;">
+            <label style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.35rem;">Delivery email (optional)</label>
+            <input id="modal-email-input" type="email" placeholder="your@gmail.com"
+              style="width:100%;padding:0.6rem 0.75rem;border:1px solid #d4d4cf;background:#f7f5f0;font-family:inherit;font-size:0.82rem;color:#1c1c1b;outline:none;box-sizing:border-box;" />
+            <p style="font-size:0.68rem;color:#a8a8a4;margin:0.3rem 0 0;">⚠️ iCloud emails may block delivery — Gmail/Yahoo recommended</p>
+          </div>
           <button class="modal-buy-btn" id="modalBuyBtn" onclick="handleBuyPhoto()">
             Buy This Photo — $15
           </button>
@@ -3180,6 +3186,29 @@
         closePhotoModal();
         return;
       }
+      // ── iCloud warning ────────────────────────────────────────────────────
+      // Apple blocks emails from shared SendGrid IPs. Warn iCloud users to
+      // use Gmail/Yahoo to guarantee delivery.
+      var stripeEmail = null;
+      var emailInput = document.getElementById('modal-email-input');
+      if (emailInput && emailInput.value.trim()) {
+        stripeEmail = emailInput.value.trim();
+        var domain = stripeEmail.split('@')[1] || '';
+        if (/icloud\.com|me\.com|mac\.com/i.test(domain)) {
+          var confirmed = confirm(
+            '⚠️ iCloud emails sometimes block photo delivery.\n\n' +
+            'For guaranteed delivery, we recommend using a Gmail or Yahoo address.\n\n' +
+            'Click OK to continue with iCloud, or Cancel to enter a different email.'
+          );
+          if (!confirmed) {
+            btn.textContent = 'Buy This Photo — $' + currentPhotoData.price;
+            btn.disabled = false;
+            emailInput.focus();
+            return;
+          }
+        }
+      }
+
       btn.textContent = 'Loading...';
       btn.disabled = true;
       try {
