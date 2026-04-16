@@ -176,25 +176,6 @@ exports.handler = async (event) => {
       // Don't throw — still send owner notification and return 200
     }
 
-    // ── iCloud fallback: also send to Gmail equivalent ────────────────────
-    // iCloud blocks emails from shared SendGrid IPs. If the customer used an
-    // iCloud address, duplicate the email to the matching Gmail address.
-    const icloudDomains = ['icloud.com', 'me.com', 'mac.com'];
-    const emailDomain = customerEmail.split('@')[1]?.toLowerCase() || '';
-    if (icloudDomains.includes(emailDomain)) {
-      const gmailFallback = customerEmail.split('@')[0] + '@gmail.com';
-      const fallbackEmail = {
-        ...buyerEmail,
-        to: gmailFallback,
-        subject: buyerEmail.subject + ' (delivered to Gmail — iCloud may have blocked original)',
-      };
-      try {
-        await sgMail.send(fallbackEmail);
-        console.log(`✅ iCloud fallback sent to: ${gmailFallback}`);
-      } catch (fallbackErr) {
-        console.error('❌ iCloud fallback failed:', fallbackErr.message);
-      }
-    }
 
     try {
       await sgMail.send(ownerEmail);
