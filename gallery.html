@@ -98,17 +98,6 @@
     .photo-grid .photo-card:hover .photo-card-overlay {
       opacity: 1;
     }
-    /* Watermark overlay on gallery thumbnails — always visible at 45% */
-    .photo-grid .photo-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 3;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Ctext transform='rotate(-45 90 90)' x='10' y='98' font-family='Georgia%2C serif' font-size='22' font-style='italic' fill='rgba(255%2C255%2C255%2C0.45)' letter-spacing='3'%3EJoFliks%E2%84%A2%3C/text%3E%3C/svg%3E");
-      background-size: 180px 180px;
-      background-repeat: repeat;
-    }
     .photo-grid .photo-card .pc-buy-hint {
       opacity: 1 !important;
     }
@@ -144,8 +133,7 @@
       .photo-modal-backdrop { align-items:flex-end; padding:0; }
       .photo-modal {
         grid-template-columns:1fr;
-        max-height:100vh;
-        height:100vh;
+        max-height:92vh;
         border-radius:14px 14px 0 0;
         display:flex;
         flex-direction:column;
@@ -153,8 +141,8 @@
       }
       .photo-modal-img {
         min-height:0 !important;
-        height:45vh;
-        max-height:45vh;
+        height:38vw;
+        max-height:230px;
         flex-shrink:0;
       }
       .photo-modal-info {
@@ -162,7 +150,7 @@
         min-height:0;
         overflow-y:auto;
         -webkit-overflow-scrolling:touch;
-        padding:1rem 1.4rem 1.2rem;
+        padding:1.2rem 1.4rem 1.4rem;
         display:flex;
         flex-direction:column;
         justify-content:space-between;
@@ -251,12 +239,6 @@
           </ul>
         </div>
         <div>
-          <div style="margin-bottom:0.7rem;">
-            <label style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:#a8a8a4;display:block;margin-bottom:0.35rem;">Delivery email (optional)</label>
-            <input id="modal-email-input" type="email" placeholder="your@gmail.com"
-              style="width:100%;padding:0.6rem 0.75rem;border:1px solid #d4d4cf;background:#f7f5f0;font-family:inherit;font-size:0.82rem;color:#1c1c1b;outline:none;box-sizing:border-box;" />
-            <p style="font-size:0.68rem;color:#a8a8a4;margin:0.3rem 0 0;">⚠️ iCloud emails may block delivery — Gmail/Yahoo recommended</p>
-          </div>
           <button class="modal-buy-btn" id="modalBuyBtn" onclick="handleBuyPhoto()">
             Buy This Photo — $15
           </button>
@@ -402,24 +384,7 @@
       </div>
     </div>
     <div class="album-grid" id="albums-lacrosse" style="display:none">
-            <div class="album-card" onclick="openAlbum('lacrosse-stgeorges-thayer-041526','St. Georges vs Thayer Academy')">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4372_adslza.jpg" alt="St. Georges vs Thayer Academy" />
-        <div class="album-card-overlay">
-          <div class="album-card-title">St. Georges vs Thayer Academy</div>
-          <div class="album-card-date">4/15/26</div>
-          <div class="album-card-arrow">View Photos &rarr;</div>
-        </div>
-      </div>
-      <div class="album-card" onclick="openAlbum('lacrosse-stgeorges-thayer-jv-041526','St. Georges vs Thayer Academy (JV)')">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4421_h2bjau.jpg" alt="St. Georges vs Thayer Academy (JV)" />
-        <div class="album-card-overlay">
-          <div class="album-card-title">St. Georges vs Thayer Academy (JV)</div>
-          <div class="album-card-date">4/15/26</div>
-          <div class="album-card-arrow">View Photos &rarr;</div>
-        </div>
-      </div>
-
-<div class="album-card" onclick="openAlbum('lacrosse-stgeorges-tabor-mens-040826','St. Georges vs Tabor (Mens)')">
+      <div class="album-card" onclick="openAlbum('lacrosse-stgeorges-tabor-mens-040826','St. Georges vs Tabor (Mens)')">
         <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_3763_pbc2me.jpg" alt="St. Georges vs Tabor (Mens)" />
         <div class="album-card-overlay">
           <div class="album-card-title">St. Georges vs Tabor (Mens)</div>
@@ -463,7 +428,15 @@
       </div>
     </div>
     <div class="album-grid" id="albums-events" style="display:none">
-      <div class="album-card" onclick="openAlbum('events-main','Events')">
+            <div class="album-card" onclick="openAlbum('events-fugees-8v8-042526','Fugees Family 8v8 Tournament')">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4656_w8twkl.jpg" alt="Fugees Family 8v8 Tournament" />
+        <div class="album-card-overlay">
+          <div class="album-card-title">Fugees Family 8v8 Tournament</div>
+          <div class="album-card-date">4/25/26</div>
+          <div class="album-card-arrow">View Photos &rarr;</div>
+        </div>
+      </div>
+<div class="album-card" onclick="openAlbum('events-main','Events')">
         <img src="https://res.cloudinary.com/dxthbasef/image/upload/v1774534872/JOF_2904_z7klf5.jpg" alt="Events" />
         <div class="album-card-overlay">
           <div class="album-card-title">Events</div>
@@ -2291,587 +2264,6 @@
         <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Tennis</span><strong class="pc-title">JOF_3726</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
       </div>
     </div>
-    <!-- LACROSSE St. Georges vs Thayer Academy (JV) -->
-    <div class="photo-grid" id="album-lacrosse-stgeorges-thayer-jv-041526" style="display:none">
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4415_ueowga.jpg','JOF_4415','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4415_ueowga.jpg" alt="JOF_4415" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4415</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4417_fd8vlq.jpg','JOF_4417','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4417_fd8vlq.jpg" alt="JOF_4417" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4417</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4420_kllxu2.jpg','JOF_4420','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4420_kllxu2.jpg" alt="JOF_4420" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4420</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4421_h2bjau.jpg','JOF_4421','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4421_h2bjau.jpg" alt="JOF_4421" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4421</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4423_gasmeq.jpg','JOF_4423','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4423_gasmeq.jpg" alt="JOF_4423" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4423</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4429_nsgunb.jpg','JOF_4429','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4429_nsgunb.jpg" alt="JOF_4429" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4429</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4433_oaxo61.jpg','JOF_4433','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4433_oaxo61.jpg" alt="JOF_4433" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4433</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4436_bh5jpb.jpg','JOF_4436','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4436_bh5jpb.jpg" alt="JOF_4436" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4436</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4438_bby9xi.jpg','JOF_4438','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4438_bby9xi.jpg" alt="JOF_4438" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4438</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4443_ubgcle.jpg','JOF_4443','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4443_ubgcle.jpg" alt="JOF_4443" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4443</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4446_za2k9z.jpg','JOF_4446','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4446_za2k9z.jpg" alt="JOF_4446" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4446</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4448_aoguzu.jpg','JOF_4448','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4448_aoguzu.jpg" alt="JOF_4448" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4448</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4452_ez6r1a.jpg','JOF_4452','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4452_ez6r1a.jpg" alt="JOF_4452" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4452</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4454_yhnazx.jpg','JOF_4454','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4454_yhnazx.jpg" alt="JOF_4454" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4454</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4455_okq5eh.jpg','JOF_4455','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4455_okq5eh.jpg" alt="JOF_4455" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4455</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4457_pbegdx.jpg','JOF_4457','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4457_pbegdx.jpg" alt="JOF_4457" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4457</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4458_lcdyy5.jpg','JOF_4458','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4458_lcdyy5.jpg" alt="JOF_4458" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4458</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4459_d7nfil.jpg','JOF_4459','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4459_d7nfil.jpg" alt="JOF_4459" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4459</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4461_h8c8x6.jpg','JOF_4461','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4461_h8c8x6.jpg" alt="JOF_4461" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4461</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4462_exjkgp.jpg','JOF_4462','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4462_exjkgp.jpg" alt="JOF_4462" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4462</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4463_jgmnvz.jpg','JOF_4463','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4463_jgmnvz.jpg" alt="JOF_4463" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4463</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4466_nyteif.jpg','JOF_4466','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4466_nyteif.jpg" alt="JOF_4466" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4466</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4468_b6reu9.jpg','JOF_4468','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4468_b6reu9.jpg" alt="JOF_4468" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4468</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4470_ahmona.jpg','JOF_4470','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4470_ahmona.jpg" alt="JOF_4470" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4470</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4471_ao22ew.jpg','JOF_4471','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4471_ao22ew.jpg" alt="JOF_4471" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4471</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4472_b72uxa.jpg','JOF_4472','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4472_b72uxa.jpg" alt="JOF_4472" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4472</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4474_l2jiuo.jpg','JOF_4474','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4474_l2jiuo.jpg" alt="JOF_4474" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4474</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4476_wfe7jj.jpg','JOF_4476','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4476_wfe7jj.jpg" alt="JOF_4476" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4476</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4478_vzuhns.jpg','JOF_4478','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4478_vzuhns.jpg" alt="JOF_4478" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4478</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4479_irvktb.jpg','JOF_4479','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4479_irvktb.jpg" alt="JOF_4479" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4479</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4480_lvwoxo.jpg','JOF_4480','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4480_lvwoxo.jpg" alt="JOF_4480" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4480</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4481_rf9zxs.jpg','JOF_4481','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4481_rf9zxs.jpg" alt="JOF_4481" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4481</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4483_hlndpi.jpg','JOF_4483','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4483_hlndpi.jpg" alt="JOF_4483" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4483</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4484_h2ts90.jpg','JOF_4484','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4484_h2ts90.jpg" alt="JOF_4484" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4484</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4485_br9g16.jpg','JOF_4485','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4485_br9g16.jpg" alt="JOF_4485" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4485</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4486_w47okf.jpg','JOF_4486','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4486_w47okf.jpg" alt="JOF_4486" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4486</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4488_lth0uq.jpg','JOF_4488','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4488_lth0uq.jpg" alt="JOF_4488" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4488</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4489_pi9yrc.jpg','JOF_4489','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4489_pi9yrc.jpg" alt="JOF_4489" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4489</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4490_n2xfr6.jpg','JOF_4490','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4490_n2xfr6.jpg" alt="JOF_4490" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4490</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4492_by9psa.jpg','JOF_4492','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4492_by9psa.jpg" alt="JOF_4492" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4492</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4494_jfxris.jpg','JOF_4494','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4494_jfxris.jpg" alt="JOF_4494" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4494</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-    </div>
-
-    <!-- LACROSSE St. Georges vs Thayer Academy -->
-    <div class="photo-grid" id="album-lacrosse-stgeorges-thayer-041526" style="display:none">
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4265_e9eohb.jpg','JOF_4265','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4265_e9eohb.jpg" alt="JOF_4265" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4265</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4266_lnsgoe.jpg','JOF_4266','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4266_lnsgoe.jpg" alt="JOF_4266" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4266</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4267_rkd2il.jpg','JOF_4267','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4267_rkd2il.jpg" alt="JOF_4267" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4267</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4269_bugc8x.jpg','JOF_4269','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4269_bugc8x.jpg" alt="JOF_4269" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4269</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4270_brxasi.jpg','JOF_4270','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4270_brxasi.jpg" alt="JOF_4270" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4270</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4273_qzjify.jpg','JOF_4273','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4273_qzjify.jpg" alt="JOF_4273" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4273</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4275_dsfncj.jpg','JOF_4275','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4275_dsfncj.jpg" alt="JOF_4275" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4275</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4276_h8xhv4.jpg','JOF_4276','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4276_h8xhv4.jpg" alt="JOF_4276" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4276</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4277_ngouvq.jpg','JOF_4277','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4277_ngouvq.jpg" alt="JOF_4277" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4277</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4278_wtryu9.jpg','JOF_4278','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4278_wtryu9.jpg" alt="JOF_4278" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4278</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4281_bpokvn.jpg','JOF_4281','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4281_bpokvn.jpg" alt="JOF_4281" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4281</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4284_k1gki2.jpg','JOF_4284','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4284_k1gki2.jpg" alt="JOF_4284" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4284</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4285_giaiww.jpg','JOF_4285','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4285_giaiww.jpg" alt="JOF_4285" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4285</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4286_tabxd2.jpg','JOF_4286','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4286_tabxd2.jpg" alt="JOF_4286" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4286</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4289_jjif9e.jpg','JOF_4289','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4289_jjif9e.jpg" alt="JOF_4289" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4289</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4290_ssbvuk.jpg','JOF_4290','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4290_ssbvuk.jpg" alt="JOF_4290" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4290</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4291_w6angp.jpg','JOF_4291','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4291_w6angp.jpg" alt="JOF_4291" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4291</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4292_jnxlos.jpg','JOF_4292','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4292_jnxlos.jpg" alt="JOF_4292" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4292</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4295_whh8rh.jpg','JOF_4295','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4295_whh8rh.jpg" alt="JOF_4295" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4295</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4296_nzjgfm.jpg','JOF_4296','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4296_nzjgfm.jpg" alt="JOF_4296" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4296</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4299_yzcyxx.jpg','JOF_4299','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4299_yzcyxx.jpg" alt="JOF_4299" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4299</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4300_yjkilj.jpg','JOF_4300','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4300_yjkilj.jpg" alt="JOF_4300" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4300</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4301_ipnsqw.jpg','JOF_4301','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4301_ipnsqw.jpg" alt="JOF_4301" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4301</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4303_qrsnou.jpg','JOF_4303','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4303_qrsnou.jpg" alt="JOF_4303" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4303</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4304_m0qwhs.jpg','JOF_4304','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4304_m0qwhs.jpg" alt="JOF_4304" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4304</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4306_b2r2pa.jpg','JOF_4306','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4306_b2r2pa.jpg" alt="JOF_4306" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4306</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4309_nlcafl.jpg','JOF_4309','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4309_nlcafl.jpg" alt="JOF_4309" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4309</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4310_abhltq.jpg','JOF_4310','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4310_abhltq.jpg" alt="JOF_4310" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4310</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4311_iabmrw.jpg','JOF_4311','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4311_iabmrw.jpg" alt="JOF_4311" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4311</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4313_zore1k.jpg','JOF_4313','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4313_zore1k.jpg" alt="JOF_4313" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4313</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4315_nttazi.jpg','JOF_4315','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4315_nttazi.jpg" alt="JOF_4315" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4315</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4316_ty0cst.jpg','JOF_4316','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4316_ty0cst.jpg" alt="JOF_4316" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4316</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4317_mzrvza.jpg','JOF_4317','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4317_mzrvza.jpg" alt="JOF_4317" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4317</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4320_bvczbr.jpg','JOF_4320','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4320_bvczbr.jpg" alt="JOF_4320" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4320</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4324_qljram.jpg','JOF_4324','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4324_qljram.jpg" alt="JOF_4324" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4324</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4325_hmv11u.jpg','JOF_4325','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4325_hmv11u.jpg" alt="JOF_4325" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4325</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4326_wtynow.jpg','JOF_4326','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4326_wtynow.jpg" alt="JOF_4326" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4326</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4327_rilngc.jpg','JOF_4327','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4327_rilngc.jpg" alt="JOF_4327" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4327</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4329_qsjtmt.jpg','JOF_4329','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4329_qsjtmt.jpg" alt="JOF_4329" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4329</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4330_ytw2zu.jpg','JOF_4330','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4330_ytw2zu.jpg" alt="JOF_4330" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4330</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4331_convwh.jpg','JOF_4331','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4331_convwh.jpg" alt="JOF_4331" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4331</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4332_tjdafn.jpg','JOF_4332','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4332_tjdafn.jpg" alt="JOF_4332" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4332</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4333_pj5fl6.jpg','JOF_4333','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4333_pj5fl6.jpg" alt="JOF_4333" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4333</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4339_wgb6dl.jpg','JOF_4339','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4339_wgb6dl.jpg" alt="JOF_4339" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4339</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4341_ohbhsh.jpg','JOF_4341','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4341_ohbhsh.jpg" alt="JOF_4341" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4341</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4350_ob8uqe.jpg','JOF_4350','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4350_ob8uqe.jpg" alt="JOF_4350" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4350</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4351_m8of0c.jpg','JOF_4351','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4351_m8of0c.jpg" alt="JOF_4351" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4351</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4352_aahnpu.jpg','JOF_4352','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4352_aahnpu.jpg" alt="JOF_4352" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4352</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4353_cbsiuq.jpg','JOF_4353','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4353_cbsiuq.jpg" alt="JOF_4353" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4353</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4356_ppe4bw.jpg','JOF_4356','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4356_ppe4bw.jpg" alt="JOF_4356" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4356</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4359_unupj3.jpg','JOF_4359','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4359_unupj3.jpg" alt="JOF_4359" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4359</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4360_kdnevo.jpg','JOF_4360','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4360_kdnevo.jpg" alt="JOF_4360" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4360</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4362_ba4uwx.jpg','JOF_4362','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4362_ba4uwx.jpg" alt="JOF_4362" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4362</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4364_vyyhac.jpg','JOF_4364','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4364_vyyhac.jpg" alt="JOF_4364" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4364</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4370_ntbpyw.jpg','JOF_4370','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4370_ntbpyw.jpg" alt="JOF_4370" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4370</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4371_omojoa.jpg','JOF_4371','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4371_omojoa.jpg" alt="JOF_4371" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4371</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4372_adslza.jpg','JOF_4372','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4372_adslza.jpg" alt="JOF_4372" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4372</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4376_yu69hr.jpg','JOF_4376','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4376_yu69hr.jpg" alt="JOF_4376" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4376</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4377_yir6h6.jpg','JOF_4377','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4377_yir6h6.jpg" alt="JOF_4377" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4377</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4378_dcvbtu.jpg','JOF_4378','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4378_dcvbtu.jpg" alt="JOF_4378" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4378</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4380_mbwkq7.jpg','JOF_4380','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4380_mbwkq7.jpg" alt="JOF_4380" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4380</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4382_tisily.jpg','JOF_4382','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4382_tisily.jpg" alt="JOF_4382" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4382</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4385_fwmy7j.jpg','JOF_4385','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4385_fwmy7j.jpg" alt="JOF_4385" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4385</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4387_o2wojt.jpg','JOF_4387','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4387_o2wojt.jpg" alt="JOF_4387" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4387</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4388_dwpeq3.jpg','JOF_4388','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4388_dwpeq3.jpg" alt="JOF_4388" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4388</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4390_otcyjf.jpg','JOF_4390','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4390_otcyjf.jpg" alt="JOF_4390" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4390</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4391_xyx71c.jpg','JOF_4391','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4391_xyx71c.jpg" alt="JOF_4391" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4391</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4393_crwbsn.jpg','JOF_4393','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4393_crwbsn.jpg" alt="JOF_4393" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4393</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4396_dztsl9.jpg','JOF_4396','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4396_dztsl9.jpg" alt="JOF_4396" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4396</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4400_qmwjm3.jpg','JOF_4400','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4400_qmwjm3.jpg" alt="JOF_4400" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4400</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4402_idtrqr.jpg','JOF_4402','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4402_idtrqr.jpg" alt="JOF_4402" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4402</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4406_hcsh6i.jpg','JOF_4406','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4406_hcsh6i.jpg" alt="JOF_4406" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4406</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4412_rw7vlb.jpg','JOF_4412','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4412_rw7vlb.jpg" alt="JOF_4412" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4412</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-
-      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4413_fprabr.jpg','JOF_4413','Lacrosse',currentAlbumNameGlobal)">
-        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4413_fprabr.jpg" alt="JOF_4413" class="photo-bg" />
-        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Lacrosse</span><strong class="pc-title">JOF_4413</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
-      </div>
-    </div>
-
     <!-- LACROSSE St. Georges vs Tabor (Mens) -->
     <div class="photo-grid" id="album-lacrosse-stgeorges-tabor-mens-040826" style="display:none">
       <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_3728_jencof.jpg','JOF_3728','Lacrosse',currentAlbumNameGlobal)">
@@ -3120,6 +2512,984 @@
 <!-- BULK IMPORTED PHOTOS GO HERE -->
     </div>
 
+    <!-- EVENTS Fugees Family 8v8 Tournament -->
+    <div class="photo-grid" id="album-events-fugees-8v8-042526" style="display:none">
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4640_imizxu.jpg','JOF_4640','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4640_imizxu.jpg" alt="JOF_4640" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4640</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4641_ajn4eu.jpg','JOF_4641','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4641_ajn4eu.jpg" alt="JOF_4641" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4641</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4644_mctusb.jpg','JOF_4644','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4644_mctusb.jpg" alt="JOF_4644" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4644</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4646_aph4gh.jpg','JOF_4646','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4646_aph4gh.jpg" alt="JOF_4646" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4646</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4647_v53r7v.jpg','JOF_4647','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4647_v53r7v.jpg" alt="JOF_4647" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4647</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4649_ehnhuj.jpg','JOF_4649','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4649_ehnhuj.jpg" alt="JOF_4649" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4649</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4650_nzpn4f.jpg','JOF_4650','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4650_nzpn4f.jpg" alt="JOF_4650" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4650</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4653_copb4a.jpg','JOF_4653','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4653_copb4a.jpg" alt="JOF_4653" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4653</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4654_qifotk.jpg','JOF_4654','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4654_qifotk.jpg" alt="JOF_4654" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4654</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4655_ppflhk.jpg','JOF_4655','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4655_ppflhk.jpg" alt="JOF_4655" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4655</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4656_w8twkl.jpg','JOF_4656','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4656_w8twkl.jpg" alt="JOF_4656" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4656</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4657_yckxyd.jpg','JOF_4657','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4657_yckxyd.jpg" alt="JOF_4657" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4657</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4658_qbvwax.jpg','JOF_4658','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4658_qbvwax.jpg" alt="JOF_4658" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4658</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4661_zpjcvq.jpg','JOF_4661','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4661_zpjcvq.jpg" alt="JOF_4661" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4661</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4663_gcrf0x.jpg','JOF_4663','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4663_gcrf0x.jpg" alt="JOF_4663" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4663</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4670_ljsapf.jpg','JOF_4670','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4670_ljsapf.jpg" alt="JOF_4670" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4670</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4672_uxbvpk.jpg','JOF_4672','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4672_uxbvpk.jpg" alt="JOF_4672" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4672</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4673_nzuvwh.jpg','JOF_4673','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4673_nzuvwh.jpg" alt="JOF_4673" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4673</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4675_ufsjca.jpg','JOF_4675','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4675_ufsjca.jpg" alt="JOF_4675" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4675</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4677_dmalns.jpg','JOF_4677','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4677_dmalns.jpg" alt="JOF_4677" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4677</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4678_r25vld.jpg','JOF_4678','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4678_r25vld.jpg" alt="JOF_4678" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4678</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4679_fubuyr.jpg','JOF_4679','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4679_fubuyr.jpg" alt="JOF_4679" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4679</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4680_xprmep.jpg','JOF_4680','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4680_xprmep.jpg" alt="JOF_4680" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4680</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4682_mdxuaf.jpg','JOF_4682','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4682_mdxuaf.jpg" alt="JOF_4682" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4682</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4684_yyba7l.jpg','JOF_4684','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4684_yyba7l.jpg" alt="JOF_4684" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4684</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4691_k2m6pt.jpg','JOF_4691','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4691_k2m6pt.jpg" alt="JOF_4691" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4691</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4692_x6xfqx.jpg','JOF_4692','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4692_x6xfqx.jpg" alt="JOF_4692" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4692</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4693_dcgsgz.jpg','JOF_4693','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4693_dcgsgz.jpg" alt="JOF_4693" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4693</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4694_tiqquh.jpg','JOF_4694','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4694_tiqquh.jpg" alt="JOF_4694" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4694</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4696_qzqv3b.jpg','JOF_4696','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4696_qzqv3b.jpg" alt="JOF_4696" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4696</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4698_grufn9.jpg','JOF_4698','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4698_grufn9.jpg" alt="JOF_4698" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4698</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4702_dpd6y9.jpg','JOF_4702','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4702_dpd6y9.jpg" alt="JOF_4702" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4702</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4705_vwddyj.jpg','JOF_4705','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4705_vwddyj.jpg" alt="JOF_4705" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4705</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4707_mnjl6c.jpg','JOF_4707','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4707_mnjl6c.jpg" alt="JOF_4707" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4707</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4714_hmw1md.jpg','JOF_4714','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4714_hmw1md.jpg" alt="JOF_4714" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4714</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4715_lt1vms.jpg','JOF_4715','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4715_lt1vms.jpg" alt="JOF_4715" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4715</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4716_dellqv.jpg','JOF_4716','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4716_dellqv.jpg" alt="JOF_4716" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4716</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4717_uic8ev.jpg','JOF_4717','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4717_uic8ev.jpg" alt="JOF_4717" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4717</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4718_cqfxiz.jpg','JOF_4718','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4718_cqfxiz.jpg" alt="JOF_4718" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4718</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4719_l3bm96.jpg','JOF_4719','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4719_l3bm96.jpg" alt="JOF_4719" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4719</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4723_jkh4sk.jpg','JOF_4723','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4723_jkh4sk.jpg" alt="JOF_4723" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4723</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4728_w3yl2g.jpg','JOF_4728','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4728_w3yl2g.jpg" alt="JOF_4728" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4728</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4729_lft8jh.jpg','JOF_4729','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4729_lft8jh.jpg" alt="JOF_4729" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4729</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4730_nizihz.jpg','JOF_4730','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4730_nizihz.jpg" alt="JOF_4730" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4730</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4733_gjfhcf.jpg','JOF_4733','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4733_gjfhcf.jpg" alt="JOF_4733" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4733</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4735_elszdz.jpg','JOF_4735','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4735_elszdz.jpg" alt="JOF_4735" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4735</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4737_wip7ps.jpg','JOF_4737','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4737_wip7ps.jpg" alt="JOF_4737" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4737</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4741_ogfnvo.jpg','JOF_4741','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4741_ogfnvo.jpg" alt="JOF_4741" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4741</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4743_okuxcr.jpg','JOF_4743','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4743_okuxcr.jpg" alt="JOF_4743" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4743</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4745_g6a9mo.jpg','JOF_4745','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4745_g6a9mo.jpg" alt="JOF_4745" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4745</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4746_adhg4e.jpg','JOF_4746','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4746_adhg4e.jpg" alt="JOF_4746" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4746</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4747_m9k5d8.jpg','JOF_4747','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4747_m9k5d8.jpg" alt="JOF_4747" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4747</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4749_uz4uhg.jpg','JOF_4749','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4749_uz4uhg.jpg" alt="JOF_4749" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4749</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4750_bce8av.jpg','JOF_4750','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4750_bce8av.jpg" alt="JOF_4750" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4750</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4754_dbgj6x.jpg','JOF_4754','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4754_dbgj6x.jpg" alt="JOF_4754" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4754</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4755_efziqf.jpg','JOF_4755','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4755_efziqf.jpg" alt="JOF_4755" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4755</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4757_mvlhup.jpg','JOF_4757','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4757_mvlhup.jpg" alt="JOF_4757" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4757</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4759_d63h0t.jpg','JOF_4759','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4759_d63h0t.jpg" alt="JOF_4759" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4759</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4760_f3oqae.jpg','JOF_4760','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4760_f3oqae.jpg" alt="JOF_4760" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4760</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4765_g4kutt.jpg','JOF_4765','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4765_g4kutt.jpg" alt="JOF_4765" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4765</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4767_f0jewk.jpg','JOF_4767','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4767_f0jewk.jpg" alt="JOF_4767" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4767</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4769_fxlp5b.jpg','JOF_4769','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4769_fxlp5b.jpg" alt="JOF_4769" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4769</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4772_wehnly.jpg','JOF_4772','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4772_wehnly.jpg" alt="JOF_4772" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4772</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4773_dfzfvh.jpg','JOF_4773','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4773_dfzfvh.jpg" alt="JOF_4773" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4773</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4774_dcvwgy.jpg','JOF_4774','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4774_dcvwgy.jpg" alt="JOF_4774" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4774</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4776_fzbqcl.jpg','JOF_4776','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4776_fzbqcl.jpg" alt="JOF_4776" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4776</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4777_qlrc9f.jpg','JOF_4777','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4777_qlrc9f.jpg" alt="JOF_4777" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4777</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4778_tllvvq.jpg','JOF_4778','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4778_tllvvq.jpg" alt="JOF_4778" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4778</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4779_mmi20e.jpg','JOF_4779','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4779_mmi20e.jpg" alt="JOF_4779" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4779</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4780_rvh2mt.jpg','JOF_4780','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4780_rvh2mt.jpg" alt="JOF_4780" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4780</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4782_bi0r5l.jpg','JOF_4782','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4782_bi0r5l.jpg" alt="JOF_4782" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4782</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4783_prnfuu.jpg','JOF_4783','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4783_prnfuu.jpg" alt="JOF_4783" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4783</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4784_gcotj0.jpg','JOF_4784','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4784_gcotj0.jpg" alt="JOF_4784" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4784</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4785_lywfqr.jpg','JOF_4785','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4785_lywfqr.jpg" alt="JOF_4785" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4785</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4789_j4gijz.jpg','JOF_4789','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4789_j4gijz.jpg" alt="JOF_4789" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4789</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4790_xzwwqf.jpg','JOF_4790','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4790_xzwwqf.jpg" alt="JOF_4790" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4790</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4791_okifx7.jpg','JOF_4791','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4791_okifx7.jpg" alt="JOF_4791" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4791</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4797_ynngjv.jpg','JOF_4797','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4797_ynngjv.jpg" alt="JOF_4797" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4797</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4798_mabglf.jpg','JOF_4798','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4798_mabglf.jpg" alt="JOF_4798" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4798</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4800_cvclqt.jpg','JOF_4800','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4800_cvclqt.jpg" alt="JOF_4800" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4800</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4802_lt9jfc.jpg','JOF_4802','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4802_lt9jfc.jpg" alt="JOF_4802" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4802</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4803_zewei5.jpg','JOF_4803','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4803_zewei5.jpg" alt="JOF_4803" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4803</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4807_itzzar.jpg','JOF_4807','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4807_itzzar.jpg" alt="JOF_4807" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4807</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4811_dlxpsf.jpg','JOF_4811','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4811_dlxpsf.jpg" alt="JOF_4811" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4811</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4812_w9dljc.jpg','JOF_4812','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4812_w9dljc.jpg" alt="JOF_4812" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4812</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4814_di1ss4.jpg','JOF_4814','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4814_di1ss4.jpg" alt="JOF_4814" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4814</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4816_wnwvs9.jpg','JOF_4816','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4816_wnwvs9.jpg" alt="JOF_4816" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4816</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4819_gbx11b.jpg','JOF_4819','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4819_gbx11b.jpg" alt="JOF_4819" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4819</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4820_al48gj.jpg','JOF_4820','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4820_al48gj.jpg" alt="JOF_4820" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4820</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4825_wbq3be.jpg','JOF_4825','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4825_wbq3be.jpg" alt="JOF_4825" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4825</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4827_acnmmo.jpg','JOF_4827','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4827_acnmmo.jpg" alt="JOF_4827" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4827</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4831_vaecgp.jpg','JOF_4831','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4831_vaecgp.jpg" alt="JOF_4831" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4831</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4834_ucdhpq.jpg','JOF_4834','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4834_ucdhpq.jpg" alt="JOF_4834" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4834</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4835_ejzbch.jpg','JOF_4835','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4835_ejzbch.jpg" alt="JOF_4835" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4835</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4838_vec9sg.jpg','JOF_4838','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4838_vec9sg.jpg" alt="JOF_4838" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4838</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4840_hcjnps.jpg','JOF_4840','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4840_hcjnps.jpg" alt="JOF_4840" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4840</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4841_ztkxxw.jpg','JOF_4841','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4841_ztkxxw.jpg" alt="JOF_4841" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4841</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4843_nvbcpr.jpg','JOF_4843','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4843_nvbcpr.jpg" alt="JOF_4843" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4843</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4845_vfgyrc.jpg','JOF_4845','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4845_vfgyrc.jpg" alt="JOF_4845" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4845</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4846_bl8p8n.jpg','JOF_4846','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4846_bl8p8n.jpg" alt="JOF_4846" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4846</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4847_neylrj.jpg','JOF_4847','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4847_neylrj.jpg" alt="JOF_4847" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4847</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4849_emgmyq.jpg','JOF_4849','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4849_emgmyq.jpg" alt="JOF_4849" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4849</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4850_slmenn.jpg','JOF_4850','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4850_slmenn.jpg" alt="JOF_4850" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4850</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4855_bipges.jpg','JOF_4855','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4855_bipges.jpg" alt="JOF_4855" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4855</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4857_pglqqy.jpg','JOF_4857','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4857_pglqqy.jpg" alt="JOF_4857" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4857</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4860_yfewyi.jpg','JOF_4860','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4860_yfewyi.jpg" alt="JOF_4860" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4860</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4867_yojgrp.jpg','JOF_4867','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4867_yojgrp.jpg" alt="JOF_4867" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4867</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4868_sqx97j.jpg','JOF_4868','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4868_sqx97j.jpg" alt="JOF_4868" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4868</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4869_oxoayh.jpg','JOF_4869','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4869_oxoayh.jpg" alt="JOF_4869" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4869</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4873_vpueqq.jpg','JOF_4873','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4873_vpueqq.jpg" alt="JOF_4873" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4873</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4874_wuevpr.jpg','JOF_4874','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4874_wuevpr.jpg" alt="JOF_4874" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4874</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4875_ypwk4u.jpg','JOF_4875','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4875_ypwk4u.jpg" alt="JOF_4875" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4875</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4876_qqyopa.jpg','JOF_4876','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4876_qqyopa.jpg" alt="JOF_4876" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4876</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4877_w0otbs.jpg','JOF_4877','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4877_w0otbs.jpg" alt="JOF_4877" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4877</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4884_zwuqgn.jpg','JOF_4884','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4884_zwuqgn.jpg" alt="JOF_4884" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4884</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4885_s4dnts.jpg','JOF_4885','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4885_s4dnts.jpg" alt="JOF_4885" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4885</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4886_etop1t.jpg','JOF_4886','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4886_etop1t.jpg" alt="JOF_4886" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4886</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4887_btcemn.jpg','JOF_4887','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4887_btcemn.jpg" alt="JOF_4887" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4887</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4889_ewzxv7.jpg','JOF_4889','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4889_ewzxv7.jpg" alt="JOF_4889" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4889</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4890_rjyz4c.jpg','JOF_4890','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4890_rjyz4c.jpg" alt="JOF_4890" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4890</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4891_kjoq2b.jpg','JOF_4891','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4891_kjoq2b.jpg" alt="JOF_4891" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4891</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4893_rgfyjz.jpg','JOF_4893','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4893_rgfyjz.jpg" alt="JOF_4893" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4893</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4894_lmbmcs.jpg','JOF_4894','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4894_lmbmcs.jpg" alt="JOF_4894" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4894</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4895_warjx8.jpg','JOF_4895','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4895_warjx8.jpg" alt="JOF_4895" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4895</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4896_pedqxa.jpg','JOF_4896','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4896_pedqxa.jpg" alt="JOF_4896" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4896</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4897_dlwiic.jpg','JOF_4897','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4897_dlwiic.jpg" alt="JOF_4897" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4897</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4901_w1wpdd.jpg','JOF_4901','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4901_w1wpdd.jpg" alt="JOF_4901" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4901</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4902_frjgtt.jpg','JOF_4902','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4902_frjgtt.jpg" alt="JOF_4902" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4902</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4904_mnyhgi.jpg','JOF_4904','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4904_mnyhgi.jpg" alt="JOF_4904" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4904</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4914_byclis.jpg','JOF_4914','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4914_byclis.jpg" alt="JOF_4914" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4914</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4915_gpzani.jpg','JOF_4915','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4915_gpzani.jpg" alt="JOF_4915" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4915</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4920_lw2p9d.jpg','JOF_4920','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4920_lw2p9d.jpg" alt="JOF_4920" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4920</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4923_vjwdm1.jpg','JOF_4923','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4923_vjwdm1.jpg" alt="JOF_4923" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4923</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4930_vywnep.jpg','JOF_4930','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4930_vywnep.jpg" alt="JOF_4930" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4930</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4931_kvtyqe.jpg','JOF_4931','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4931_kvtyqe.jpg" alt="JOF_4931" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4931</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4933_uycdvn.jpg','JOF_4933','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4933_uycdvn.jpg" alt="JOF_4933" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4933</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4934_pif7ej.jpg','JOF_4934','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4934_pif7ej.jpg" alt="JOF_4934" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4934</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4940_zwonrx.jpg','JOF_4940','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4940_zwonrx.jpg" alt="JOF_4940" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4940</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4941_gzaxrz.jpg','JOF_4941','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4941_gzaxrz.jpg" alt="JOF_4941" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4941</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4943_yjsd3q.jpg','JOF_4943','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4943_yjsd3q.jpg" alt="JOF_4943" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4943</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4948_ulbhpv.jpg','JOF_4948','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4948_ulbhpv.jpg" alt="JOF_4948" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4948</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4949_wxsfw8.jpg','JOF_4949','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4949_wxsfw8.jpg" alt="JOF_4949" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4949</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4950_c35dru.jpg','JOF_4950','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4950_c35dru.jpg" alt="JOF_4950" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4950</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4952_udhdac.jpg','JOF_4952','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4952_udhdac.jpg" alt="JOF_4952" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4952</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4953_xf6xro.jpg','JOF_4953','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4953_xf6xro.jpg" alt="JOF_4953" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4953</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4954_smsywu.jpg','JOF_4954','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4954_smsywu.jpg" alt="JOF_4954" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4954</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4955_uqzfbq.jpg','JOF_4955','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4955_uqzfbq.jpg" alt="JOF_4955" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4955</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4957_vcdd6s.jpg','JOF_4957','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4957_vcdd6s.jpg" alt="JOF_4957" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4957</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4958_blfsle.jpg','JOF_4958','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4958_blfsle.jpg" alt="JOF_4958" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4958</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4962_xca3r1.jpg','JOF_4962','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4962_xca3r1.jpg" alt="JOF_4962" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4962</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4963_ixsmrf.jpg','JOF_4963','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4963_ixsmrf.jpg" alt="JOF_4963" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4963</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4964_ronjgh.jpg','JOF_4964','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4964_ronjgh.jpg" alt="JOF_4964" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4964</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4965_xkzhxx.jpg','JOF_4965','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4965_xkzhxx.jpg" alt="JOF_4965" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4965</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4966_vwkyp5.jpg','JOF_4966','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4966_vwkyp5.jpg" alt="JOF_4966" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4966</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4967_mu33xw.jpg','JOF_4967','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4967_mu33xw.jpg" alt="JOF_4967" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4967</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4968_itxnkd.jpg','JOF_4968','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4968_itxnkd.jpg" alt="JOF_4968" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4968</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4969_onk9mp.jpg','JOF_4969','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4969_onk9mp.jpg" alt="JOF_4969" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4969</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4972_uxymqu.jpg','JOF_4972','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4972_uxymqu.jpg" alt="JOF_4972" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4972</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4974_d19moy.jpg','JOF_4974','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4974_d19moy.jpg" alt="JOF_4974" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4974</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4976_znx520.jpg','JOF_4976','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4976_znx520.jpg" alt="JOF_4976" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4976</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4977_cwmrkg.jpg','JOF_4977','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4977_cwmrkg.jpg" alt="JOF_4977" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4977</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4979_lhiiqw.jpg','JOF_4979','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4979_lhiiqw.jpg" alt="JOF_4979" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4979</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4983_jzv8yl.jpg','JOF_4983','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4983_jzv8yl.jpg" alt="JOF_4983" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4983</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4985_u1uxyd.jpg','JOF_4985','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4985_u1uxyd.jpg" alt="JOF_4985" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4985</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4987_r2obpk.jpg','JOF_4987','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4987_r2obpk.jpg" alt="JOF_4987" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4987</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4988_oxqety.jpg','JOF_4988','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4988_oxqety.jpg" alt="JOF_4988" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4988</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4989_dulrvp.jpg','JOF_4989','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4989_dulrvp.jpg" alt="JOF_4989" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4989</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4993_vskskh.jpg','JOF_4993','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4993_vskskh.jpg" alt="JOF_4993" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4993</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4994_sqiwqs.jpg','JOF_4994','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4994_sqiwqs.jpg" alt="JOF_4994" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4994</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4995_p9m2v7.jpg','JOF_4995','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4995_p9m2v7.jpg" alt="JOF_4995" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4995</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4997_wf3jtp.jpg','JOF_4997','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4997_wf3jtp.jpg" alt="JOF_4997" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4997</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4998_ofmpzc.jpg','JOF_4998','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4998_ofmpzc.jpg" alt="JOF_4998" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4998</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_4999_a9p4wa.jpg','JOF_4999','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_4999_a9p4wa.jpg" alt="JOF_4999" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_4999</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5000_zw1699.jpg','JOF_5000','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5000_zw1699.jpg" alt="JOF_5000" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5000</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5001_ejg9bi.jpg','JOF_5001','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5001_ejg9bi.jpg" alt="JOF_5001" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5001</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5004_l7navp.jpg','JOF_5004','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5004_l7navp.jpg" alt="JOF_5004" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5004</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5008_w0nlrs.jpg','JOF_5008','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5008_w0nlrs.jpg" alt="JOF_5008" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5008</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5009_shs7bw.jpg','JOF_5009','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5009_shs7bw.jpg" alt="JOF_5009" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5009</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5010_zr5evu.jpg','JOF_5010','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5010_zr5evu.jpg" alt="JOF_5010" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5010</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5013_c6gahj.jpg','JOF_5013','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5013_c6gahj.jpg" alt="JOF_5013" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5013</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5014_mhesxk.jpg','JOF_5014','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5014_mhesxk.jpg" alt="JOF_5014" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5014</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5015_tgn6us.jpg','JOF_5015','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5015_tgn6us.jpg" alt="JOF_5015" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5015</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5019_c5hj1r.jpg','JOF_5019','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5019_c5hj1r.jpg" alt="JOF_5019" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5019</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5020_yr7wqz.jpg','JOF_5020','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5020_yr7wqz.jpg" alt="JOF_5020" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5020</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5022_wdii6b.jpg','JOF_5022','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5022_wdii6b.jpg" alt="JOF_5022" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5022</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5023_hhwyno.jpg','JOF_5023','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5023_hhwyno.jpg" alt="JOF_5023" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5023</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5025_a3zl5p.jpg','JOF_5025','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5025_a3zl5p.jpg" alt="JOF_5025" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5025</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5026_ifckrx.jpg','JOF_5026','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5026_ifckrx.jpg" alt="JOF_5026" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5026</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5027_tqy2g0.jpg','JOF_5027','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5027_tqy2g0.jpg" alt="JOF_5027" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5027</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5030_vl3mus.jpg','JOF_5030','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5030_vl3mus.jpg" alt="JOF_5030" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5030</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5031_kunlng.jpg','JOF_5031','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5031_kunlng.jpg" alt="JOF_5031" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5031</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5033_sjn9jl.jpg','JOF_5033','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5033_sjn9jl.jpg" alt="JOF_5033" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5033</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5037_ic9h29.jpg','JOF_5037','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5037_ic9h29.jpg" alt="JOF_5037" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5037</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5040_zwpqmi.jpg','JOF_5040','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5040_zwpqmi.jpg" alt="JOF_5040" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5040</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+
+      <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/JOF_5041_lt1njv.jpg','JOF_5041','Events',currentAlbumNameGlobal)">
+        <img src="https://res.cloudinary.com/dxthbasef/image/upload/JOF_5041_lt1njv.jpg" alt="JOF_5041" class="photo-bg" />
+        <div class="photo-card-overlay"><div class="pc-meta"><span class="pc-cat">Events</span><strong class="pc-title">JOF_5041</strong></div><div class="pc-buy-hint">Tap to purchase</div></div>
+      </div>
+    </div>
+
     <!-- EVENTS album -->
     <div class="photo-grid" id="album-events-main" style="display:none">
       <div class="photo-card" onclick="openPhotoModal('https://res.cloudinary.com/dxthbasef/image/upload/v1774534872/JOF_2904_z7klf5.jpg','JOF_2904','Events',currentAlbumNameGlobal)">
@@ -3136,24 +3506,24 @@
     </div>
 
   </div><!-- end view-photos -->
-  <!-- ── VIP LINK GENERATOR (owner only, shown below every album) ── -->
-  <div id="vip-gen" style="display:none; background:#fdfcfa; border-top:1px solid #e8e7e2; padding:1rem 2.5rem;">
+  <!-- ── ATHLETE LINK GENERATOR (owner only, shown below every album) ── -->
+  <div id="athlete-gen" style="display:none; background:#fdfcfa; border-top:1px solid #e8e7e2; padding:1rem 2.5rem;">
     <div style="max-width:680px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;">
       <div>
         <p style="font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;margin:0 0 0.2rem;">Owner Tools</p>
-        <p style="font-size:0.8rem;color:#4a4a47;margin:0;">Generate a permanent JoFliks VIP link for this album. Share with the team — it never expires.</p>
+        <p style="font-size:0.8rem;color:#4a4a47;margin:0;">Generate a private, time-limited athlete link for this album.</p>
       </div>
-      <button id="vip-gen-btn" onclick="generateVIPLink()" style="padding:0.6rem 1.4rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#1c1c1b;color:white;border:none;cursor:pointer;white-space:nowrap;">
-        🔒 Generate VIP Link
+      <button id="athlete-gen-btn" onclick="generateAthleteLink()" style="padding:0.6rem 1.4rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#1c1c1b;color:white;border:none;cursor:pointer;white-space:nowrap;">
+        🔒 Generate Athlete Link
       </button>
     </div>
-    <div id="vip-gen-result" style="display:none; margin-top:0.9rem; max-width:680px;">
+    <div id="athlete-gen-result" style="display:none; margin-top:0.9rem; max-width:680px;">
       <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
-        <input id="vip-gen-url" readonly style="flex:1;min-width:220px;font-size:0.76rem;padding:0.5rem 0.75rem;border:1px solid #d4d4cf;background:#f0ede6;color:#1c1c1b;font-family:monospace;outline:none;border-radius:2px;" />
-        <button onclick="copyVIPLink()" id="vip-copy-btn" style="padding:0.5rem 1.1rem;font-family:inherit;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#2e7d32;color:white;border:none;cursor:pointer;border-radius:2px;">Copy Link</button>
-        <button onclick="generateVIPLink()" style="padding:0.5rem 1rem;font-family:inherit;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;background:transparent;color:#737370;border:1px solid #d4d4cf;cursor:pointer;border-radius:2px;">Regenerate</button>
+        <input id="athlete-gen-url" readonly style="flex:1;min-width:220px;font-size:0.76rem;padding:0.5rem 0.75rem;border:1px solid #d4d4cf;background:#f0ede6;color:#1c1c1b;font-family:monospace;outline:none;border-radius:2px;" />
+        <button onclick="copyAthleteGenLink()" id="athlete-copy-btn" style="padding:0.5rem 1.1rem;font-family:inherit;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#2e7d32;color:white;border:none;cursor:pointer;border-radius:2px;">Copy Link</button>
+        <button onclick="generateAthleteLink()" style="padding:0.5rem 1rem;font-family:inherit;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;background:transparent;color:#737370;border:1px solid #d4d4cf;cursor:pointer;border-radius:2px;">Regenerate</button>
       </div>
-      <p style="font-size:0.68rem;color:#a8a8a4;margin-top:0.5rem;">🔒 Link never expires &nbsp;·&nbsp; VIP members pay $5–$30 depending on bundle &nbsp;·&nbsp; Not publicly listed</p>
+      <p style="font-size:0.68rem;color:#a8a8a4;margin-top:0.5rem;">⏱ Link expires in 72 hours &nbsp;·&nbsp; Athletes pay $5–$30 depending on bundle &nbsp;·&nbsp; Not publicly listed</p>
     </div>
   </div>
 
@@ -3186,31 +3556,6 @@
     //  ALBUM PRICING CONFIG — edit prices here, one line per album
     //  Use 0 for FREE albums. Default price applies to all others.
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    
-    // ── NAV CURTAIN — instant view transitions ────────────────────────────────
-    // A lightweight white overlay that hides content swaps so there's no flash
-    (function() {
-      var curtainEl = null;
-      function ensureCurtain() {
-        if (curtainEl) return curtainEl;
-        curtainEl = document.createElement('div');
-        curtainEl.id = 'nav-curtain';
-        curtainEl.style.cssText = 'position:fixed;inset:0;background:#fdfcfa;z-index:8000;opacity:0;pointer-events:none;transition:opacity 0.12s ease;';
-        document.body.appendChild(curtainEl);
-        return curtainEl;
-      }
-      window.showNavCurtain = function() {
-        var c = ensureCurtain();
-        c.style.pointerEvents = 'all';
-        c.style.opacity = '1';
-      };
-      window.hideNavCurtain = function() {
-        var c = ensureCurtain();
-        c.style.opacity = '0';
-        setTimeout(function() { c.style.pointerEvents = 'none'; }, 130);
-      };
-    })();
-
     var DEFAULT_PHOTO_PRICE = 15;   // $ price for any album not listed below
     var ALBUM_PRICES = {
       'baseball-stgeorges-wheeler-041026': 15,
@@ -3244,15 +3589,15 @@
       'lacrosse-stgeorges-pomfret-040126': 'lacrosse',
       'lacrosse-stgeorges-tabor-040826': 'lacrosse',
       'lacrosse-stgeorges-tabor-mens-040826': 'lacrosse',
-      'lacrosse-stgeorges-thayer-041526': 'lacrosse',
-      'lacrosse-stgeorges-thayer-jv-041526': 'lacrosse',
       'bball-ALBUMID': 'basketball',
       'baseball-stgeorges-wheeler-041026': 'baseball',
       'bball-stgeorges-standrews-022526': 'basketball',
       'soccer-example': 'soccer',
       'football-example': 'football',
       'baseball-example': 'baseball',
-      'events-main': 'events'
+      'events-main':
+      'events-fugees-8v8-042526': 'Fugees Family 8v8 Tournament', 'events'
+          'events-fugees-8v8-042526': 'events',
     };
     var ALBUM_LABEL_MAP = {
       'lacrosse-example': 'St.Georges vs NAPS',
@@ -3260,15 +3605,14 @@
       'lacrosse-stgeorges-pomfret-040126': 'St. Georges vs Pomfret',
       'lacrosse-stgeorges-tabor-040826': 'St. Georges vs Tabor (Womens)',
       'lacrosse-stgeorges-tabor-mens-040826': 'St. Georges vs Tabor (Mens)',
-      'lacrosse-stgeorges-thayer-041526': 'St. Georges vs Thayer Academy',
-      'lacrosse-stgeorges-thayer-jv-041526': 'St. Georges vs Thayer Academy (JV)',
       'bball-ALBUMID': 'Team A vs Team B',
       'baseball-stgeorges-wheeler-041026': 'St. Georges vs Wheeler Academy',
       'bball-stgeorges-standrews-022526': 'St. Georges vs St. Andrews',
       'soccer-example': 'St. Georges vs Lawrence Academy',
       'football-example': 'Football Practice (1)',
       'baseball-example': 'N/Ar',
-      'events-main': 'Events'
+      'events-main':
+      'events-fugees-8v8-042526': 'Fugees Family 8v8 Tournament', 'Events'
     };
     var SPORT_LABEL_MAP = {
       'lacrosse': 'Lacrosse', 'basketball': 'Basketball', 'soccer': 'Soccer',
@@ -3280,26 +3624,22 @@
       document.getElementById('view-sports').style.display = 'block';
       document.getElementById('view-albums').style.display = 'none';
       document.getElementById('view-photos').style.display = 'none';
-      hideVIPGen();
+      hideAthleteGen();
       updateBreadcrumb();
       history.replaceState(null, '', window.location.pathname);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openSport(sport, label) {
-      showNavCurtain();
       currentSport = sport; currentSportLabel = label; currentAlbum = ''; currentAlbumLabel = '';
-      requestAnimationFrame(function() {
-        document.getElementById('view-sports').style.display = 'none';
-        document.getElementById('view-albums').style.display = 'block';
-        document.getElementById('view-photos').style.display = 'none';
-        hideVIPGen();
-        document.querySelectorAll('.album-grid').forEach(function(g) { g.style.display = 'none'; });
-        document.getElementById('albums-' + sport).style.display = 'grid';
-        updateBreadcrumb();
-        window.scrollTo({ top: 0 });
-        setTimeout(hideNavCurtain, 80);
-      });
+      document.getElementById('view-sports').style.display = 'none';
+      document.getElementById('view-albums').style.display = 'block';
+      document.getElementById('view-photos').style.display = 'none';
+      hideAthleteGen();
+      document.querySelectorAll('.album-grid').forEach(function(g) { g.style.display = 'none'; });
+      document.getElementById('albums-' + sport).style.display = 'grid';
+      updateBreadcrumb();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function goToSport() {
@@ -3307,7 +3647,7 @@
       document.getElementById('view-sports').style.display = 'none';
       document.getElementById('view-albums').style.display = 'block';
       document.getElementById('view-photos').style.display = 'none';
-      hideVIPGen();
+      hideAthleteGen();
       document.querySelectorAll('.album-grid').forEach(function(g) { g.style.display = 'none'; });
       document.getElementById('albums-' + currentSport).style.display = 'grid';
       updateBreadcrumb();
@@ -3315,31 +3655,22 @@
     }
 
     function openAlbum(albumId, albumLabel) {
-      // ── Instant curtain: hide content immediately so no flash ──
-      showNavCurtain();
-
       currentAlbum = albumId; currentAlbumLabel = albumLabel; currentAlbumNameGlobal = albumLabel;
       currentAlbumPrice = (albumId in ALBUM_PRICES) ? ALBUM_PRICES[albumId] : DEFAULT_PHOTO_PRICE;
-
-      // Small RAF so the curtain paints before the DOM work below
-      requestAnimationFrame(function() {
-        document.getElementById('view-sports').style.display = 'none';
-        document.getElementById('view-albums').style.display = 'none';
-        document.getElementById('view-photos').style.display = 'block';
-        document.querySelectorAll('.photo-grid').forEach(function(g) {
-          g.style.display = 'none';
-        });
-        var grid = document.getElementById('album-' + albumId);
-        if (grid) grid.style.display = 'block';
-        document.getElementById('album-desc').textContent = albumLabel + ' — click any photo to ' + (currentAlbumPrice === 0 ? 'download for free.' : 'purchase for $' + currentAlbumPrice + '.');
-        document.getElementById('album-price-badge').textContent = currentAlbumPrice === 0 ? 'FREE download' : ('$' + currentAlbumPrice + ' per photo — instant email delivery');
-        updateBreadcrumb();
-        history.replaceState(null, '', '#' + albumId);
-        window.scrollTo({ top: 0 });
-        showVIPGen();
-        // Lift the curtain after content is positioned
-        setTimeout(hideNavCurtain, 120);
+      document.getElementById('view-sports').style.display = 'none';
+      document.getElementById('view-albums').style.display = 'none';
+      document.getElementById('view-photos').style.display = 'block';
+      document.querySelectorAll('.photo-grid').forEach(function(g) {
+        g.style.display = 'none';
       });
+      var grid = document.getElementById('album-' + albumId);
+      if (grid) grid.style.display = 'block';
+      document.getElementById('album-desc').textContent = albumLabel + ' — click any photo to ' + (currentAlbumPrice === 0 ? 'download for free.' : 'purchase for $' + currentAlbumPrice + '.');
+      document.getElementById('album-price-badge').textContent = currentAlbumPrice === 0 ? 'FREE download' : ('$' + currentAlbumPrice + ' per photo — instant email delivery');
+      updateBreadcrumb();
+      history.replaceState(null, '', '#' + albumId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showAthleteGen();
     }
 
 
@@ -3405,29 +3736,6 @@
         closePhotoModal();
         return;
       }
-      // ── iCloud warning ────────────────────────────────────────────────────
-      // Apple blocks emails from shared SendGrid IPs. Warn iCloud users to
-      // use Gmail/Yahoo to guarantee delivery.
-      var stripeEmail = null;
-      var emailInput = document.getElementById('modal-email-input');
-      if (emailInput && emailInput.value.trim()) {
-        stripeEmail = emailInput.value.trim();
-        var domain = stripeEmail.split('@')[1] || '';
-        if (/icloud\.com|me\.com|mac\.com/i.test(domain)) {
-          var confirmed = confirm(
-            '⚠️ iCloud emails sometimes block photo delivery.\n\n' +
-            'For guaranteed delivery, we recommend using a Gmail or Yahoo address.\n\n' +
-            'Click OK to continue with iCloud, or Cancel to enter a different email.'
-          );
-          if (!confirmed) {
-            btn.textContent = 'Buy This Photo — $' + currentPhotoData.price;
-            btn.disabled = false;
-            emailInput.focus();
-            return;
-          }
-        }
-      }
-
       btn.textContent = 'Loading...';
       btn.disabled = true;
       try {
@@ -3507,37 +3815,37 @@
     // Shows the panel whenever an album is open, generates a secure
     // token via the Netlify function, and lets the owner copy the link.
 
-    var _vipGenUnlocked = false;   // stays unlocked for the session
+    var _athleteGenUnlocked = false;   // stays unlocked for the session
 
     // Called from openAlbum — show the generator panel
-    function showVIPGen() {
-      var panel = document.getElementById('vip-gen');
+    function showAthleteGen() {
+      var panel = document.getElementById('athlete-gen');
       if (panel) panel.style.display = 'block';
       // Reset result row whenever album changes
-      var result = document.getElementById('vip-gen-result');
+      var result = document.getElementById('athlete-gen-result');
       if (result) result.style.display = 'none';
     }
 
     // Called from openSport / goHome — hide the panel
-    function hideVIPGen() {
-      var panel = document.getElementById('vip-gen');
+    function hideAthleteGen() {
+      var panel = document.getElementById('athlete-gen');
       if (panel) panel.style.display = 'none';
     }
 
-    // Owner clicks "Generate VIP Link"
-    async function generateVIPLink() {
+    // Owner clicks "Generate Athlete Link"
+    async function generateAthleteLink() {
       // Password gate (once per session)
-      if (!_vipGenUnlocked) {
+      if (!_athleteGenUnlocked) {
         var pwd = prompt('Enter owner password:');
         if (pwd === null) return;                        // cancelled
         if (pwd !== 'CCypress7!') {
           alert('Incorrect password.');
           return;
         }
-        _vipGenUnlocked = true;
+        _athleteGenUnlocked = true;
       }
 
-      var btn = document.getElementById('vip-gen-btn');
+      var btn = document.getElementById('athlete-gen-btn');
       btn.textContent = 'Generating…';
       btn.disabled    = true;
 
@@ -3555,9 +3863,9 @@
         var data = await resp.json();
 
         if (data.url) {
-          document.getElementById('vip-gen-url').value = data.url;
-          document.getElementById('vip-gen-result').style.display = 'block';
-          document.getElementById('vip-copy-btn').textContent = 'Copy Link';
+          document.getElementById('athlete-gen-url').value = data.url;
+          document.getElementById('athlete-gen-result').style.display = 'block';
+          document.getElementById('athlete-copy-btn').textContent = 'Copy Link';
         } else {
           alert('Error generating link: ' + (data.error || 'Unknown error'));
         }
@@ -3567,18 +3875,18 @@
         var base   = 'https://jofliks.com/athlete.html';
         var demoToken = 'demo-' + Math.random().toString(36).slice(2, 18);
         var demoUrl   = base + '?token=' + demoToken + '&album=' + encodeURIComponent(currentAlbum);
-        document.getElementById('vip-gen-url').value = demoUrl;
-        document.getElementById('vip-gen-result').style.display = 'block';
-        document.getElementById('vip-copy-btn').textContent = 'Copy Link';
+        document.getElementById('athlete-gen-url').value = demoUrl;
+        document.getElementById('athlete-gen-result').style.display = 'block';
+        document.getElementById('athlete-copy-btn').textContent = 'Copy Link';
       }
 
-      btn.textContent = '🔒 Generate VIP Link';
+      btn.textContent = '🔒 Generate Athlete Link';
       btn.disabled    = false;
     }
 
     // Copy the generated URL to clipboard
-    function copyVIPLink() {
-      var input = document.getElementById('vip-gen-url');
+    function copyAthleteGenLink() {
+      var input = document.getElementById('athlete-gen-url');
       if (!input || !input.value) return;
       if (navigator.clipboard) {
         navigator.clipboard.writeText(input.value);
@@ -3586,7 +3894,7 @@
         input.select();
         document.execCommand('copy');
       }
-      var btn = document.getElementById('vip-copy-btn');
+      var btn = document.getElementById('athlete-copy-btn');
       btn.textContent = '✓ Copied!';
       setTimeout(function() { btn.textContent = 'Copy Link'; }, 2000);
     }
