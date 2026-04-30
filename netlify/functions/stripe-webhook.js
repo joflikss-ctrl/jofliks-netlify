@@ -176,7 +176,6 @@ exports.handler = async (event) => {
       // Don't throw — still send owner notification and return 200
     }
 
-
     try {
       await sgMail.send(ownerEmail);
       console.log(`✅ Owner notification sent`);

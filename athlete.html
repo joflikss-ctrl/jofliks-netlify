@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VIP Album — JoFliks Photography</title>
+  <title>Athlete Album — JoFliks Photography</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -116,20 +116,20 @@
 <div id="state-error" class="state-screen" style="display:none;">
   <div style="font-size:3rem;margin-bottom:1rem;">&#x1F512;</div>
   <h2>Link Unavailable</h2>
-  <p id="error-msg">This VIP link is invalid. Contact JoFliks Photography for a new link.</p>
+  <p id="error-msg">This athlete link is invalid or has expired. Contact JoFliks Photography to get a new one.</p>
   <a href="gallery.html" style="margin-top:1.5rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:underline;">Back to Gallery</a>
 </div>
 
 <div id="main-content" style="display:none;">
 
   <div class="athlete-banner">
-    <div class="badge">⭐ JoFliks VIP</div>
+    <div class="badge">&#x1F3C6; Athletes Only</div>
     <h1 id="album-title">Game Photos</h1>
     <p>Exclusive discounted pricing &mdash; add photos to your cart, then checkout.</p>
   </div>
 
   <div class="pricing-section">
-    <h2>VIP Pricing</h2>
+    <h2>Athlete Pricing</h2>
     <p class="pricing-sub">Add photos to your cart &mdash; price auto-adjusts to your bundle</p>
     <div class="pricing-cards">
       <div class="pricing-card">
@@ -219,7 +219,7 @@
 const TIERS = [
   { label:'1 photo',      min:1,  max:1,  price:5,  stripeAmount:500,  save:'',         perPhoto:'$5.00 each' },
   { label:'2 photos',     min:2,  max:2,  price:7,  stripeAmount:700,  save:'Save 30%', perPhoto:'$3.50 each' },
-  { label:'3 photos',     min:3,  max:4,  price:10, stripeAmount:1000, save:'Save 33%', perPhoto:'$3.33 each' },
+  { label:'3-4 photos',   min:3,  max:4,  price:10, stripeAmount:1000, save:'Save 33%', perPhoto:'$3.33 each' },
   { label:'5-10 photos',  min:5,  max:10, price:15, stripeAmount:1500, save:'Save 70%', perPhoto:'as low as $1.50' },
   { label:'10-20 photos', min:10, max:20, price:30, stripeAmount:3000, save:'Best Deal',perPhoto:'as low as $1.50' },
 ];
@@ -377,6 +377,12 @@ function handleDrawerBackdrop(e) {
 
 function renderCartDrawer() {
   var count = cart.length;
+
+  // Always ensure selectedTier matches current cart count
+  var bestTier = getBestTier(count);
+  if (!selectedTier || selectedTier.min > count || selectedTier.max < count) {
+    selectedTier = bestTier;
+  }
 
   // Items list
   var list = document.getElementById('cart-items-list');

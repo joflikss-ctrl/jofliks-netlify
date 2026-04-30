@@ -1,151 +1,147 @@
 /**
  * generate-athlete-token.js
- * Generates permanent JoFliks VIP links.
+ * Generates secure athlete links that NEVER expire.
+ * Uses Netlify Blobs for persistent storage — tokens survive deploys and restarts.
  *
- * Tokens are HMAC-signed so they are self-verifying —
- * no database or Netlify Blobs needed. Links never expire.
- *
- * POST /.netlify/functions/generate-athlete-token
- *   body: { albumId, albumLabel, password }
- *   returns: { url, token, albumId, albumLabel }
- *
- * GET /.netlify/functions/generate-athlete-token/verify
- *   ?token=xxx&album=xxx
- *   returns: { valid, albumId, albumLabel }
+ * POST / — generate token  { albumId, albumLabel, password }
+ * GET  /verify — verify token  ?token=xxx&album=xxx
  */
 
 const crypto = require('crypto');
 
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
 const OWNER_PASSWORD = process.env.ATHLETE_PASSWORD || 'CCypress7!';
-const TOKEN_SECRET   = process.env.TOKEN_SECRET     || 'jofliks-vip-secret-2025';
+const TOKEN_SECRET   = process.env.TOKEN_SECRET     || 'jofliks-secret-change-in-prod';
 
+// ─── STORAGE: Netlify Blobs ───────────────────────────────────────────────────
+// Netlify Blobs persists across cold starts and deploys — tokens last forever.
+let blobStore;
+async function getStore() {
+  if (blobStore) return blobStore;
+  try {
+    const { getStore } = await import('@netlify/blobs');
+    blobStore = getStore('athlete-tokens');
+    return blobStore;
+  } catch {
+    // Fallback to in-memory if Blobs not available (local dev)
+    console.warn('Netlify Blobs unavailable — using in-memory store (local dev only)');
+    return null;
+  }
+}
+
+// In-memory fallback for local development
+const memStore = {};
+
+async function saveToken(token, data) {
+  const store = await getStore();
+  if (store) {
+    await store.setJSON(token, data);
+  } else {
+    memStore[token] = data;
+  }
+}
+
+async function loadToken(token) {
+  const store = await getStore();
+  if (store) {
+    return await store.get(token, { type: 'json' });
+  }
+  return memStore[token] || null;
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function createToken(albumId) {
+  const random = crypto.randomBytes(24).toString('hex');
+  const hmac   = crypto.createHmac('sha256', TOKEN_SECRET)
+                       .update(`${random}:${albumId}`)
+                       .digest('hex')
+                       .slice(0, 16);
+  return `${random}.${hmac}`;
+}
+
+// ─── CORS ─────────────────────────────────────────────────────────────────────
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Content-Type': 'application/json',
 };
 
-// Create a signed token encoding the albumId
-function createToken(albumId) {
-  const payload = Buffer.from(albumId).toString('base64url');
-  const sig = crypto
-    .createHmac('sha256', TOKEN_SECRET)
-    .update(payload)
-    .digest('hex')
-    .slice(0, 32);
-  return `${payload}.${sig}`;
-}
-
-// Verify and decode a token — returns albumId or null
-function verifyToken(token) {
-  if (!token || !token.includes('.')) return null;
-  const [payload, sig] = token.split('.');
-  const expected = crypto
-    .createHmac('sha256', TOKEN_SECRET)
-    .update(payload)
-    .digest('hex')
-    .slice(0, 32);
-  if (sig !== expected) return null;
-  try {
-    return Buffer.from(payload, 'base64url').toString('utf8');
-  } catch {
-    return null;
-  }
-}
-
+// ─── HANDLER ─────────────────────────────────────────────────────────────────
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers: CORS, body: '' };
   }
 
-  // Strip function name from path to get the sub-route
-  const subpath = (event.path || '')
-    .replace('/.netlify/functions/generate-athlete-token', '')
-    .replace(/\/$/, '');
+  const path = event.path.replace('/.netlify/functions/generate-athlete-token', '');
 
-  // ── POST / — Generate a VIP link ─────────────────────────────────────────
-  if (event.httpMethod === 'POST' && (subpath === '' || subpath === '/')) {
+  // ── POST / — Generate token ──────────────────────────────────────────────
+  if (event.httpMethod === 'POST' && (path === '' || path === '/')) {
     let body;
-    try {
-      body = JSON.parse(event.body || '{}');
-    } catch {
-      return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Invalid JSON' }) };
-    }
+    try { body = JSON.parse(event.body); }
+    catch { return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Invalid JSON' }) }; }
 
     const { albumId, albumLabel, password } = body;
 
-    if (!albumId) {
-      return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'albumId required' }) };
+    if (!albumId || !albumLabel) {
+      return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'albumId and albumLabel required' }) };
     }
     if (password !== OWNER_PASSWORD) {
       return { statusCode: 401, headers: CORS, body: JSON.stringify({ error: 'Incorrect password' }) };
     }
 
-    const token   = createToken(albumId);
-    const siteUrl = process.env.URL || 'https://jofliks.com';
-    const url     = `${siteUrl}/athlete.html?token=${token}&album=${encodeURIComponent(albumId)}`;
+    const token    = createToken(albumId);
+    const siteUrl  = process.env.URL || 'https://jofliks.com';
+    const url      = `${siteUrl}/athlete.html?token=${token}&album=${encodeURIComponent(albumId)}`;
+    const tokenData = {
+      albumId,
+      albumLabel,
+      uses: 0,
+      createdAt: Date.now(),
+      expiresAt: null, // null = never expires
+    };
 
-    console.log(`VIP link generated for album: ${albumId}`);
+    await saveToken(token, tokenData);
 
     return {
       statusCode: 200,
       headers: CORS,
-      body: JSON.stringify({
-        token,
-        url,
-        albumId,
-        albumLabel: albumLabel || albumId,
-        expiresIn: 'never',
-      }),
+      body: JSON.stringify({ token, url, albumId, albumLabel, expiresIn: 'never' }),
     };
   }
 
-  // ── GET /verify — Validate a VIP token ───────────────────────────────────
-  if (event.httpMethod === 'GET' && subpath === '/verify') {
-    const params = event.queryStringParameters || {};
-    const { token, album } = params;
-
+  // ── GET /verify — Validate token ─────────────────────────────────────────
+  if (event.httpMethod === 'GET' && path === '/verify') {
+    const { token, album } = event.queryStringParameters || {};
     if (!token || !album) {
-      return {
-        statusCode: 200,
-        headers: CORS,
-        body: JSON.stringify({ valid: false, reason: 'Missing token or album' }),
-      };
+      return { statusCode: 400, headers: CORS, body: JSON.stringify({ valid: false, reason: 'Missing token or album' }) };
     }
 
-    const decodedAlbumId = verifyToken(token);
+    const entry = await loadToken(token);
 
-    if (!decodedAlbumId) {
-      return {
-        statusCode: 200,
-        headers: CORS,
-        body: JSON.stringify({ valid: false, reason: 'Invalid token signature' }),
-      };
+    if (!entry) {
+      return { statusCode: 200, headers: CORS, body: JSON.stringify({ valid: false, reason: 'Token not found' }) };
     }
+    if (entry.albumId !== album) {
+      return { statusCode: 200, headers: CORS, body: JSON.stringify({ valid: false, reason: 'Album mismatch' }) };
+    }
+    // No expiry check — tokens last forever
 
-    if (decodedAlbumId !== album) {
-      return {
-        statusCode: 200,
-        headers: CORS,
-        body: JSON.stringify({ valid: false, reason: 'Token does not match album' }),
-      };
-    }
+    // Increment use counter
+    entry.uses = (entry.uses || 0) + 1;
+    await saveToken(token, entry);
 
     return {
       statusCode: 200,
       headers: CORS,
       body: JSON.stringify({
         valid: true,
-        albumId: decodedAlbumId,
-        expiresAt: null,
+        albumId:    entry.albumId,
+        albumLabel: entry.albumLabel,
+        uses:       entry.uses,
+        expiresAt:  null,
       }),
     };
   }
 
-  // Unknown route
-  return {
-    statusCode: 404,
-    headers: CORS,
-    body: JSON.stringify({ error: 'Not found' }),
-  };
+  return { statusCode: 404, headers: CORS, body: JSON.stringify({ error: 'Not found' }) };
 };

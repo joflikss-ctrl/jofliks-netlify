@@ -25,7 +25,8 @@ exports.handler = async (event) => {
       const VALID_ATHLETE_PRICES = {
         '1 photo':      500,   // $5
         '2 photos':     700,   // $7
-        '3 photos':     1000,  // $10
+        '3 photos':     1000,  // $10 (legacy)
+        '3-4 photos':   1000,  // $10
         '5-10 photos':  1500,  // $15
         '10-20 photos': 3000,  // $30
       };
