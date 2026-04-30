@@ -399,7 +399,7 @@ function renderCartDrawer() {
   bundleEl.innerHTML = TIERS.filter(function(t) { return t.max >= count; }).map(function(t) {
     var available = count >= t.min && count <= t.max;
     var tooFew    = count < t.min;
-    var isSelected = selectedTier && selectedTier.label === t.label;
+    var isSelected = selectedTier && selectedTier.label === t.label && available;
     var lockMsg   = tooFew ? 'Need ' + (t.min - count) + ' more' : '';
     return '<div class="bundle-opt ' + (isSelected ? 'selected' : '') + ' ' + (tooFew ? 'locked' : '') + '" ' +
       (available ? 'onclick="selectBundle(\'' + t.label + '\')"' : '') + '>' +
@@ -430,6 +430,13 @@ function updateDrawerTotal() {
 // ── CHECKOUT ───────────────────────────────────────────────────────────────
 async function handleCheckout() {
   if (!selectedTier || cart.length === 0) return;
+  // Guard: ensure selectedTier actually covers current cart count
+  var count = cart.length;
+  if (count < selectedTier.min || count > selectedTier.max) {
+    selectedTier = getBestTier(count);
+    renderCartDrawer();
+    return; // re-render with correct tier, user clicks checkout again
+  }
   var btn = document.getElementById('drawer-checkout-btn');
   btn.disabled    = true;
   btn.innerHTML   = 'Redirecting...';
@@ -441,7 +448,7 @@ async function handleCheckout() {
         photoUrl:   cart[0].url,
         photoName:  cart.map(function(p){return p.name;}).join(', '),
         albumName:  albumLabel,
-        sport:      'Lacrosse',
+        sport:      albumLabel,
         price:      selectedTier.stripeAmount,
         bundle:     selectedTier.label,
         cartCount:  cart.length,
