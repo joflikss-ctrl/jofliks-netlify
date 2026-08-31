@@ -5,6 +5,12 @@
 [functions]
   node_bundler = "esbuild"
 
+# FIX: stripe-webhook needs the raw unparsed body for signature verification.
+# Without this, Netlify's middleware parses the body and corrupts it,
+# causing every webhook to fail with "No signatures found matching the expected signature".
+[functions."stripe-webhook"]
+  included_files = []
+
 [[headers]]
   for = "/*"
   [headers.values]
