@@ -47,6 +47,7 @@
         <a href="portfolio.html">Portfolio</a>
         <a href="gallery.html">Gallery</a>
         <a href="pricing.html" class="active">Pricing</a>
+        <a href="booking.html">Book Now</a>
         <a href="contact.html">Contact</a>
       </nav>
       <button class="hamburger" id="hamburger" aria-label="Open menu">
@@ -58,6 +59,7 @@
       <a href="portfolio.html">Portfolio</a>
       <a href="gallery.html">Gallery</a>
       <a href="pricing.html">Pricing</a>
+      <a href="booking.html">Book Now</a>
       <a href="contact.html">Contact</a>
     </div>
   </header>
@@ -182,7 +184,7 @@
 
   <!-- SENIOR PORTRAITS -->
   <section class="pricing-section" id="senior-portraits">
-    <div class="pricing-section-label">Now Booking — Fall 2026</div>
+    <div class="pricing-section-label">Starting September 10 — Discounts for St. George's Students</div>
     <div style="display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;">
       <h2 style="margin:0;">Senior Portraits</h2>
       <span style="font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:var(--mid);">one-on-one sessions, on location</span>
@@ -205,7 +207,7 @@
           <li>Private online gallery delivery</li>
           <li>1-week turnaround</li>
         </ul>
-        <a href="contact.html" class="btn btn-dark">Book This Session</a>
+        <a href="booking.html?package=classic" class="btn btn-dark">Book This Session</a>
       </div>
 
       <div class="price-card price-card-featured">
@@ -226,7 +228,7 @@
           <li>Print licensing included</li>
           <li>3-day turnaround</li>
         </ul>
-        <a href="contact.html" class="btn btn-dark">Book This Session</a>
+        <a href="booking.html?package=signature" class="btn btn-dark">Book This Session</a>
       </div>
 
       <div class="price-card">
@@ -248,7 +250,7 @@
       </div>
 
     </div>
-    <p style="margin-top:1.2rem;font-size:0.78rem;color:rgba(0,0,0,0.35);letter-spacing:0.05em;">* Cap &amp; gown and multi-outfit add-ons available. <a href="contact.html" style="color:var(--graphite);text-decoration:underline;">Get in touch →</a></p>
+    <p style="margin-top:1.2rem;font-size:0.78rem;color:rgba(0,0,0,0.35);letter-spacing:0.05em;">* Cap &amp; gown and multi-outfit add-ons available. St. George's students receive a special discount — mention it when booking. <a href="contact.html" style="color:var(--graphite);text-decoration:underline;">Get in touch →</a></p>
   </section>
 
   <!-- DIVIDER -->
@@ -353,5 +355,27 @@
   </footer>
 
   <script src="js/main.js"></script>
+
+  <!-- HOT DEAL: SENIOR PORTRAITS -->
+  <div class="hotdeal-fab-wrap" id="hotdealFabWrap">
+    <a href="pricing.html#senior-portraits" class="hotdeal-fab">
+      <span class="hotdeal-badge">Hot Deal</span>
+      <span class="hotdeal-label">Senior Portraits</span>
+    </a>
+    <button class="hotdeal-fab-close" onclick="jofHotdealDismiss()" aria-label="Dismiss">✕</button>
+  </div>
+  <script>
+    (function () {
+      var HD_KEY = 'jofHotdealDismissed';
+      var hdWrap = document.getElementById('hotdealFabWrap');
+      var hdDismissed = false;
+      try { hdDismissed = sessionStorage.getItem(HD_KEY) === '1'; } catch (e) {}
+      if (hdDismissed && hdWrap) hdWrap.style.display = 'none';
+      window.jofHotdealDismiss = function () {
+        if (hdWrap) hdWrap.style.display = 'none';
+        try { sessionStorage.setItem(HD_KEY, '1'); } catch (e) {}
+      };
+    })();
+  </script>
 </body>
 </html>

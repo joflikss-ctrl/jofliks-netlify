@@ -48,6 +48,7 @@
         <a href="portfolio.html">Portfolio</a>
         <a href="gallery.html">Gallery</a>
         <a href="pricing.html">Pricing</a>
+        <a href="booking.html">Book Now</a>
         <a href="contact.html">Contact</a>
       </nav>
       <button class="hamburger" id="hamburger" aria-label="Open menu">
@@ -59,6 +60,7 @@
       <a href="portfolio.html">Portfolio</a>
       <a href="gallery.html">Gallery</a>
       <a href="pricing.html">Pricing</a>
+      <a href="booking.html">Book Now</a>
       <a href="contact.html">Contact</a>
     </div>
   </header>
@@ -188,6 +190,7 @@
         <a href="portfolio.html">Portfolio</a>
         <a href="gallery.html">Gallery</a>
         <a href="pricing.html">Pricing</a>
+        <a href="booking.html">Book Now</a>
         <a href="contact.html">Contact</a>
       </div>
       <div class="footer-social">
@@ -256,9 +259,9 @@
   <div class="promo-modal-backdrop" id="promoModalBackdrop" onclick="promoClickOutside(event)">
     <div class="promo-modal">
       <button class="promo-modal-close" onclick="promoClose()" aria-label="Close">✕</button>
-      <div class="promo-modal-eyebrow">Now Booking — Fall 2026</div>
+      <div class="promo-modal-eyebrow">Starting September 10</div>
       <h3>Senior Portrait Sessions</h3>
-      <p>One-on-one sessions on location, starting at $150. Limited fall dates available.</p>
+      <p>One-on-one sessions on location, starting at $150. Discounts available for St. George's students.</p>
       <div class="promo-modal-actions">
         <a href="pricing.html#senior-portraits" class="btn btn-light">See Pricing &amp; Book</a>
         <a href="#" onclick="promoClose(); return false;" class="btn btn-ghost">Maybe Later</a>
@@ -267,13 +270,14 @@
   </div>
   <script>
     (function () {
-      var PROMO_KEY = 'jofSeniorPromoSeen';
+      var PROMO_KEY = 'jofSeniorPromoSeenAt';
+      var COOLDOWN_MS = 24 * 60 * 60 * 1000;
       function promoOpen() {
         document.getElementById('promoModalBackdrop').classList.add('open');
       }
       window.promoClose = function () {
         document.getElementById('promoModalBackdrop').classList.remove('open');
-        try { localStorage.setItem(PROMO_KEY, '1'); } catch (e) {}
+        try { localStorage.setItem(PROMO_KEY, String(Date.now())); } catch (e) {}
       };
       window.promoClickOutside = function (e) {
         if (e.target === document.getElementById('promoModalBackdrop')) promoClose();
@@ -282,11 +286,33 @@
         var bd = document.getElementById('promoModalBackdrop');
         if (bd.classList.contains('open') && e.key === 'Escape') promoClose();
       });
-      var alreadySeen = false;
-      try { alreadySeen = localStorage.getItem(PROMO_KEY) === '1'; } catch (e) {}
-      if (!alreadySeen) {
+      var seenAt = 0;
+      try { seenAt = parseInt(localStorage.getItem(PROMO_KEY), 10) || 0; } catch (e) {}
+      if (Date.now() - seenAt > COOLDOWN_MS) {
         setTimeout(promoOpen, 3000);
       }
+    })();
+  </script>
+
+  <!-- HOT DEAL: SENIOR PORTRAITS -->
+  <div class="hotdeal-fab-wrap" id="hotdealFabWrap">
+    <a href="pricing.html#senior-portraits" class="hotdeal-fab">
+      <span class="hotdeal-badge">Hot Deal</span>
+      <span class="hotdeal-label">Senior Portraits</span>
+    </a>
+    <button class="hotdeal-fab-close" onclick="jofHotdealDismiss()" aria-label="Dismiss">✕</button>
+  </div>
+  <script>
+    (function () {
+      var HD_KEY = 'jofHotdealDismissed';
+      var hdWrap = document.getElementById('hotdealFabWrap');
+      var hdDismissed = false;
+      try { hdDismissed = sessionStorage.getItem(HD_KEY) === '1'; } catch (e) {}
+      if (hdDismissed && hdWrap) hdWrap.style.display = 'none';
+      window.jofHotdealDismiss = function () {
+        if (hdWrap) hdWrap.style.display = 'none';
+        try { sessionStorage.setItem(HD_KEY, '1'); } catch (e) {}
+      };
     })();
   </script>
 </body>

@@ -136,7 +136,7 @@ em { font-family: var(--serif); font-style: italic; }
 }
 .nav-links {
   display: flex;
-  gap: 2.2rem;
+  gap: 1.7rem;
 }
 .nav-links a {
   font-size: 0.72rem;
@@ -1128,6 +1128,53 @@ a.contact-detail-value:hover { text-decoration: underline; }
 }
 
 /* =============================================
+   PACKAGE SELECT CARDS (booking page)
+   ============================================= */
+.pkg-select {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+.pkg-option {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.pkg-card {
+  display: block;
+  cursor: pointer;
+  border: 1px solid var(--light);
+  background: var(--white);
+  padding: 1.2rem 1.1rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.pkg-card:hover { border-color: var(--graphite); }
+.pkg-option:checked + .pkg-card {
+  border-color: var(--ink);
+  background: var(--beige);
+}
+.pkg-option:focus-visible + .pkg-card { outline: 2px solid var(--graphite); outline-offset: 2px; }
+.pkg-card-name {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+.pkg-card-price {
+  font-size: 0.85rem;
+  color: var(--graphite);
+  margin-bottom: 0.5rem;
+}
+.pkg-card-desc {
+  font-size: 0.72rem;
+  color: var(--mid);
+  line-height: 1.6;
+}
+@media (max-width: 560px) {
+  .pkg-select { grid-template-columns: 1fr; }
+}
+
+/* =============================================
    PHOTO PLACEHOLDER COLOURS
    (Replace with real <img> tags)
    ============================================= */
@@ -1384,6 +1431,61 @@ a.contact-detail-value:hover { text-decoration: underline; }
   cursor: pointer;
 }
 .promo-modal-close:hover { color: var(--white); }
+
+/* =============================================
+   HOT DEAL FLOATING BUTTON (sitewide)
+   ============================================= */
+.hotdeal-fab-wrap {
+  position: fixed;
+  bottom: 22px; right: 22px;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hotdeal-fab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  border: 1px solid rgba(197,161,98,0.55);
+  color: var(--white);
+  padding: 13px 18px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.hotdeal-fab:hover { transform: translateY(-2px); border-color: rgba(197,161,98,0.9); }
+.hotdeal-badge {
+  background: linear-gradient(180deg, #ecd6a8 0%, #c5a162 100%);
+  color: #1c1c1b;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.hotdeal-fab-close {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  font-size: 0.68rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.hotdeal-fab-close:hover { color: var(--white); }
+@media (max-width: 560px) {
+  .hotdeal-fab-wrap { bottom: 16px; right: 16px; }
+  .hotdeal-fab { padding: 11px 14px; font-size: 0.66rem; gap: 8px; }
+  .hotdeal-fab span.hotdeal-label { display: none; }
+}
 
 @media (max-width: 768px) {
   /* ---- Nav ---- */

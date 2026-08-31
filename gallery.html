@@ -212,6 +212,7 @@
       <a href="portfolio.html">Portfolio</a>
       <a href="gallery.html">Gallery</a>
       <a href="pricing.html">Pricing</a>
+      <a href="booking.html">Book Now</a>
       <a href="contact.html">Contact</a>
     </div>
   </header>
@@ -4716,6 +4717,7 @@
         <a href="portfolio.html">Portfolio</a>
         <a href="gallery.html">Gallery</a>
         <a href="pricing.html">Pricing</a>
+        <a href="booking.html">Book Now</a>
         <a href="contact.html">Contact</a>
       </div>
       <div class="footer-social">
@@ -5177,6 +5179,28 @@
           setTimeout(jofHideLoader, 6000);
         };
       }
+    })();
+  </script>
+
+  <!-- HOT DEAL: SENIOR PORTRAITS -->
+  <div class="hotdeal-fab-wrap" id="hotdealFabWrap">
+    <a href="pricing.html#senior-portraits" class="hotdeal-fab">
+      <span class="hotdeal-badge">Hot Deal</span>
+      <span class="hotdeal-label">Senior Portraits</span>
+    </a>
+    <button class="hotdeal-fab-close" onclick="jofHotdealDismiss()" aria-label="Dismiss">✕</button>
+  </div>
+  <script>
+    (function () {
+      var HD_KEY = 'jofHotdealDismissed';
+      var hdWrap = document.getElementById('hotdealFabWrap');
+      var hdDismissed = false;
+      try { hdDismissed = sessionStorage.getItem(HD_KEY) === '1'; } catch (e) {}
+      if (hdDismissed && hdWrap) hdWrap.style.display = 'none';
+      window.jofHotdealDismiss = function () {
+        if (hdWrap) hdWrap.style.display = 'none';
+        try { sessionStorage.setItem(HD_KEY, '1'); } catch (e) {}
+      };
     })();
   </script>
 
