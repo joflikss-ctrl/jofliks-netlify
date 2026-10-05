@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { verifyToken } = require('../lib/athlete-token');
+const { verifyToken, checkPassword } = require('../lib/athlete-token');
 
 // Only photos hosted in the JoFliks Cloudinary account can be sold.
 const CLOUD_BASE = 'https://res.cloudinary.com/dxthbasef/image/upload/';
@@ -51,6 +51,12 @@ exports.handler = async (event) => {
     const body = JSON.parse(event.body || '{}');
     const { photoUrl, photoName, albumName, sport, isAthlete, token, albumId } = body;
 
+    // Owner-only $0 test purchase: only works with the owner password.
+    const isTest = Boolean(body.ownerTestPassword);
+    if (isTest && !checkPassword(body.ownerTestPassword)) {
+      return json(401, { error: 'Incorrect owner password.' });
+    }
+
     let unitAmount, bundle, urls, productName, description, cancelUrl;
     const site = process.env.URL || 'https://jofliks.com';
 
@@ -90,6 +96,11 @@ exports.handler = async (event) => {
       cancelUrl = `${site}/gallery.html`;
     }
 
+    if (isTest) {
+      unitAmount = 0;
+      productName = `[TEST] ${productName}`;
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
@@ -111,6 +122,7 @@ exports.handler = async (event) => {
         bundle,
         cartCount: String(urls.length),
         isAthlete: isAthlete ? 'true' : 'false',
+        test: isTest ? 'true' : 'false',
         ...chunkPhotoIds(urls),
       },
     });

@@ -166,7 +166,7 @@ exports.handler = async (event) => {
     const ownerEmail = {
       to: 'joflikss@gmail.com',
       from: { email: 'noreply@jofliks.com', name: 'JoFliks Photography' },
-      subject: `💰 New Sale! ${isBundle ? photoCount + ' photos' : photoName} — $${amountPaid}`,
+      subject: `${session.metadata.test === 'true' ? '[TEST] ' : '💰 '}New Sale! ${isBundle ? photoCount + ' photos' : photoName} — $${amountPaid}`,
       html: `
         <p><strong>New photo sale!</strong></p>
         <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>

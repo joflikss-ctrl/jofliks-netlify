@@ -430,6 +430,14 @@ function updateDrawerTotal() {
   btn.disabled = !selectedTier || cart.length === 0;
 }
 
+
+// Owner-only $0 test checkout: open the page with ?ownertest=1 in the URL.
+function getOwnerTestPassword() {
+  if (!new URLSearchParams(window.location.search).has('ownertest')) return undefined;
+  var pwd = prompt('OWNER TEST MODE — enter owner password for a $0 test purchase (Cancel = normal purchase):');
+  return pwd || undefined;
+}
+
 // ── CHECKOUT ───────────────────────────────────────────────────────────────
 async function handleCheckout() {
   if (!selectedTier || cart.length === 0) return;
@@ -440,6 +448,7 @@ async function handleCheckout() {
     renderCartDrawer();
     return; // re-render with correct tier, user clicks checkout again
   }
+  var ownerTestPassword = getOwnerTestPassword();
   var btn = document.getElementById('drawer-checkout-btn');
   btn.disabled    = true;
   btn.innerHTML   = 'Redirecting...';
@@ -459,6 +468,7 @@ async function handleCheckout() {
         isAthlete:  true,
         token:      token,
         albumId:    albumId,
+        ownerTestPassword: ownerTestPassword,
       }),
     });
     var data = await resp.json();

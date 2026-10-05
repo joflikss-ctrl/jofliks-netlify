@@ -49,7 +49,8 @@ exports.handler = async (event) => {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    if (session.payment_status !== 'paid') {
+    // 'no_payment_required' = $0 owner test order
+    if (session.payment_status !== 'paid' && session.payment_status !== 'no_payment_required') {
       return json(402, { error: 'This order has not been paid yet.' });
     }
 

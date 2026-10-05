@@ -4909,6 +4909,14 @@
       if (e.key === 'Escape') closePhotoModal();
     });
 
+
+    // Owner-only $0 test checkout: open the page with ?ownertest=1 in the URL.
+    function getOwnerTestPassword() {
+      if (!new URLSearchParams(window.location.search).has('ownertest')) return undefined;
+      var pwd = prompt('OWNER TEST MODE — enter owner password for a $0 test purchase (Cancel = normal purchase):');
+      return pwd || undefined;
+    }
+
     // ---- BUY / DOWNLOAD PHOTO ----
     async function handleBuyPhoto() {
       if (!currentPhotoData) return;
@@ -4919,6 +4927,7 @@
         closePhotoModal();
         return;
       }
+      var ownerTestPassword = getOwnerTestPassword();
       btn.textContent = 'Loading...';
       btn.disabled = true;
       try {
@@ -4930,14 +4939,15 @@
             photoName: currentPhotoData.name,
             albumName: currentPhotoData.album,
             sport: currentPhotoData.sport,
-            price: currentPhotoData.price
+            price: currentPhotoData.price,
+            ownerTestPassword: ownerTestPassword
           })
         });
         var data = await res.json();
         if (data.url) {
           window.location.href = data.url;
         } else {
-          alert('Something went wrong. Please try again.');
+          alert(data.error || 'Something went wrong. Please try again.');
           btn.textContent = 'Buy This Photo — $' + currentPhotoData.price;
           btn.disabled = false;
         }
