@@ -5624,9 +5624,14 @@
         <p style="font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:#a8a8a4;margin:0 0 0.2rem;">Owner Tools</p>
         <p style="font-size:0.8rem;color:#4a4a47;margin:0;">Generate a private, time-limited athlete link for this album.</p>
       </div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
       <button id="athlete-gen-btn" onclick="generateAthleteLink()" style="padding:0.6rem 1.4rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#1c1c1b;color:white;border:none;cursor:pointer;white-space:nowrap;">
         🔒 Generate Athlete Link
       </button>
+      <button id="owner-test-btn" onclick="toggleOwnerTestMode()" style="padding:0.6rem 1.2rem;font-family:inherit;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:transparent;color:#1c1c1b;border:1px solid #1c1c1b;cursor:pointer;white-space:nowrap;border-radius:2px;">
+        🧪 $0 Test Mode
+      </button>
+      </div>
     </div>
     <div id="athlete-gen-result" style="display:none; margin-top:0.9rem; max-width:680px;">
       <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
@@ -5637,6 +5642,27 @@
       <p style="font-size:0.68rem;color:#a8a8a4;margin-top:0.5rem;">⏱ Link expires in 48 hours &nbsp;·&nbsp; Athletes pay $5–$30 depending on bundle &nbsp;·&nbsp; Not publicly listed</p>
     </div>
   </div>
+
+  <!-- Owner test-mode badge (only visible with ?ownertest=1) -->
+  <div id="owner-test-badge" onclick="toggleOwnerTestMode()" title="Click to exit test mode" style="display:none;position:fixed;left:1rem;bottom:1rem;z-index:9999;background:#b3261e;color:#fff;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;padding:0.5rem 0.9rem;border-radius:2px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25);">🧪 Test Mode On · Exit</div>
+  <script>
+    // Owner tool: switch the current album in/out of $0 test-purchase mode.
+    function toggleOwnerTestMode() {
+      var params = new URLSearchParams(window.location.search);
+      var on = params.has('ownertest');
+      if (on) params.delete('ownertest'); else params.set('ownertest', '1');
+      var album = (typeof currentAlbum !== 'undefined' && currentAlbum) ? currentAlbum : window.location.hash.replace('#', '');
+      var qs = params.toString();
+      window.location.href = window.location.pathname + (qs ? '?' + qs : '') + (album ? '#' + album : '');
+    }
+    (function () {
+      if (!new URLSearchParams(window.location.search).has('ownertest')) return;
+      var badge = document.getElementById('owner-test-badge');
+      if (badge) badge.style.display = 'block';
+      var b = document.getElementById('owner-test-btn');
+      if (b) { b.textContent = 'Exit Test Mode'; b.style.background = '#b3261e'; b.style.color = '#fff'; b.style.borderColor = '#b3261e'; }
+    })();
+  </script>
 
   <footer class="site-footer">
     <div class="footer-inner">
