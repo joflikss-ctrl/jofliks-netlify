@@ -221,7 +221,7 @@ const TIERS = [
   { label:'2 photos',     min:2,  max:2,  price:7,  stripeAmount:700,  save:'Save 30%', perPhoto:'$3.50 each' },
   { label:'3-4 photos',   min:3,  max:4,  price:10, stripeAmount:1000, save:'Save 33%', perPhoto:'$3.33 each' },
   { label:'5-10 photos',  min:5,  max:10, price:15, stripeAmount:1500, save:'Save 70%', perPhoto:'as low as $1.50' },
-  { label:'10-20 photos', min:10, max:20, price:30, stripeAmount:3000, save:'Best Deal',perPhoto:'as low as $1.50' },
+  { label:'10-20 photos', min:11, max:20, price:30, stripeAmount:3000, save:'Best Deal',perPhoto:'as low as $1.50' },
 ];
 
 // Returns the best applicable tier for the given cart count
@@ -258,8 +258,8 @@ window.addEventListener('load', async function() {
     albumLabel = data.albumLabel || albumId;
     loadAlbum();
   } catch(e) {
-    albumLabel = decodeURIComponent(albumId).replace(/-/g,' ');
-    loadAlbum();
+    // Never show the album if the link couldn't be checked
+    showError('Could not check this link. Please refresh the page or try again in a minute.');
   }
 });
 
@@ -314,7 +314,10 @@ function toggleCart(idx, e) {
   if (e) e.stopPropagation();
   var photo = photos[idx];
   var inCartIdx = cart.findIndex(function(p) { return p.url === photo.url; });
-  if (inCartIdx === -1) { cart.push(photo); }
+  if (inCartIdx === -1) {
+    if (cart.length >= 20) { alert('You can buy up to 20 photos per checkout.'); return; }
+    cart.push(photo);
+  }
   else { cart.splice(inCartIdx, 1); }
   updateCartUI();
 }
@@ -454,13 +457,15 @@ async function handleCheckout() {
         cartCount:  cart.length,
         photoUrls:  cart.map(function(p){return p.url;}),
         isAthlete:  true,
+        token:      token,
+        albumId:    albumId,
       }),
     });
     var data = await resp.json();
     if (data.url) { window.location.href = data.url; }
     else { throw new Error(data.error || 'Checkout failed'); }
   } catch(e) {
-    alert('Something went wrong. Please try again or email joseph@jofliks.com');
+    alert((e && e.message && e.message !== 'Failed to fetch' ? e.message + '\n\n' : 'Something went wrong. ') + 'Questions? Email joflikss@gmail.com');
     btn.disabled  = false;
     btn.innerHTML = 'Checkout &mdash; $' + selectedTier.price;
   }

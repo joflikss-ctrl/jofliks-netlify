@@ -55,12 +55,24 @@ exports.handler = async (event) => {
 
     // ── FIX 2: Support multi-photo athlete orders ─────────────────────────
     // Parse all photo URLs if this is a bundle purchase
+    // New format: photo IDs split across photos_0, photos_1, ... (Stripe's
+    // 500-character metadata limit). Old format: a JSON list in photoUrls.
+    const CLOUD_BASE = 'https://res.cloudinary.com/dxthbasef/image/upload/';
     let allPhotoUrls = [];
-    try {
-      allPhotoUrls = photoUrlsJson ? JSON.parse(photoUrlsJson) : [photoUrl];
-    } catch {
-      allPhotoUrls = [photoUrl];
+    const chunkCount = parseInt(session.metadata.photos_chunks || '0');
+    if (chunkCount > 0) {
+      for (let i = 0; i < chunkCount; i++) {
+        const chunk = session.metadata[`photos_${i}`] || '';
+        chunk.split('|').filter(Boolean).forEach(id => allPhotoUrls.push(CLOUD_BASE + id));
+      }
+    } else {
+      try {
+        allPhotoUrls = photoUrlsJson ? JSON.parse(photoUrlsJson) : [photoUrl];
+      } catch {
+        allPhotoUrls = [photoUrl];
+      }
     }
+    if (!allPhotoUrls.length) allPhotoUrls = [photoUrl];
 
     // Build Cloudinary force-download URLs
     const downloadLinks = allPhotoUrls.map(url => ({

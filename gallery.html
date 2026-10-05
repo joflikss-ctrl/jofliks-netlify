@@ -4702,7 +4702,7 @@
         <button onclick="copyAthleteGenLink()" id="athlete-copy-btn" style="padding:0.5rem 1.1rem;font-family:inherit;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;background:#2e7d32;color:white;border:none;cursor:pointer;border-radius:2px;">Copy Link</button>
         <button onclick="generateAthleteLink()" style="padding:0.5rem 1rem;font-family:inherit;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;background:transparent;color:#737370;border:1px solid #d4d4cf;cursor:pointer;border-radius:2px;">Regenerate</button>
       </div>
-      <p style="font-size:0.68rem;color:#a8a8a4;margin-top:0.5rem;">⏱ Link expires in 72 hours &nbsp;·&nbsp; Athletes pay $5–$30 depending on bundle &nbsp;·&nbsp; Not publicly listed</p>
+      <p style="font-size:0.68rem;color:#a8a8a4;margin-top:0.5rem;">⏱ Link expires in 48 hours &nbsp;·&nbsp; Athletes pay $5–$30 depending on bundle &nbsp;·&nbsp; Not publicly listed</p>
     </div>
   </div>
 
@@ -4950,12 +4950,29 @@
     }
 
     // ---- BULK IMPORTER ----
-    function toggleImporter() {
+    // Owner password is checked by the server, never stored in this page.
+    var _ownerPassword = null;
+    async function checkOwnerPassword(pwd) {
+      try {
+        var r = await fetch('/.netlify/functions/generate-athlete-token/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwd })
+        });
+        return r.ok;
+      } catch (e) { return false; }
+    }
+
+    async function toggleImporter() {
       var body = document.getElementById('importer-body');
       var label = document.getElementById('importer-toggle-label');
       if (body.style.display === 'none') {
-        var pwd = prompt('Enter password:');
-        if (pwd !== 'CCypress7!') { alert('Incorrect password.'); return; }
+        if (!_ownerPassword) {
+          var pwd = prompt('Enter password:');
+          if (pwd === null) return;
+          if (!(await checkOwnerPassword(pwd))) { alert('Incorrect password.'); return; }
+          _ownerPassword = pwd;
+        }
         body.style.display = 'block';
         label.textContent = 'Click to collapse';
       } else {
@@ -5018,14 +5035,10 @@
     // Owner clicks "Generate Athlete Link"
     async function generateAthleteLink() {
       // Password gate (once per session)
-      if (!_athleteGenUnlocked) {
+      if (!_ownerPassword) {
         var pwd = prompt('Enter owner password:');
         if (pwd === null) return;                        // cancelled
-        if (pwd !== 'CCypress7!') {
-          alert('Incorrect password.');
-          return;
-        }
-        _athleteGenUnlocked = true;
+        _ownerPassword = pwd;                            // server checks it below
       }
 
       var btn = document.getElementById('athlete-gen-btn');
@@ -5039,7 +5052,7 @@
           body: JSON.stringify({
             albumId:    currentAlbum,
             albumLabel: currentAlbumLabel,
-            password:   'CCypress7!',   // server validates independently
+            password:   _ownerPassword,
           }),
         });
 
@@ -5050,6 +5063,7 @@
           document.getElementById('athlete-gen-result').style.display = 'block';
           document.getElementById('athlete-copy-btn').textContent = 'Copy Link';
         } else {
+          if (resp.status === 401) _ownerPassword = null;   // wrong password — ask again next time
           alert('Error generating link: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
