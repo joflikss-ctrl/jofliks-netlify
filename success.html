@@ -15,6 +15,14 @@
     .success-icon { width:56px; height:56px; border:2px solid var(--ink); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; font-size:1.4rem; }
     .success-card h1 { font-size:1.8rem; font-weight:400; margin-bottom:0.8rem; }
     .success-card p { font-size:0.88rem; color:var(--graphite); line-height:1.8; margin-bottom:1rem; }
+    .success-card.has-photos { max-width:760px; }
+    .dl-status { font-size:0.82rem; color:var(--silver); margin:1rem 0; }
+    .dl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:0.8rem; margin:1.5rem 0 0.5rem; text-align:left; }
+    .dl-item { border:1px solid var(--faint); background:var(--white); display:flex; flex-direction:column; }
+    .dl-item img { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--faint); }
+    .dl-item a { display:block; text-align:center; padding:0.6rem 0.4rem; background:var(--ink); color:#fff; text-decoration:none; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; }
+    @media (max-width:600px) { .success-wrap { padding:2.5rem 1rem; } .success-card { padding:2rem 1rem; } .dl-grid { grid-template-columns:repeat(2,1fr); gap:0.6rem; } }
+    .dl-tip { font-size:0.75rem !important; color:var(--silver) !important; }
   </style>
 </head>
 <body>
@@ -32,11 +40,14 @@
     </div>
   </header>
   <div class="success-wrap">
-    <div class="success-card">
+    <div class="success-card" id="success-card">
       <div class="success-icon">✓</div>
       <h1>Purchase Complete!</h1>
-      <p>Thank you! Your high-resolution photo has been sent to your email address. Check your inbox — it should arrive within a minute.</p>
-      <p style="font-size:0.8rem;color:var(--silver);">Check your spam folder if you don't see it. Questions? Email <a href="mailto:joflikss@gmail.com" style="color:var(--ink);">joflikss@gmail.com</a></p>
+      <p id="success-msg">Thank you! Your photos are loading below. We're also emailing you a copy.</p>
+      <div class="dl-status" id="dl-status">Loading your photos…</div>
+      <div class="dl-grid" id="dl-grid"></div>
+      <p class="dl-tip" id="dl-tip" style="display:none;">On iPhone, tap Download and the photo saves to your Files app (Downloads folder). Bookmark this page if you'd like to download again later.</p>
+      <p style="font-size:0.8rem;color:var(--silver);">Check your spam folder if the email doesn't show up. Questions? Email <a href="mailto:joflikss@gmail.com" style="color:var(--ink);">joflikss@gmail.com</a></p>
       <div style="display:flex;gap:0.8rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;">
         <a href="gallery.html" class="btn btn-dark">Back to Gallery</a>
         <a href="index.html" class="btn btn-dark" style="background:transparent;color:var(--ink);border-color:var(--light);">Home</a>
@@ -65,6 +76,46 @@
     <div class="footer-base"><p>&copy; 2026 JoFliks Photography. All rights reserved.</p></div>
   </footer>
   <script src="js/main.js"></script>
+  <script>
+    // Show download links straight from the order, so buyers don't depend on email.
+    (function () {
+      var status = document.getElementById('dl-status');
+      var grid   = document.getElementById('dl-grid');
+      var msg    = document.getElementById('success-msg');
+      var sessionId = new URLSearchParams(window.location.search).get('session_id');
+
+      function fallback(text) {
+        status.textContent = text;
+        msg.textContent = 'Thank you! Your high-resolution photos are being sent to your email address.';
+      }
+      if (!sessionId) return fallback('');
+
+      fetch('/.netlify/functions/get-order?session_id=' + encodeURIComponent(sessionId))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data.photos || !data.photos.length) {
+            return fallback((data.error ? data.error + ' ' : '') + 'Your photos will arrive by email.');
+          }
+          var n = data.photos.length;
+          msg.textContent = 'Thank you! Your ' + (n > 1 ? n + ' photos are' : 'photo is') +
+            ' ready to download below.' + (data.email ? ' We also emailed a copy to ' + data.email + '.' : '');
+          status.style.display = 'none';
+          document.getElementById('success-card').classList.add('has-photos');
+          document.getElementById('dl-tip').style.display = 'block';
+          data.photos.forEach(function (p) {
+            var item = document.createElement('div');
+            item.className = 'dl-item';
+            var img = document.createElement('img');
+            img.src = p.preview; img.alt = p.name; img.loading = 'lazy';
+            var a = document.createElement('a');
+            a.href = p.download; a.textContent = 'Download'; a.setAttribute('download', '');
+            item.appendChild(img); item.appendChild(a);
+            grid.appendChild(item);
+          });
+        })
+        .catch(function () { fallback('Your photos will arrive by email.'); });
+    })();
+  </script>
 
   <!-- HOT DEAL: SENIOR PORTRAITS -->
   <div class="hotdeal-fab-wrap" id="hotdealFabWrap">
