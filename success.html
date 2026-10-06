@@ -22,6 +22,9 @@
     .dl-item img { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--faint); }
     .dl-item a { display:block; text-align:center; padding:0.6rem 0.4rem; background:var(--ink); color:#fff; text-decoration:none; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; }
     @media (max-width:600px) { .success-wrap { padding:2.5rem 1rem; } .success-card { padding:2rem 1rem; } .dl-grid { grid-template-columns:repeat(2,1fr); gap:0.6rem; } }
+    .dl-all { display:none; margin:1.2rem auto 0; padding:0.95rem 2rem; background:var(--ink); color:#fff; border:none; font-family:inherit; font-size:0.78rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; cursor:pointer; width:100%; max-width:360px; }
+    .dl-all:disabled { opacity:0.6; cursor:wait; }
+    .dl-all-note { font-size:0.75rem !important; color:var(--silver) !important; margin:0.5rem 0 0 !important; }
     .dl-tip { font-size:0.75rem !important; color:var(--silver) !important; }
   </style>
 </head>
@@ -45,8 +48,10 @@
       <h1>Purchase Complete!</h1>
       <p id="success-msg">Thank you! Your photos are loading below. We're also emailing you a copy.</p>
       <div class="dl-status" id="dl-status">Loading your photos…</div>
+      <button class="dl-all" id="dl-all" type="button">Save All Photos</button>
+      <p class="dl-all-note" id="dl-all-note" style="display:none;"></p>
       <div class="dl-grid" id="dl-grid"></div>
-      <p class="dl-tip" id="dl-tip" style="display:none;">On iPhone, tap Download and the photo saves to your Files app (Downloads folder). Bookmark this page if you'd like to download again later.</p>
+      <p class="dl-tip" id="dl-tip" style="display:none;">Tip: "Save All Photos" saves every photo at once (on iPhone it puts them straight into your Photos). Individual Download buttons open one photo at a time in a new tab. Bookmark this page to download again later.</p>
       <p style="font-size:0.8rem;color:var(--silver);">Check your spam folder if the email doesn't show up. Questions? Email <a href="mailto:joflikss@gmail.com" style="color:var(--ink);">joflikss@gmail.com</a></p>
       <div style="display:flex;gap:0.8rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;">
         <a href="gallery.html" class="btn btn-dark">Back to Gallery</a>
@@ -109,11 +114,100 @@
             img.src = p.preview; img.alt = p.name; img.loading = 'lazy';
             var a = document.createElement('a');
             a.href = p.download; a.textContent = 'Download'; a.setAttribute('download', '');
+            a.target = '_blank'; a.rel = 'noopener';   // keep this page open so the other photos are still here
             item.appendChild(img); item.appendChild(a);
             grid.appendChild(item);
           });
+          setupSaveAll(data.photos);
         })
         .catch(function () { fallback('Your photos will arrive by email.'); });
+
+      // ── Save all photos in one go ─────────────────────────────────────
+      // iPhone/Android: share sheet -> "Save N Images" into Photos.
+      // Computers: one .zip file with every photo.
+      function setupSaveAll(photos) {
+        var btn  = document.getElementById('dl-all');
+        var note = document.getElementById('dl-all-note');
+        var n = photos.length;
+        var files = null;   // prepared File objects (phone flow)
+        btn.style.display = 'block';
+        btn.textContent = n > 1 ? 'Save All ' + n + ' Photos' : 'Save Photo';
+
+        function canShareFiles() {
+          try {
+            var test = new File([new Blob(['x'], { type: 'image/jpeg' })], 't.jpg', { type: 'image/jpeg' });
+            return !!(navigator.canShare && navigator.canShare({ files: [test] }));
+          } catch (e) { return false; }
+        }
+
+        function fetchAll() {
+          var done = 0;
+          return Promise.all(photos.map(function (p) {
+            return fetch(p.download).then(function (r) {
+              if (!r.ok) throw new Error('Download failed');
+              return r.blob();
+            }).then(function (blob) {
+              done++;
+              btn.textContent = 'Preparing ' + done + ' of ' + n + '…';
+              return new File([blob], p.name.replace(/_[a-z0-9]{5,}$/i, '') + '.jpg', { type: 'image/jpeg' });
+            });
+          }));
+        }
+
+        function showError() {
+          btn.disabled = false;
+          btn.textContent = 'Try Again';
+          note.style.display = 'block';
+          note.textContent = 'Something went wrong. You can still use the Download button on each photo below.';
+        }
+
+        btn.addEventListener('click', function () {
+          // Phone, step 2: files ready -> open the share sheet (must happen right on the tap)
+          if (files) {
+            navigator.share({ files: files }).catch(function () {});
+            return;
+          }
+          btn.disabled = true;
+          if (canShareFiles()) {
+            // Phone, step 1: download everything, then ask for one more tap
+            fetchAll().then(function (f) {
+              files = f;
+              btn.disabled = false;
+              btn.textContent = 'Tap to Save ' + (n > 1 ? 'All ' + n + ' Photos' : 'Photo');
+              note.style.display = 'block';
+              note.textContent = 'Ready! Tap again, then choose "Save ' + (n > 1 ? n + ' Images' : 'Image') + '".';
+            }).catch(showError);
+          } else {
+            // Computer: build one zip file
+            loadJSZip().then(function (JSZip) {
+              return fetchAll().then(function (f) {
+                var zip = new JSZip();
+                f.forEach(function (file) { zip.file(file.name, file); });
+                btn.textContent = 'Zipping…';
+                return zip.generateAsync({ type: 'blob' });
+              });
+            }).then(function (blob) {
+              var a = document.createElement('a');
+              a.href = URL.createObjectURL(blob);
+              a.download = 'JoFliks-Photos.zip';
+              document.body.appendChild(a); a.click(); a.remove();
+              btn.disabled = false;
+              btn.textContent = 'Downloaded ✓ (Save Again)';
+            }).catch(showError);
+          }
+        });
+      }
+
+      function loadJSZip() {
+        if (window.JSZip) return Promise.resolve(window.JSZip);
+        return new Promise(function (resolve, reject) {
+          var s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+          s.onload = function () { resolve(window.JSZip); };
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
     })();
   </script>
 
