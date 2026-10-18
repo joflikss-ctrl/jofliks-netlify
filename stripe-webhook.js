@@ -3,6 +3,14 @@ const sgMail  = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+// Turns a SendGrid error into one readable line, e.g.
+// "403: The from address does not match a verified Sender Identity"
+function describeSendError(err) {
+  const code = err.code || err.response?.statusCode || '';
+  const msgs = err.response?.body?.errors?.map(e => e.message).join('; ');
+  return `${code ? code + ': ' : ''}${msgs || err.message}`;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -30,6 +38,10 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: `Webhook Error: ${err.message}` };
   }
 
+  // Tracks whether each email actually went out (reported back to Stripe below)
+  const emailStatus = {};
+  if (!process.env.SENDGRID_API_KEY) emailStatus.config = 'SENDGRID_API_KEY is missing in Netlify env vars';
+
   // ── Only act on completed checkouts ───────────────────────────────────────
   if (stripeEvent.type === 'checkout.session.completed') {
     const session = stripeEvent.data.object;
@@ -55,12 +67,24 @@ exports.handler = async (event) => {
 
     // ── FIX 2: Support multi-photo athlete orders ─────────────────────────
     // Parse all photo URLs if this is a bundle purchase
+    // New format: photo IDs split across photos_0, photos_1, ... (Stripe's
+    // 500-character metadata limit). Old format: a JSON list in photoUrls.
+    const CLOUD_BASE = 'https://res.cloudinary.com/dxthbasef/image/upload/';
     let allPhotoUrls = [];
-    try {
-      allPhotoUrls = photoUrlsJson ? JSON.parse(photoUrlsJson) : [photoUrl];
-    } catch {
-      allPhotoUrls = [photoUrl];
+    const chunkCount = parseInt(session.metadata.photos_chunks || '0');
+    if (chunkCount > 0) {
+      for (let i = 0; i < chunkCount; i++) {
+        const chunk = session.metadata[`photos_${i}`] || '';
+        chunk.split('|').filter(Boolean).forEach(id => allPhotoUrls.push(CLOUD_BASE + id));
+      }
+    } else {
+      try {
+        allPhotoUrls = photoUrlsJson ? JSON.parse(photoUrlsJson) : [photoUrl];
+      } catch {
+        allPhotoUrls = [photoUrl];
+      }
     }
+    if (!allPhotoUrls.length) allPhotoUrls = [photoUrl];
 
     // Build Cloudinary force-download URLs
     const downloadLinks = allPhotoUrls.map(url => ({
@@ -154,7 +178,7 @@ exports.handler = async (event) => {
     const ownerEmail = {
       to: 'joflikss@gmail.com',
       from: { email: 'noreply@jofliks.com', name: 'JoFliks Photography' },
-      subject: `💰 New Sale! ${isBundle ? photoCount + ' photos' : photoName} — $${amountPaid}`,
+      subject: `${session.metadata.test === 'true' ? '[TEST] ' : '💰 '}New Sale! ${isBundle ? photoCount + ' photos' : photoName} — $${amountPaid}`,
       html: `
         <p><strong>New photo sale!</strong></p>
         <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>
@@ -171,21 +195,29 @@ exports.handler = async (event) => {
     try {
       await sgMail.send(buyerEmail);
       console.log(`✅ Email sent to buyer: ${customerEmail}`);
+      emailStatus.buyer = 'sent';
     } catch (emailErr) {
-      console.error('❌ Failed to send buyer email:', emailErr.response?.body || emailErr.message);
+      const detail = describeSendError(emailErr);
+      console.error('❌ Failed to send buyer email:', detail);
+      emailStatus.buyer = 'FAILED: ' + detail;
       // Don't throw — still send owner notification and return 200
     }
 
     try {
       await sgMail.send(ownerEmail);
       console.log(`✅ Owner notification sent`);
+      emailStatus.owner = 'sent';
     } catch (emailErr) {
-      console.error('❌ Failed to send owner email:', emailErr.message);
+      const detail = describeSendError(emailErr);
+      console.error('❌ Failed to send owner email:', detail);
+      emailStatus.owner = 'FAILED: ' + detail;
     }
   }
 
+  // Email results go in the response so they show up in
+  // Stripe → Webhooks → Event deliveries → Response, even when Netlify logs don't.
   return {
     statusCode: 200,
-    body: JSON.stringify({ received: true }),
+    body: JSON.stringify({ received: true, email: emailStatus }),
   };
 };
