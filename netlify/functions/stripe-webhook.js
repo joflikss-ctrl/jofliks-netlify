@@ -1,7 +1,35 @@
 const stripe  = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const sgMail  = require('@sendgrid/mail');
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Emails go out through Resend (resend.com). Needs RESEND_API_KEY in Netlify env vars
+// and jofliks.com verified as a sending domain in Resend.
+async function sendEmail({ to, from, replyTo, bcc, subject, html }) {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: `${from.name} <${from.email}>`,
+      to: [to],
+      subject,
+      html,
+      ...(replyTo ? { reply_to: replyTo } : {}),
+      ...(bcc ? { bcc: [bcc] } : {}),
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    const err = new Error(body.message || res.statusText);
+    err.code = res.status;
+    throw err;
+  }
+}
+
+// Turns an email error into one readable line, e.g. "403: The jofliks.com domain is not verified"
+function describeSendError(err) {
+  return `${err.code ? err.code + ': ' : ''}${err.message}`;
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -29,6 +57,10 @@ exports.handler = async (event) => {
     console.error('Webhook signature verification failed:', err.message);
     return { statusCode: 400, body: `Webhook Error: ${err.message}` };
   }
+
+  // Tracks whether each email actually went out (reported back to Stripe below)
+  const emailStatus = {};
+  if (!process.env.RESEND_API_KEY) emailStatus.config = 'RESEND_API_KEY is missing in Netlify env vars';
 
   // ── Only act on completed checkouts ───────────────────────────────────────
   if (stripeEvent.type === 'checkout.session.completed') {
@@ -116,6 +148,7 @@ exports.handler = async (event) => {
       to: customerEmail,
       from: { email: 'noreply@jofliks.com', name: 'JoFliks Photography' },
       replyTo: 'joflikss@gmail.com',
+      bcc: 'joflikss@gmail.com', // you get an exact copy of what the customer received
       subject: subjectLine,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;color:#1c1c1b;background:#fdfcfa;">
@@ -176,28 +209,41 @@ exports.handler = async (event) => {
         <p><strong>Amount:</strong> $${amountPaid}</p>
         <p><strong>Athlete purchase:</strong> ${isAthlete === 'true' ? 'Yes' : 'No'}</p>
         <p><strong>Order ID:</strong> ${session.id}</p>
-        <p><em>Download link has been automatically sent to the customer.</em></p>
+        ${'{{BUYER_EMAIL_STATUS}}'}
       `,
     };
 
     try {
-      await sgMail.send(buyerEmail);
+      await sendEmail(buyerEmail);
       console.log(`✅ Email sent to buyer: ${customerEmail}`);
+      emailStatus.buyer = 'sent';
     } catch (emailErr) {
-      console.error('❌ Failed to send buyer email:', emailErr.response?.body || emailErr.message);
+      const detail = describeSendError(emailErr);
+      console.error('❌ Failed to send buyer email:', detail);
+      emailStatus.buyer = 'FAILED: ' + detail;
       // Don't throw — still send owner notification and return 200
     }
 
+    ownerEmail.html = ownerEmail.html.replace('{{BUYER_EMAIL_STATUS}}',
+      emailStatus.buyer === 'sent'
+        ? `<p><strong>✅ Download email sent to ${customerEmail}</strong> (copy in your inbox)</p>`
+        : `<p style="color:#b00020;"><strong>❌ Download email to ${customerEmail} FAILED:</strong> ${String(emailStatus.buyer).replace(/^FAILED: /, "")}<br/>Send them this link: https://jofliks.com/success.html?session_id=${session.id}</p>`);
+
     try {
-      await sgMail.send(ownerEmail);
+      await sendEmail(ownerEmail);
       console.log(`✅ Owner notification sent`);
+      emailStatus.owner = 'sent';
     } catch (emailErr) {
-      console.error('❌ Failed to send owner email:', emailErr.message);
+      const detail = describeSendError(emailErr);
+      console.error('❌ Failed to send owner email:', detail);
+      emailStatus.owner = 'FAILED: ' + detail;
     }
   }
 
+  // Email results go in the response so they show up in
+  // Stripe → Webhooks → Event deliveries → Response, even when Netlify logs don't.
   return {
     statusCode: 200,
-    body: JSON.stringify({ received: true }),
+    body: JSON.stringify({ received: true, email: emailStatus }),
   };
 };
